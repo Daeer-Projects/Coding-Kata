@@ -1,0 +1,8 @@
+*.vs
+/bin
+/obj
+/KarateChopKata/KarateChopKata/bin
+/KarateChopKata/KarateChopKata/obj
+/KarateChopKata/KarateChopKata.Tests/bin
+/KarateChopKata/KarateChopKata.Tests/obj
+/KarateChopKata/*.user

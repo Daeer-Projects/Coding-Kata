@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarateChopKata", "KarateChopKata\KarateChopKata.csproj", "{99F22DFD-3DB6-4D2F-BF9B-D61A9F9E7FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarateChopKata.Tests", "KarateChopKata.Tests\KarateChopKata.Tests.csproj", "{36ADB594-5533-406C-8C5B-8B6FDC617BB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99F22DFD-3DB6-4D2F-BF9B-D61A9F9E7FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F22DFD-3DB6-4D2F-BF9B-D61A9F9E7FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F22DFD-3DB6-4D2F-BF9B-D61A9F9E7FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F22DFD-3DB6-4D2F-BF9B-D61A9F9E7FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36ADB594-5533-406C-8C5B-8B6FDC617BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36ADB594-5533-406C-8C5B-8B6FDC617BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36ADB594-5533-406C-8C5B-8B6FDC617BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36ADB594-5533-406C-8C5B-8B6FDC617BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30FC7E1C-7E0F-43EC-AB20-7A51ACCFA813}
+	EndGlobalSection
+EndGlobal
