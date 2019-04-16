@@ -22,6 +22,7 @@ namespace StringManipulation.Tests
         [Theory]
         [InlineData("AASDEDFFRDSSSSEDSW", 2, "AASDEDFFRDSSEDSW")]
         [InlineData("FFDGDGEREGSFGGFGFFGFFFFFSSESSSSSEES", 3, "FFDGDGEREGSFGGFGFFGFFFSSESSSEES")]
+        [InlineData("AAAAAAAAAAAAAAAAAAAA", 7, "AAAAAAA")]
         public void Test_string_with_defined_count_unless_zero_returns_expected(string input, int count, string expected)
         {
             // Arrange.
