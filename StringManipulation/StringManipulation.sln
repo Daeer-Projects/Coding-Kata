@@ -5,7 +5,16 @@ VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringManipulation", "StringManipulation\StringManipulation.csproj", "{0C3D050A-39B4-48AD-A59D-DF5ABFC7AC83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringManipulation.Tests", "StringManipulation.Tests\StringManipulation.Tests.csproj", "{848C6A1C-8776-41EC-B5DE-13D0A81B2237}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StringManipulation.Tests", "StringManipulation.Tests\StringManipulation.Tests.csproj", "{848C6A1C-8776-41EC-B5DE-13D0A81B2237}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RemoveDuplicateCharacters", "RemoveDuplicateCharacters\RemoveDuplicateCharacters.vbproj", "{BB92EF7D-3AAB-4603-9F40-0A6F632C2F59}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RemoveDuplicateCharacters.Tests", "RemoveDuplicateCharacters.Tests\RemoveDuplicateCharacters.Tests.vbproj", "{CB2052C7-EEFC-454D-B784-08D535C63EB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C45C28C-277D-4E5F-8986-5268B108719B}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +30,14 @@ Global
 		{848C6A1C-8776-41EC-B5DE-13D0A81B2237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{848C6A1C-8776-41EC-B5DE-13D0A81B2237}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{848C6A1C-8776-41EC-B5DE-13D0A81B2237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB92EF7D-3AAB-4603-9F40-0A6F632C2F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB92EF7D-3AAB-4603-9F40-0A6F632C2F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB92EF7D-3AAB-4603-9F40-0A6F632C2F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB92EF7D-3AAB-4603-9F40-0A6F632C2F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB2052C7-EEFC-454D-B784-08D535C63EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB2052C7-EEFC-454D-B784-08D535C63EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB2052C7-EEFC-454D-B784-08D535C63EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB2052C7-EEFC-454D-B784-08D535C63EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -33,20 +33,20 @@ namespace StringManipulation.Tests
             actual.Should().Be(expected,
                 "using the defined count will return the amount of characters for each collection in the input string.");
         }
-
-        [Fact]
-        public void Test_string_with_defined_count_of_zero_returns_expected()
+        
+        [Theory]
+        [InlineData("AASDEDFFRDSSSSEDSW", 0, "ASDEDFRDSEDSW")]
+        [InlineData("AASDEDFFRDSSSSEDSW", -1, "ASDEDFRDSEDSW")]
+        [InlineData("AASDEDFFRDSSSSEDSW", -1000, "ASDEDFRDSEDSW")]
+        public void Test_string_with_defined_count_of_zero_or_less_returns_expected_as_count_of_one(string input, int count, string expected)
         {
             // Arrange.
-            var expected = "ASDEDFRDSEDSW";
-            var input = "AASDEDFFRDSSSSEDSW";
-
             // Act.
-            var actual = input.Manipulate(0);
+            var actual = input.Manipulate(count);
 
             // Assert.
             actual.Should().Be(expected,
-                "using the defined count will return the amount of characters for each collection in the input string.");
+                "using a defined count or zero or less will use one as the count.");
         }
     }
 }
