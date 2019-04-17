@@ -32,9 +32,9 @@ Remove duplicate characters from a given string if they exceed the allowed numbe
 
 ### Examples
 
-RemoveDuplicateCharacters("AAABCDDDBCBC", 0) returns "ABCD"
-RemoveDuplicateCharacters("AAABCDDDBCBC", 1) returns "AABCDDBC"
-RemoveDuplicateCharacters("AAABCDDDBCBC", 2) returns "AAABCDDDBCBC"
+* RemoveDuplicateCharacters("AAABCDDDBCBC", 0) returns "ABCD"
+* RemoveDuplicateCharacters("AAABCDDDBCBC", 1) returns "AABCDDBC"
+* RemoveDuplicateCharacters("AAABCDDDBCBC", 2) returns "AAABCDDDBCBC"
 
 ### What does this mean
 
