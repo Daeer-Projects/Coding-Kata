@@ -60,5 +60,16 @@ namespace RemoveDuplicateCharacters.Tests
             // Assert.
             Assert.Throws<ArgumentNullException>(() => string.Empty.RemoveDuplicateCharacters());
         }
+
+        [Fact]
+        public void Test_remove_duplicates_with_null_input_throws_null_exception()
+        {
+            // Arrange.
+            string input = null;
+
+            // Act.
+            // Assert.
+            Assert.Throws<ArgumentNullException>(() => input.RemoveDuplicateCharacters());
+        }
     }
 }

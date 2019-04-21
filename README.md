@@ -6,3 +6,6 @@ A collection of kata attempts.
 
 * Kata01: Karate Chop
 * StringManipulation
+* RemoveDuplicateCharacters
+* StringCalculatorKata_One
+* StringCalculatorKata_Two
