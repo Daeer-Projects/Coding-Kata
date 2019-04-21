@@ -1,34 +1,36 @@
 ﻿Imports System.Runtime.CompilerServices
 
 Public Module StringExtensions
-    ''' <summary>
-    ''' Removes duplicate characters from a given string if they exceed the allowed number of duplicates.
-    ''' This is a different version from the C#, as we now have some different requirements.
-    ''' </summary>
-    ''' <param name="originalString"> String to remove duplicates from. </param>
-    ''' <param name="allowedDuplicates"> Maximum number of duplicates of each character in the resulting string. </param>
-    ''' <exception cref="ArgumentNullException"> originalString is null or empty. </exception>
-    ''' <exception cref="ArgumentOutOfRangeException"> allowedDuplicates is less than zero. </exception>
+    ''' A collection of string extensions.
+    ''' This Is taken from the test example I was asked during my interview.
+    '''
+    ''' Given a string And an optional count value, can you process the input string
+    ''' And output a single (unless defined) character for each of the characters
+    ''' in the input string.
+    ''' <param name="inputString"> The input that we are processing. </param>
+    ''' <param name="itemCount"> The count of characters we can accept before we ignore the character. </param>
+    ''' <exception cref="ArgumentNullException"> inputString is null or empty. </exception>
+    ''' <exception cref="ArgumentOutOfRangeException"> itemCount is less than zero. </exception>
     ''' <returns>
-    ''' A string containing only the maximum number of character duplicates for each character in the string.
+    ''' The processed string.
     ''' Examples:
-    ''' RemoveDuplicateCharacters("AAABCDDDBCBC", 0) returns "ABCD"
-    ''' RemoveDuplicateCharacters("AAABCDDDBCBC", 1) returns "AABCDDBC"
-    ''' RemoveDuplicateCharacters("AAABCDDDBCBC", 2) returns "AAABCDDDBCBC"
+    ''' "AASDEDFFRDSSSSEDSW" using the default count of 1, should return "ASDEDFRDSEDSW"
+    ''' "AAAASDEEEERFFDRETYTGGFDDD" using a count of 2, should return "AASDEERFFDRETYTGGFDD"
+    ''' "AAAASDEEEERFFDRETYTGGFDDD" using a count of 3, should return "AAASDEEERFFDRETYTGGFDDD"
     ''' </returns>
-    <Extension()> 
-    Public Function RemoveDuplicateCharacters(ByVal originalString As String, ByVal allowedDuplicates As Integer) As String
-        Dim result = string.Empty
+    <Extension()>
+    Public Function Manipulate(ByVal inputString As String, ByVal itemCount As Integer) As String
+        Dim result = String.Empty
         Dim count = 1
         ' ToDo: Update based on new requirements.
 
-        For Each element As Char In originalString
+        For Each element As Char In inputString
             If (result.Any() AndAlso result.Last() = element) Then
-                If (count < allowedDuplicates) Then
+                If (count < itemCount) Then
                     result += element
                 End If
                 count += 1
-            Else 
+            Else
                 result += element
                 count = 1
             End If
