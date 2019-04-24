@@ -9,3 +9,4 @@ A collection of kata attempts.
 * RemoveDuplicateCharacters
 * StringCalculatorKata_One
 * StringCalculatorKata_Two
+* Kata04: Data Munging
