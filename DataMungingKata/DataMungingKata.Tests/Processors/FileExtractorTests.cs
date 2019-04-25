@@ -38,7 +38,7 @@ namespace DataMungingKata.Tests.Processors
         {
             // Arrange.
             const string input = @"C:\Weather.dat";
-            _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(x => { throw new ArgumentNullException(); });
+            _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(x => throw new ArgumentNullException());
 
             // Act.
             // Assert.
