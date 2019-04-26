@@ -79,9 +79,10 @@ namespace DataMungingKata.Tests.Processors
                     2,
                     new List<Weather>
                     {
-                        new Weather {Day = 1, MaximumTemperature = -121.5f, MinimumTemperature = -20.4f},
-                        new Weather {Day = 2, MaximumTemperature = -120.2f, MinimumTemperature = -117.3f},
-                        new Weather {Day = 3, MaximumTemperature = -21.1f, MinimumTemperature = -3.4f}
+                        new Weather {Day = 1, MaximumTemperature = -20.4f, MinimumTemperature = -121.5f},
+                        new Weather {Day = 2, MaximumTemperature = -117.3f, MinimumTemperature = -119.7f},
+                        new Weather {Day = 3, MaximumTemperature = -3.4f, MinimumTemperature = -21.1f},
+                        new Weather {Day = 3, MaximumTemperature = 2.1f, MinimumTemperature = -2.1f}
                     }
                 };
             }

@@ -18,7 +18,7 @@ namespace DataMungingKata.Processors
 
             foreach (var weather in weatherData)
             {
-                var temperatureChange = Math.Abs(weather.MaximumTemperature) - Math.Abs(weather.MinimumTemperature);
+                var temperatureChange = weather.MaximumTemperature - weather.MinimumTemperature;
 
                 if (temperatureChange < minimumTemperatureChange)
                 {
