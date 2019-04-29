@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DataMungingKata.Interfaces;
 using DataMungingKata.Types;
 
 namespace DataMungingKata.Processors
 {
-    public class WeatherData
+    public class WeatherData : INotify
     {
         public int GetDayOfLeastTemperatureChange(IList<Weather> weatherData)
         {
@@ -18,6 +19,9 @@ namespace DataMungingKata.Processors
 
             foreach (var weather in weatherData)
             {
+                // Contract requirements. ToDo: Extract out to another method.
+                if (weather.MinimumTemperature > weather.MaximumTemperature) throw new ArgumentException(nameof(weather), "The minimum temperature can not be greater than the maximum temperature.");
+
                 var temperatureChange = weather.MaximumTemperature - weather.MinimumTemperature;
 
                 if (temperatureChange < minimumTemperatureChange)

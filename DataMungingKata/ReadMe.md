@@ -44,3 +44,9 @@ The rest, we can ignore.
 
 We must note, that the min and max temps can have decimal points.
 
+### Solution
+
+I have got the base solution completed for part one now.  I still need to do some unit tests, but have a migrane at the moment, so leaving till later.
+
+However, the application does what is expected of it.  For this part, anyway.
+

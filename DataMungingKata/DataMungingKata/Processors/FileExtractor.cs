@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 
 using DataMungingKata.Constants;
+using DataMungingKata.Interfaces;
 using DataMungingKata.Types;
 
 namespace DataMungingKata.Processors
@@ -11,13 +12,13 @@ namespace DataMungingKata.Processors
     /// <summary>
     /// A system to extract data from a file.  Specifically the "<see cref="Weather"/>" data.
     /// </summary>
-    public class FileExtractor
+    public class FileExtractor : IReader
     {
         /// <summary>
         /// The file system that works with the File class.
         /// </summary>
         private readonly IFileSystem _fileSystem;
-        
+
         /// <summary>
         /// Initialises a new instance of the FileExtractor class.
         /// </summary>
@@ -88,14 +89,14 @@ namespace DataMungingKata.Processors
             foreach (var item in file)
             {
                 // Need to use the config to extract out the items...
-                if (!item.Equals(AppConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item))
+                if (!item.Equals(AppConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item) && !item.Contains("mo"))
                 {
                     // So, not the header and not the empty line.
                     var day = item.Substring(WeatherConfig.DayColumnStart, WeatherConfig.DayColumnLength);
                     var maxTemp = item.Substring(WeatherConfig.MaxTempColumnStart, WeatherConfig.MaxTempColumnLength);
                     var minTemp = item.Substring(WeatherConfig.MinTempColumnStart, WeatherConfig.MinTempColumnLength);
 
-                    if (int.TryParse(day, out var dayAsInt) && 
+                    if (int.TryParse(day, out var dayAsInt) &&
                         float.TryParse(maxTemp, out var maxTempAsFloat) &&
                         float.TryParse(minTemp, out var minTempAsFloat))
                     {

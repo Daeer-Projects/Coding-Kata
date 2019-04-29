@@ -28,6 +28,16 @@ namespace DataMungingKata.Tests.Processors
             Assert.Throws<ArgumentException>(() => _weatherData.GetDayOfLeastTemperatureChange(data));
         }
 
+        [Theory]
+        [MemberData(nameof(GetInValidWeatherData))]
+        public void Test_get_day_with_min_greater_than_max_temp_throws_exception(IList<Weather> data)
+        {
+            // Arrange.
+            // Act.
+            // Assert.
+            Assert.Throws<ArgumentException>(() => _weatherData.GetDayOfLeastTemperatureChange(data));
+        }
+
         [Fact]
         public void Test_get_day_with_null_list_throws_null_exception()
         {
@@ -83,6 +93,20 @@ namespace DataMungingKata.Tests.Processors
                         new Weather {Day = 2, MaximumTemperature = -117.3f, MinimumTemperature = -119.7f},
                         new Weather {Day = 3, MaximumTemperature = -3.4f, MinimumTemperature = -21.1f},
                         new Weather {Day = 3, MaximumTemperature = 2.1f, MinimumTemperature = -2.1f}
+                    }
+                };
+            }
+        }
+
+        public static IEnumerable<object[]> GetInValidWeatherData
+        {
+            get
+            {
+                yield return new object[]
+                {
+                    new List<Weather>
+                    {
+                        new Weather {Day = 1, MaximumTemperature = 21.4f, MinimumTemperature = 30f}
                     }
                 };
             }
