@@ -50,3 +50,10 @@ I have got the base solution completed for part one now.  I still need to do som
 
 However, the application does what is expected of it.  For this part, anyway.
 
+The unit tests how now been completed.  They cover the contract requirements that I defined, the simple exceptions, and a simple return for the good path.
+
+The other components have their own tests, so I haven't duplicated them.
+
+## Part Two
+
+Next part...

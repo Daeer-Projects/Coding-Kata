@@ -81,7 +81,7 @@ namespace DataMungingKata.Processors
         public IList<Weather> GetWeatherData(string fileLocation)
         {
             // Contract checks.
-            if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException();
+            if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException(nameof(fileLocation), "The file location can not be null.");
 
             var file = _fileSystem.File.ReadAllLines(fileLocation);
             var results = new List<Weather>();
