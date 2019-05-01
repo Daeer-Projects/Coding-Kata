@@ -23,31 +23,14 @@ namespace DataMungingKata.Tests.Processors
             _weatherDataManager = new WeatherDataManager(_reader, _notify);
         }
 
-        [Fact]
-        public void Test_construction_with_null_reader_throws_null_exception()
+        [Theory]
+        [MemberData(nameof(GetMixedConstructorParameters))]
+        public void Test_construction_with_mixed_null_parameters_throws_null_exception(IReader reader, INotify notify)
         {
             // Arrange.
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _weatherDataManager = new WeatherDataManager(null, _notify));
-        }
-
-        [Fact]
-        public void Test_construction_with_null_notify_throws_null_exception()
-        {
-            // Arrange.
-            // Act.
-            // Assert.
-            Assert.Throws<ArgumentNullException>(() => _weatherDataManager = new WeatherDataManager(_reader, null));
-        }
-
-        [Fact]
-        public void Test_construction_with_null_parameters_throws_null_exception()
-        {
-            // Arrange.
-            // Act.
-            // Assert.
-            Assert.Throws<ArgumentNullException>(() => _weatherDataManager = new WeatherDataManager(null, null));
+            Assert.Throws<ArgumentNullException>(() => _weatherDataManager = new WeatherDataManager(reader, notify));
         }
 
         [Theory]
@@ -78,5 +61,31 @@ namespace DataMungingKata.Tests.Processors
             // Assert.
             actual.Should().Be(expected);
         }
+
+        #region Test Data.
+
+        public static IEnumerable<object[]> GetMixedConstructorParameters
+        {
+            get
+            {
+                yield return new object[]
+                {
+                    null,
+                    Substitute.For<INotify>()
+                };
+                yield return new object[]
+                {
+                    Substitute.For<IReader>(),
+                    null
+                };
+                yield return new object[]
+                {
+                    null,
+                    null
+                };
+            }
+        }
+
+        #endregion Test Data.
     }
 }

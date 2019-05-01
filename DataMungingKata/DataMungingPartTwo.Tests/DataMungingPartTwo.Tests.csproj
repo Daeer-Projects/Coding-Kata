@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataMungingKata\DataMungingKata.csproj" />
+    <ProjectReference Include="..\DataMungingPartTwo\DataMungingPartTwo.csproj" />
   </ItemGroup>
 
 </Project>

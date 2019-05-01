@@ -56,4 +56,33 @@ The other components have their own tests, so I haven't duplicated them.
 
 ## Part Two
 
-Next part...
+Football Data.
+
+I've downloaded the file and added it to the solution.
+
+> The file football.dat contains the results from the English Premier League for 2001/2. The columns labeled ‘F’ and ‘A’ contain the total number of goals scored for and against each team in that season (so Arsenal scored 79 goals against opponents, and had 36 goals scored against them). Write a program to print the name of the team with the smallest difference in ‘for’ and ‘against’ goals.
+
+### Objective
+
+* Print the name of the team.
+* This team will need to correspond with the smallest difference in the 'for' and 'against' goals.
+* This data will need to be read in from a file.
+
+### Process
+
+The file reader process will be the same as from Part One.  The only difference is the columns I need to read in.
+
+#### Columns
+
+I need just three columns from the data.
+
+| Column  | Description         |Start | Length |
+|---------|---------------------|------|--------|
+| Team    | Team name           | 8    | 16     |
+| For     | For goal points     | 44   | 4      |
+| Against | Against goal points | 51   | 3      |
+
+The team is a string and will need to be trimmed.
+
+The other two will need to be converted to int's, as they don't contain any decimal points.
+
