@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
-using System.Text;
+
 using DataMungingKata.Processors;
 using DataMungingKata.Types;
 using FluentAssertions;
@@ -74,11 +75,22 @@ namespace DataMungingKata.Tests.Processors
             actual.Should().BeEquivalentTo(expectedList);
         }
 
+        [Fact]
+        public void Test_get_weather_date_with_invalid_file_throws_exception()
+        {
+            // Arrange.
+            _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(GetBadData());
+
+            // Act.
+            // Assert.
+            Assert.Throws<InvalidDataException>(() => _fileExtractor.GetWeatherData("fileName"));
+        }
+
         #region Test Data
 
         private string[] GetGoodData()
         {
-            return new string[]
+            return new[]
             {
                 "  Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP",
                 "  ",
@@ -90,7 +102,7 @@ namespace DataMungingKata.Tests.Processors
 
         private string[] GetBadData()
         {
-            return new string[]
+            return new[]
             {
                 "  Oh no, not this one!",
                 "  ",

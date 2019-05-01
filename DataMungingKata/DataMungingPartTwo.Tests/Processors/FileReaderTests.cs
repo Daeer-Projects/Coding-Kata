@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 
 using DataMungingPartTwo.Processors;
@@ -10,15 +11,15 @@ using Xunit;
 
 namespace DataMungingPartTwo.Tests.Processors
 {
-    public class FileExtractorTests
+    public class FileReaderTests
     {
         private readonly IFileSystem _fileSystem;
-        private readonly FileExtractor _fileExtractor;
+        private readonly FileReader _fileReader;
 
-        public FileExtractorTests()
+        public FileReaderTests()
         {
             _fileSystem = Substitute.For<IFileSystem>();
-            _fileExtractor = new FileExtractor(_fileSystem);
+            _fileReader = new FileReader(_fileSystem);
         }
 
         [Theory]
@@ -30,7 +31,7 @@ namespace DataMungingPartTwo.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _fileExtractor.GetFootballData(input));
+            Assert.Throws<ArgumentNullException>(() => _fileReader.GetFootballData(input));
         }
 
         [Fact]
@@ -42,7 +43,7 @@ namespace DataMungingPartTwo.Tests.Processors
 
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _fileExtractor.GetFootballData(input));
+            Assert.Throws<ArgumentNullException>(() => _fileReader.GetFootballData(input));
         }
 
         [Fact]
@@ -80,17 +81,28 @@ namespace DataMungingPartTwo.Tests.Processors
             _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(GetGoodData());
 
             // Act.
-            var actual = _fileExtractor.GetFootballData("fileName");
+            var actual = _fileReader.GetFootballData("fileName");
 
             // Assert.
             actual.Should().BeEquivalentTo(expectedList);
+        }
+
+        [Fact]
+        public void Test_get_football_date_with_invalid_file_throws_exception()
+        {
+            // Arrange.
+            _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(GetBadData());
+
+            // Act.
+            // Assert.
+            Assert.Throws<InvalidDataException>(() => _fileReader.GetFootballData("fileName"));
         }
 
         #region Test Data.
 
         private string[] GetGoodData()
         {
-            return new string[]
+            return new[]
             {
                 "       Team            P     W    L   D    F      A     Pts",
                 "    1. Arsenal         38    26   9   3    79  -  36    87",
@@ -98,6 +110,17 @@ namespace DataMungingPartTwo.Tests.Processors
                 "    3. Manchester_U    38    24   5   9    87  -  45    77",
                 "   -------------------------------------------------------",
                 "    4. Newcastle       38    21   8   9    74  -  52    71"
+            };
+        }
+
+        private string[] GetBadData()
+        {
+            return new[]
+            {
+                "  Oh no, not this one!",
+                "  ",
+                "   47834 2 1.22 424345 yep 12312    43",
+                ":)"
             };
         }
 

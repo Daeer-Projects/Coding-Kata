@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
-
+using System.Linq;
 using DataMungingKata.Constants;
 using DataMungingKata.Interfaces;
 using DataMungingKata.Types;
@@ -36,7 +37,7 @@ namespace DataMungingKata.Processors
         /// <exception cref="ArgumentNullException">
         /// If the file locations is <see langword="null"/> or empty.
         /// </exception>
-        /// <exception cref="System.IO.DirectoryNotFoundException">
+        /// <exception cref="DirectoryNotFoundException">
         /// The specified path is invalid (for example, it is on an unmapped
         /// drive).
         /// </exception>
@@ -49,13 +50,13 @@ namespace DataMungingKata.Processors
         /// <paramref name="path" /> specified a directory.-or- The caller does
         /// not have the required permission.
         /// </exception>
-        /// <exception cref="System.IO.FileNotFoundException">
+        /// <exception cref="FileNotFoundException">
         /// The file specified in <paramref name="path" /> was not found.
         /// </exception>
         /// <exception cref="System.Security.SecurityException">
         /// The caller does not have the required permission.
         /// </exception>
-        /// <exception cref="System.IO.PathTooLongException">
+        /// <exception cref="PathTooLongException">
         /// The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must
         /// be less than 248 characters, and file names must be less than 260
@@ -67,14 +68,16 @@ namespace DataMungingKata.Processors
         /// <exception cref="ArgumentException">
         /// <paramref name="path" /> is a zero-length string, contains only
         /// white space, or contains one or more invalid characters as defined
-        /// by <see cref="System.IO.Path.InvalidPathChars" /> .
+        /// by <see cref="Path.InvalidPathChars" /> .
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="startIndex" /> plus <paramref name="length" />
         /// indicates a position not within this instance. -or-
         /// <paramref name="startIndex" /> or <paramref name="length" /> is less
         /// than zero.
-        /// </exception>
+        /// </exception> 
+        /// <exception cref="InvalidOperationException">The source sequence is empty.</exception>
+        /// <exception cref="InvalidDataException">Invalid File Data.  No rows found.</exception>
         /// <returns>
         /// A list of weather items.
         /// </returns>
@@ -84,6 +87,8 @@ namespace DataMungingKata.Processors
             if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException(nameof(fileLocation), "The file location can not be null.");
 
             var file = _fileSystem.File.ReadAllLines(fileLocation);
+            if (!file.Any() || !file.First().Contains(AppConstants.WeatherHeader)) throw new InvalidDataException("Invalid File Data.  No rows found.");
+
             var results = new List<Weather>();
 
             foreach (var item in file)
@@ -112,7 +117,7 @@ namespace DataMungingKata.Processors
                     }
                 }
             }
-
+            
             return results;
         }
     }

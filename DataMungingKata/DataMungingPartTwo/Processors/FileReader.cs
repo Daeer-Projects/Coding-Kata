@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 
 using DataMungingPartTwo.Constants;
 using DataMungingPartTwo.Types;
 
 namespace DataMungingPartTwo.Processors
 {
-    public class FileExtractor
+    public class FileReader
     {
         private readonly IFileSystem _fileSystem;
 
-        public FileExtractor(IFileSystem file)
+        public FileReader(IFileSystem file)
         {
             _fileSystem = file;
         }
@@ -22,6 +24,8 @@ namespace DataMungingPartTwo.Processors
             if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException(nameof(fileLocation), "The file location can not be null.");
 
             var file = _fileSystem.File.ReadAllLines(fileLocation);
+            if (!file.Any() || !file.First().Contains(AppConstants.FootballHeader)) throw new InvalidDataException("Invalid File Data.  No rows found.");
+
             var results = new List<Football>();
 
             foreach (var item in file)
