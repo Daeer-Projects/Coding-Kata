@@ -5,11 +5,12 @@ using System.IO.Abstractions;
 using System.Linq;
 
 using DataMungingPartTwo.Constants;
+using DataMungingPartTwo.Interfaces;
 using DataMungingPartTwo.Types;
 
 namespace DataMungingPartTwo.Processors
 {
-    public class FileReader
+    public class FileReader : IReader
     {
         private readonly IFileSystem _fileSystem;
 

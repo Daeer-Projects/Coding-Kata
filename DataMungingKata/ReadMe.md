@@ -86,3 +86,15 @@ The team is a string and will need to be trimmed.
 
 The other two will need to be converted to int's, as they don't contain any decimal points.
 
+### Solution
+
+The application for Part Two is now complete'ish.
+
+I haven't added all of the summary blocks, but I know they should be there.  I think I will leave till Part Three for the final version... If I get to write another one.
+
+So, what is Part Three?
+
+
+## Part Three
+
+

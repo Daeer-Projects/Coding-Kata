@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DataMungingPartTwo.Interfaces;
 using DataMungingPartTwo.Types;
 
 namespace DataMungingPartTwo.Processors
 {
-    public class FootballNotifier
+    public class FootballNotifier : INotify
     {
         public string GetTeamWithSmallestPointRange(IList<Football> footballData)
         {
