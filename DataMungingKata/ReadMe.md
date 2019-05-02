@@ -97,4 +97,18 @@ So, what is Part Three?
 
 ## Part Three
 
+> Take the two programs written previously and factor out as much common code as possible, leaving you with two smaller programs and some kind of shared functionality.
 
+That sounds interesting.  How can I make some of the configuration systems more generic?  Hmmmmmm...
+
+### Kata Questions
+
+1. To what extent did the design decisions you made when writing the original programs make it easier or harder to factor out common code?
+2. Was the way you wrote the second program influenced by writing the first?
+3. Is factoring out as much common code as possible always a good thing? Did the readability of the programs suffer because of this requirement? How about the maintainability?
+
+#### Answers
+
+1. To do.
+2. Yes, very much so.  It was almost a copy of the first.
+3. To do.
