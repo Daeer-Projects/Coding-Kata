@@ -101,6 +101,24 @@ So, what is Part Three?
 
 That sounds interesting.  How can I make some of the configuration systems more generic?  Hmmmmmm...
 
+### Requirements
+
+I thought I would start with figuring out the new set of requirements for this project.
+
+So, what do we want it to do?
+
+1. Read in different types of files.
+2. Extract parts of the files / rows into defined classes.
+3. Have something that returns the specific question the bit requires.
+    a. This could be many different things based on what the part wants.
+
+### Questions
+
+1. How are we going to define the configuration for the file types?
+2. How are we going to define the interfaces for the generic process? I'm thinking I keep the IReader and INotify. Might need an IProcessor.
+3. How are we going to register the requirement type to the main program?
+
+
 ### Kata Questions
 
 1. To what extent did the design decisions you made when writing the original programs make it easier or harder to factor out common code?

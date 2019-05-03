@@ -20,9 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMungingPartTwo.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PartThree", "PartThree", "{F9E00131-A7DB-47A4-9216-3BC75D96DAA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMungingPartThree", "DataMungingPartThree\DataMungingPartThree.csproj", "{A88058CA-1CA9-4BB1-AF13-B7D02D801BE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMungingPartThree", "PartThree\DataMungingPartThree\DataMungingPartThree.csproj", "{A88058CA-1CA9-4BB1-AF13-B7D02D801BE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMungingPartThree.Tests", "DataMungingPartThree.Tests\DataMungingPartThree.Tests.csproj", "{FDE270D2-346E-478A-ADE7-11C865D18308}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMungingPartThree.Tests", "PartThree\DataMungingPartThree.Tests\DataMungingPartThree.Tests.csproj", "{FDE270D2-346E-478A-ADE7-11C865D18308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
