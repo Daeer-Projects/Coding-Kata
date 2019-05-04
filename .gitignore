@@ -10,3 +10,7 @@
 /DataMungingKata/PartThree/DataMungingPartThree/obj
 /DataMungingKata/PartThree/DataMungingPartThree.Tests/bin/Debug/netcoreapp3.0
 /DataMungingKata/PartThree/DataMungingPartThree.Tests/obj
+/DataMungingKata/PartThree/DataMungingCore/bin/Debug/netcoreapp3.0
+/DataMungingKata/PartThree/DataMungingCore/obj
+/DataMungingKata/PartThree/WeatherComponent/bin/Debug/netcoreapp3.0
+/DataMungingKata/PartThree/WeatherComponent/obj

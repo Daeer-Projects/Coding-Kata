@@ -112,20 +112,102 @@ So, what do we want it to do?
 3. Have something that returns the specific question the bit requires.
     a. This could be many different things based on what the part wants.
 
-### Questions
+Let's figure out the requirements a bit more.
 
-1. How are we going to define the configuration for the file types?
-2. How are we going to define the interfaces for the generic process? I'm thinking I keep the IReader and INotify. Might need an IProcessor.
-3. How are we going to register the requirement type to the main program?
+> We want the application to *register* *systems* into a *collection*, then *execute* the components, which will involve *reading* in data from a file, and *returning* the *result* of executing a question.
+
+So, each of the previous parts are systems.  We need to register them with something.  Then for each of those systems, we want to execute the process we did in the other parts.
+
+This involves reading in a file from a specific location, extracting parts of the data into an object, and then finding out a piece of information from the data.
+
+Apart from the console application that starts this process, I see three other parts.
+
+* Core - contains all of the interfaces, the registration system, and any other commom part.
+* Weather -  the weather component.
+* Football - the football component.
+
+I can think of two ways we could go with this.
+
+1. Create a Factory system to execute the different components.
+2. Set up an event system to make the components execute the question.
+
+Which way to go?
+
+I would like to try the event system, and see if I can get things to run asynchronously.
+
+There's a NuGet package that helps with events called Easy.MessageHub.
 
 
-### Kata Questions
+#### Core
+
+We will need the interfaces:
+
+* IReader
+* IMapper
+* INotify
+
+We will also need:
+
+ * IMessageHub - the event subscribe and publish system.
+ * Registration - registers the components defined in the solution.
+ * Executor - for each of the components, we want to raise the start event.
+ * Logging - need a system to log details of processing (Serilog).
+ * Interface Types - for the different types of return, we need something concrete to base them on.
+
+
+#### Components
+
+These will need to have an implementation of the interfaces.  We did this in part one and two.
+
+I want to add validation for the different parts and types that the components create and use.
+
+The component must have:
+
+* Types - the objects created and used.
+* IReader - the system that reads in data from the file.
+* IMapper - the system that maps the data from the file into the objects.
+* INotify - the system that executes the question against the data collected.
+* Validator - validates the types created.
+* Configuration - defines the parts of the data that we need to extract into an object.
+* Subscriber - we need to subscribe to a starting event.
+* Publisher - we need to publish the answer when we have finished.
+
+
+#### Problems
+
+I have a problem with just starting a project.  I can write some bits like this down, but when it actually comes to writing some code, I struggle.
+
+I guess I will just have to make a start, and see where things go.  If it changes, then I will have to update this read me with the reasons why it changed.
+
+So, onwards we go!
+
+
+##### First problem:
+
+The weather and football objects are totally different.  How do I make them an IDataType?
+
+The IDataType is part of the Core project.  That project should not care how the components object is defined.
+
+I have an idea, but not sure if it is right.  Not sure what the standard is to handle this problem.
+
+
+##### Second problem:
+
+My async skills are a bit limited unless using the built in async code.  However, file reading is synchronous, so trying to put it into a task factory.  Need to work on how!
+
+
+#### Progress
+
+I've set up most of the weather component and the tests for it.  I still need to do the validators, and extract parts of the current code to use those validators.
+
+
+## Kata Questions
 
 1. To what extent did the design decisions you made when writing the original programs make it easier or harder to factor out common code?
 2. Was the way you wrote the second program influenced by writing the first?
 3. Is factoring out as much common code as possible always a good thing? Did the readability of the programs suffer because of this requirement? How about the maintainability?
 
-#### Answers
+### Answers
 
 1. To do.
 2. Yes, very much so.  It was almost a copy of the first.
