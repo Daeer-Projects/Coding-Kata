@@ -7,6 +7,7 @@ using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
 using WeatherComponent.Configuration;
 using WeatherComponent.Constants;
+using WeatherComponent.Extensions;
 using WeatherComponent.Types;
 
 namespace WeatherComponent.Processors
@@ -17,7 +18,7 @@ namespace WeatherComponent.Processors
         {
             // Convert this to a type with specific validation.
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
-            if (!fileData.Any() || !fileData.First().Contains(WeatherConstants.WeatherHeader)) throw new InvalidDataException("Invalid File Data.  No rows found.");
+            if (!fileData.IsValid()) throw new InvalidDataException("Invalid File Data.  No rows found.");
             
             var results = await Task.Factory.StartNew(() => {
                 IList<IDataType> taskResults = new List<IDataType>();

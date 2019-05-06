@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.3.0" />
     <PackageReference Include="System.IO.Abstractions" Version="4.2.8" />
   </ItemGroup>
 
