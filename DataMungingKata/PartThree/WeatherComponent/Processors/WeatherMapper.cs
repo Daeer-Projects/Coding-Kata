@@ -18,7 +18,7 @@ namespace WeatherComponent.Processors
         {
             // Convert this to a type with specific validation.
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
-            if (!fileData.IsValid()) throw new InvalidDataException("Invalid File Data.  No rows found.");
+            if (!fileData.IsValid()) throw new InvalidDataException("Invalid Data File.");
             
             var results = await Task.Factory.StartNew(() => {
                 IList<IDataType> taskResults = new List<IDataType>();
