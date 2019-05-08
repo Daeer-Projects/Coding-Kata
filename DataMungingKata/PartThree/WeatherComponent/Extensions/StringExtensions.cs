@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using WeatherComponent.Configuration;
 using WeatherComponent.Types;
 
@@ -11,35 +12,52 @@ namespace WeatherComponent.Extensions
         {
             var isWeatherValidType = new WeatherValidationType();
 
-            Weather result = null;
             var (canExtract, errorMessage, data) = CanExtractWeatherItems(item);
             if (canExtract)
             {
-                var day = data[0];
-                var maxTemp = data[1];
-                var minTemp = data[2];
-
-                if (int.TryParse(day, out var dayAsInt) &&
-                    float.TryParse(maxTemp, out var maxTempAsFloat) &&
-                    float.TryParse(minTemp, out var minTempAsFloat))
-                {
-                    result = new Weather
-                    {
-                        Day = dayAsInt,
-                        MaximumTemperature = maxTempAsFloat,
-                        MinimumTemperature = minTempAsFloat
-                    };
-                }
-                else
-                {
-                    isWeatherValidType.IsValid = false;
-                    isWeatherValidType.ErrorList.Add($"Invalid items. Day: {day}, Max Temp: {maxTemp}, Min Temp: {minTemp}.");
-                }
+                isWeatherValidType = ExtractWeatherItems(data, isWeatherValidType);
             }
             else
             {
                 isWeatherValidType.IsValid = false;
                 isWeatherValidType.ErrorList.Add(errorMessage);
+            }
+
+            return isWeatherValidType;
+        }
+
+        private static WeatherValidationType ExtractWeatherItems(List<string> data, WeatherValidationType isWeatherValidType)
+        {
+            var day = data[0];
+            var maxTemp = data[1];
+            var minTemp = data[2];
+
+            if (int.TryParse(day, out var dayAsInt) &&
+                float.TryParse(maxTemp, out var maxTempAsFloat) &&
+                float.TryParse(minTemp, out var minTempAsFloat))
+            {
+                var result = new Weather
+                {
+                    Day = dayAsInt,
+                    MaximumTemperature = maxTempAsFloat,
+                    MinimumTemperature = minTempAsFloat
+                };
+
+                if (result.IsValid())
+                {
+                    isWeatherValidType.IsValid = true;
+                    isWeatherValidType.Weather = result;
+                }
+                else
+                {
+                    isWeatherValidType.IsValid = false;
+                    isWeatherValidType.ErrorList.Add($"Invalid Weather.");
+                }
+            }
+            else
+            {
+                isWeatherValidType.IsValid = false;
+                isWeatherValidType.ErrorList.Add($"Invalid items. Day: {day}, Max Temp: {maxTemp}, Min Temp: {minTemp}.");
             }
 
             return isWeatherValidType;

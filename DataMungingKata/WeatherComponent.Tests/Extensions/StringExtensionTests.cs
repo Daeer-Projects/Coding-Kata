@@ -50,5 +50,20 @@ namespace WeatherComponent.Tests.Extensions
             // Assert.
             result.ErrorList.Should().Contain(x => x.Contains("Invalid items."));
         }
+
+        [Theory]
+        [InlineData("   0  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5")]
+        [InlineData("-120  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5")]
+        [InlineData("  32  88    59    74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5")]
+        [InlineData("  15  88.4  88.5  74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5")]
+        public void Test_to_weather_with_valid_format_but_invalid_items_sets_error_list(string inputString)
+        {
+            // Arrange.
+            // Act.
+            var result = inputString.ToWeather();
+
+            // Assert.
+            result.ErrorList.Should().Contain(x => x.Contains("Invalid Weather."));
+        }
     }
 }

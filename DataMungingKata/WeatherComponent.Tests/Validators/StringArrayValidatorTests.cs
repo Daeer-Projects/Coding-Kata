@@ -8,7 +8,7 @@ namespace WeatherComponent.Tests.Validators
 {
     public class StringArrayValidatorTests
     {
-        private StringArrayValidator _arrayValidator;
+        private readonly StringArrayValidator _arrayValidator;
 
         public StringArrayValidatorTests()
         {
