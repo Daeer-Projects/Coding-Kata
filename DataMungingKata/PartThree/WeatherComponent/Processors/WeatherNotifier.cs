@@ -32,7 +32,6 @@ namespace WeatherComponent.Processors
                         {
                             throw new ArgumentException(weatherValidationResult.Errors.Select(m => m.ErrorMessage).ToString());
                         }
-                        //if (weather.MinimumTemperature > weather.MaximumTemperature) throw new ArgumentException("The minimum temperature can not be greater than the maximum temperature.");
 
                         var temperatureChange = weather.CalculateWeatherChange();
 

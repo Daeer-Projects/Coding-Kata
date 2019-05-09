@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using System;
+using FluentValidation.Results;
 using WeatherComponent.Types;
 using WeatherComponent.Validators;
 
@@ -18,6 +19,8 @@ namespace WeatherComponent.Extensions
         /// <summary>
         /// Extracted out this simple calculation so that if it changes
         /// in the future, we only change it in one place.
+        /// I have set the rounding to be to 2 decimal places.  The file will only provide up to
+        /// 1 decimal place.
         /// </summary>
         /// <param name="weather"> The item that contains the min and max temperatures. </param>
         /// <returns>
@@ -25,7 +28,7 @@ namespace WeatherComponent.Extensions
         /// </returns>
         public static float CalculateWeatherChange(this Weather weather)
         {
-            return weather.MaximumTemperature - weather.MinimumTemperature;
+            return MathF.Round(weather.MaximumTemperature - weather.MinimumTemperature, 2);
         }
     }
 }

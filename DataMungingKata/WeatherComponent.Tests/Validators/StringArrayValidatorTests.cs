@@ -38,9 +38,9 @@ namespace WeatherComponent.Tests.Validators
             // Assert.
             result.IsValid.Should().BeFalse("the invalid data provided should produce a false result.");
         }
-
-        #region Test Data.
         
+        #region Test Data.
+
         public static IEnumerable<object[]> GetGoodData
         {
             get

@@ -195,10 +195,38 @@ I have an idea, but not sure if it is right.  Not sure what the standard is to h
 
 My async skills are a bit limited unless using the built in async code.  However, file reading is synchronous, so trying to put it into a task factory.  Need to work on how!
 
+I think to start with, I will leave most of the code as synchronous, just to get it working.  When I have the code working, then I can work on making it asynchronous.
+
+
+##### Third problem:
+
+I am duplicating the validation for the Weather class.  The first time before we add it to the list in the mapper, the second time when we get it out of the data in the notifier.
+
+Should we be doing this twice?  There are arguments for both sides.
+
+For:
+1. We should be checking the objects we are working on.
+
+Against:
+1. The object was validated in the mapper, why do we need to duplicate that check again in the notifier?
+
+
+##### Fourth problem:
+
+I have noticed that the weather temperatures have an "*" next to them.  I don't think the other parts handle this, but I didn't notice that anything was wrong.  I think the value wouldn't have parsed into a float, so that Weather object would have been ignored and not part of the main calculation.  This would be incorrect.
+
+I will need to fix this issue in this part.
+
 
 #### Progress
 
 I've set up most of the weather component and the tests for it.  I still need to do the validators, and extract parts of the current code to use those validators.
+
+As I am writing more of the Weather component, I am noticing that there is a lot to write.  Which means, each component will be quite large.
+
+The Weather component is mostly there now, up to the stage where I could use the part one or part two console apps to use it.  I still need to work out how I am going to do the processing part again.
+
+I didn't like calling the working part a "manager" in the other parts.  A processor is what I think it should be, but it will be done differently if we are using events, not just using it as is.
 
 
 ## Kata Questions
