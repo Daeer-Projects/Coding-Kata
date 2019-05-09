@@ -18,7 +18,7 @@ namespace WeatherComponent.Tests.Extensions
             var result = weather.IsValid();
 
             // Assert.
-            result.Should().BeTrue("the weather data is all made up of valid data.");
+            result.IsValid.Should().BeTrue("the weather data is all made up of valid data.");
         }
 
         [Theory]
@@ -30,7 +30,7 @@ namespace WeatherComponent.Tests.Extensions
             var result = weather.IsValid();
 
             // Assert.
-            result.Should().BeFalse("the weather data is made up of invalid data.");
+            result.IsValid.Should().BeFalse("the weather data is made up of invalid data.");
         }
 
         #region Test Data.

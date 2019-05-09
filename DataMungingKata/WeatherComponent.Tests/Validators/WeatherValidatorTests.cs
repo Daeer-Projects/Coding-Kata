@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using FluentAssertions;
 using WeatherComponent.Types;
@@ -13,7 +14,7 @@ namespace WeatherComponent.Tests.Validators
 
         public WeatherValidatorTests()
         {
-            _weatherValidator = new WeatherValidator();   
+            _weatherValidator = new WeatherValidator();
         }
 
         [Theory]
@@ -30,7 +31,7 @@ namespace WeatherComponent.Tests.Validators
 
         [Theory]
         [MemberData(nameof(GetBadWeather))]
-        public void Test_validate_with_bad_data_returns_true(Weather weather)
+        public void Test_validate_with_bad_data_returns_false(Weather weather, int errorCount, List<string> errorMessages)
         {
             // Arrange.
             // Act.
@@ -38,6 +39,31 @@ namespace WeatherComponent.Tests.Validators
 
             // Assert.
             result.IsValid.Should().BeFalse("the weather data is made up of invalid data.");
+        }
+
+        [Theory]
+        [MemberData(nameof(GetBadWeather))]
+        public void Test_validate_with_bad_data_returns_expected_error_count(Weather weather, int errorCount, List<string> errorMessages)
+        {
+            // Arrange.
+            // Act.
+            var result = _weatherValidator.Validate(weather);
+
+            // Assert.
+            result.Errors.Count.Should().Be(errorCount);
+        }
+
+
+        [Theory]
+        [MemberData(nameof(GetBadWeather))]
+        public void Test_validate_with_bad_data_returns_expected_error_messages(Weather weather, int errorCount, List<string> errorMessages)
+        {
+            // Arrange.
+            // Act.
+            var result = _weatherValidator.Validate(weather);
+
+            // Assert.
+            result.Errors.Select(m => m.ErrorMessage).Should().BeEquivalentTo(errorMessages);
         }
 
         #region Test Data.
@@ -96,7 +122,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = 0,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -105,7 +134,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = -1,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -114,7 +146,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = -1000,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -123,7 +158,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = int.MinValue,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -132,7 +170,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = 32,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -141,7 +182,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = 69,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -150,7 +194,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = int.MaxValue,
                         MinimumTemperature = float.MinValue,
                         MaximumTemperature = float.MaxValue
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"Days must be within 1 and 31."}
                 };
                 yield return new object[]
                 {
@@ -159,7 +206,10 @@ namespace WeatherComponent.Tests.Validators
                         Day = 15,
                         MinimumTemperature = 100.01f,
                         MaximumTemperature = 100f
-                    }
+                    },
+                    1,
+                    new List<string>
+                        {"The Minimum Temperature cannot be greater than the Maximum Temperature."}
                 };
                 yield return new object[]
                 {
@@ -168,6 +218,24 @@ namespace WeatherComponent.Tests.Validators
                         Day = 15,
                         MinimumTemperature = -100.01f,
                         MaximumTemperature = -100.02f
+                    },
+                    1,
+                    new List<string>
+                        {"The Minimum Temperature cannot be greater than the Maximum Temperature."}
+                };
+                yield return new object[]
+                {
+                    new Weather
+                    {
+                        Day = 0,
+                        MinimumTemperature = -100.01f,
+                        MaximumTemperature = -100.02f
+                    },
+                    2,
+                    new List<string>
+                    {
+                        "Days must be within 1 and 31.",
+                        "The Minimum Temperature cannot be greater than the Maximum Temperature."
                     }
                 };
             }

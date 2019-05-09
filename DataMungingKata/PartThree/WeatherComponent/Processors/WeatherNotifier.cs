@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
+using WeatherComponent.Extensions;
 using WeatherComponent.Types;
 
 namespace WeatherComponent.Processors
@@ -24,10 +26,15 @@ namespace WeatherComponent.Processors
                 {
                     if (type.Data is Weather weather)
                     {
-                        // Contract requirements. ToDo: Extract out to another method.
-                        if (weather.MinimumTemperature > weather.MaximumTemperature) throw new ArgumentException("The minimum temperature can not be greater than the maximum temperature.");
+                        // Contract requirements. Duplicating the validation here. Should we?
+                        var weatherValidationResult = weather.IsValid();
+                        if (!weatherValidationResult.IsValid)
+                        {
+                            throw new ArgumentException(weatherValidationResult.Errors.Select(m => m.ErrorMessage).ToString());
+                        }
+                        //if (weather.MinimumTemperature > weather.MaximumTemperature) throw new ArgumentException("The minimum temperature can not be greater than the maximum temperature.");
 
-                        var temperatureChange = weather.MaximumTemperature - weather.MinimumTemperature;
+                        var temperatureChange = weather.CalculateWeatherChange();
 
                         if (temperatureChange < minimumTemperatureChange)
                         {
