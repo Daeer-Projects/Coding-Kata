@@ -130,12 +130,15 @@ I can think of two ways we could go with this.
 
 1. Create a Factory system to execute the different components.
 2. Set up an event system to make the components execute the question.
+3. Just loop through each process registered.
 
 Which way to go?
 
 I would like to try the event system, and see if I can get things to run asynchronously.
 
 There's a NuGet package that helps with events called Easy.MessageHub.
+
+I'm going to start with doing it simply with a processor, the same way that I did in parts one and two.  Then I'll work on making it an event based system, then the asynchronous changes.
 
 
 #### Core
@@ -197,6 +200,10 @@ My async skills are a bit limited unless using the built in async code.  However
 
 I think to start with, I will leave most of the code as synchronous, just to get it working.  When I have the code working, then I can work on making it asynchronous.
 
+Had to remove the asyncronous code to make it run straight.  So, need to work on getting that correct.  Hhhhhmmmmmmm!
+
+Breaks all of the unit tests converting to synchronous code for now.
+
 
 ##### Third problem:
 
@@ -205,17 +212,19 @@ I am duplicating the validation for the Weather class.  The first time before we
 Should we be doing this twice?  There are arguments for both sides.
 
 For:
-1. We should be checking the objects we are working on.
+1. We should be checking the objects we are working on, and not accepting that the object is valid.  
+2. The method does not know that something else has validated it.
 
 Against:
 1. The object was validated in the mapper, why do we need to duplicate that check again in the notifier?
+2. Additional overhead of re-processing the validation.
 
 
 ##### Fourth problem:
 
 I have noticed that the weather temperatures have an "*" next to them.  I don't think the other parts handle this, but I didn't notice that anything was wrong.  I think the value wouldn't have parsed into a float, so that Weather object would have been ignored and not part of the main calculation.  This would be incorrect.
 
-I will need to fix this issue in this part.
+I will need to fix this issue in this part. - Fixed in part three.
 
 
 #### Progress

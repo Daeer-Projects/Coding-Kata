@@ -5,6 +5,7 @@ namespace DataMungingCore.Interfaces
 {
     public interface IMapper
     {
-        Task<IList<IDataType>> MapAsync(string[] fileData);
+        //Task<IList<IDataType>> MapAsync(string[] fileData);
+        IList<IDataType> MapAsync(string[] fileData);
     }
 }

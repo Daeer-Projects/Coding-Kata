@@ -18,12 +18,14 @@ namespace WeatherComponent.Processors
             _fileSystem = fileSystem;
         }
 
-        public async Task<string[]> ReadAsync(string fileLocation)
+        //public async Task<string[]> ReadAsync(string fileLocation)
+        public string[] ReadAsync(string fileLocation)
         {            
             // Contract checks.
             if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException(nameof(fileLocation), "The file location can not be null.");
 
-            var file = await Task.Factory.StartNew(() => _fileSystem.File.ReadAllLines(fileLocation));
+            // var file = await Task.Factory.StartNew(() => _fileSystem.File.ReadAllLines(fileLocation));
+            var file = _fileSystem.File.ReadAllLines(fileLocation);
 
             return file;
         }

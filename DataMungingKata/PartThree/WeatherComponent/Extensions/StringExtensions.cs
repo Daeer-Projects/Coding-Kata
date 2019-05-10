@@ -49,8 +49,8 @@ namespace WeatherComponent.Extensions
         private static void ExtractWeatherItems(this WeatherValidationType isWeatherValidType, IReadOnlyList<string> data)
         {
             var day = data[0];
-            var maxTemp = data[1];
-            var minTemp = data[2];
+            var maxTemp = data[1].RemoveAsterisk();
+            var minTemp = data[2].RemoveAsterisk();
 
             if (int.TryParse(day, out var dayAsInt) &&
                 float.TryParse(maxTemp, out var maxTempAsFloat) &&
@@ -72,6 +72,10 @@ namespace WeatherComponent.Extensions
             }
         }
 
+        private static string RemoveAsterisk(this string item)
+        {
+            return  item.Replace("*", string.Empty);
+        }
 
         private static void ProcessWeatherValidation(this WeatherValidationType isWeatherValidType, Weather result)
         {
