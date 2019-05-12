@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO.Abstractions;
 using System.Threading.Tasks;
-using WeatherComponent.Constants;
-using WeatherComponent.Processors;
 
 namespace DataMungingPartThree
 {
@@ -21,28 +18,15 @@ namespace DataMungingPartThree
 
             // Just getting it to work for now.  Using the same method I did for part one and two.
 
+
             var boot = new Bootstrapper();
-            boot.ProcessItems();
+            var runningTasks = Task.Factory.StartNew(async () => await boot.ProcessItemsAsync().ConfigureAwait(false));
 
-            //var reader = new WeatherReader(new FileSystem());
-            //var mapper = new WeatherMapper();
-            //var notifier = new WeatherNotifier();
-            //var processor = new WeatherProcessor(reader, mapper, notifier);
-
-            //Console.WriteLine($"Processing the file '{WeatherConstants.FullFileName}'.");
-            //try
-            //{
-            //    var result = await Task.Factory.StartNew(() => processor.ProcessAsync(WeatherConstants.FullFileName));
-
-            //    Console.WriteLine($"The result is: {result}.");
-            //}
-            //catch (Exception exception)
-            //{
-            //    Console.WriteLine($"The application threw the following exception: {exception.Message}.");
-            //}
+            Console.WriteLine($"The result is: {runningTasks.GetAwaiter().GetResult().GetAwaiter().GetResult().ProcessResult}.");
 
             Console.WriteLine("I hoped you enjoyed it!");
 
         }
+
     }
 }

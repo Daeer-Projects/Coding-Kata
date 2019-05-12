@@ -5,7 +5,7 @@ namespace DataMungingCore.Interfaces
 {
     public interface INotify
     {
-         //Task<IReturnType> NotifyAsync(IList<IDataType> data);
-         IReturnType NotifyAsync(IList<IDataType> data);
+         Task<IReturnType> NotifyAsync(IList<IDataType> data);
+         //IReturnType NotifyAsync(IList<IDataType> data);
     }
 }

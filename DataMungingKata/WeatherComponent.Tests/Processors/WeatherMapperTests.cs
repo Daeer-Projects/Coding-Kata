@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
 using FluentAssertions;
+using NSubstitute;
+using Serilog;
 using WeatherComponent.Processors;
 using WeatherComponent.Types;
 using Xunit;
@@ -13,11 +15,13 @@ namespace WeatherComponent.Tests.Processors
 {
     public class WeatherMapperTests
     {
+        private readonly ILogger _logger;
         private readonly WeatherMapper _weatherMapper;
 
         public WeatherMapperTests()
         {
-            _weatherMapper = new WeatherMapper();
+            _logger = Substitute.For<ILogger>();
+            _weatherMapper = new WeatherMapper(_logger);
         }
 
         [Fact]

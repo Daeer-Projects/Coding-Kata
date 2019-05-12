@@ -6,6 +6,7 @@ using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
 using FluentAssertions;
 using NSubstitute;
+using Serilog;
 using WeatherComponent.Processors;
 using Xunit;
 
@@ -16,6 +17,7 @@ namespace WeatherComponent.Tests.Processors
         private readonly IReader _reader;
         private readonly IMapper _mapper;
         private readonly INotify _notify;
+        private readonly ILogger _logger;
         private WeatherProcessor _processor;
 
         public WeatherProcessorTests()
@@ -23,17 +25,18 @@ namespace WeatherComponent.Tests.Processors
             _reader = Substitute.For<IReader>();
             _mapper = Substitute.For<IMapper>();
             _notify = Substitute.For<INotify>();
-            _processor = new WeatherProcessor(_reader, _mapper, _notify);
+            _logger = Substitute.For<ILogger>();
+            _processor = new WeatherProcessor(_reader, _mapper, _notify, _logger);
         }
 
         [Theory]
         [MemberData(nameof(GetMixedConstructorParameters))]
-        public void Test_construction_with_mixed_null_parameters_throws_null_exception(IReader reader, IMapper mapper, INotify notify)
+        public void Test_construction_with_mixed_null_parameters_throws_null_exception(IReader reader, IMapper mapper, INotify notify, ILogger logger)
         {
             // Arrange.
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _processor = new WeatherProcessor(reader, mapper, notify));
+            Assert.Throws<ArgumentNullException>(() => _processor = new WeatherProcessor(reader, mapper, notify, logger));
         }
 
         [Theory]
@@ -57,13 +60,13 @@ namespace WeatherComponent.Tests.Processors
 
             _reader.ReadAsync(Arg.Any<string>()).Returns(new[] {"hello"});
             _mapper.MapAsync(Arg.Any<string[]>()).Returns(new List<IDataType>());
-            _notify.NotifyAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType {Result = 4});
+            _notify.NotifyAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType {ProcessResult = 4});
 
             // Act.
             var actual = await _processor.ProcessAsync(input).ConfigureAwait(false);
 
             // Assert.
-            actual.Result.Should().Be(expected);
+            actual.ProcessResult.Should().Be(expected);
         }
 
         #region Test Data.
@@ -76,22 +79,33 @@ namespace WeatherComponent.Tests.Processors
                 {
                     null,
                     Substitute.For<IMapper>(),
-                    Substitute.For<INotify>()
+                    Substitute.For<INotify>(),
+                    Substitute.For<ILogger>()
                 };
                 yield return new object[]
                 {
                     Substitute.For<IReader>(),
                     null,
                     Substitute.For<INotify>(),
+                    Substitute.For<ILogger>()
                 };
                 yield return new object[]
                 {
                     Substitute.For<IReader>(),
                     Substitute.For<IMapper>(),
+                    null,
+                    Substitute.For<ILogger>()
+                };
+                yield return new object[]
+                {
+                    Substitute.For<IReader>(),
+                    Substitute.For<IMapper>(),
+                    Substitute.For<INotify>(),
                     null
                 };
                 yield return new object[]
                 {
+                    null,
                     null,
                     null,
                     null

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
 using FluentAssertions;
+using NSubstitute;
+using Serilog;
 using WeatherComponent.Processors;
 using WeatherComponent.Types;
 using Xunit;
@@ -13,11 +15,13 @@ namespace WeatherComponent.Tests.Processors
 {
     public class WeatherNotifierTests
     {
+        private readonly ILogger _logger;
         private readonly WeatherNotifier _weatherNotifier;
 
         public WeatherNotifierTests()
         {
-            _weatherNotifier = new WeatherNotifier();
+            _logger = Substitute.For<ILogger>();
+            _weatherNotifier = new WeatherNotifier(_logger);
         }
 
         [Fact]
@@ -59,7 +63,7 @@ namespace WeatherComponent.Tests.Processors
             var actualDay = await _weatherNotifier.NotifyAsync(data).ConfigureAwait(false);
 
             // Assert.
-            actualDay.Result.Should().Be(expectedDay);
+            actualDay.ProcessResult.Should().Be(expectedDay);
         }
 
         #region Test Data.

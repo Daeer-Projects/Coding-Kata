@@ -5,7 +5,7 @@ namespace DataMungingCore.Interfaces
 {
     public interface IReader
     {
-        //Task<string[]> ReadAsync(string fileLocation);
-        string[] ReadAsync(string fileLocation);
+        Task<string[]> ReadAsync(string fileLocation);
+        //string[] ReadAsync(string fileLocation);
     }
 }

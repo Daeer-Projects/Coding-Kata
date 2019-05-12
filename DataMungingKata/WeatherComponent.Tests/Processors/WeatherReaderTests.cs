@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using NSubstitute;
+using Serilog;
 using WeatherComponent.Processors;
 using Xunit;
 
@@ -11,12 +12,14 @@ namespace WeatherComponent.Tests.Processors
     public class WeatherReaderTests
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ILogger _logger;
         private readonly WeatherReader _weatherReader;
 
         public WeatherReaderTests()
         {
             _fileSystem = Substitute.For<IFileSystem>();
-            _weatherReader = new WeatherReader(_fileSystem);
+            _logger = Substitute.For<ILogger>();
+            _weatherReader = new WeatherReader(_fileSystem, _logger);
         }
 
         [Theory]

@@ -2,6 +2,6 @@
 {
     public interface IReturnType
     {
-        object Result { get; }
+        object ProcessResult { get; }
     }
 }
