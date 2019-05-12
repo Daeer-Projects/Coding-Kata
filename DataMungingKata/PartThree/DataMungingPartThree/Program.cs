@@ -22,8 +22,13 @@ namespace DataMungingPartThree
             var boot = new Bootstrapper();
             var runningTasks = Task.Factory.StartNew(async () => await boot.ProcessItemsAsync().ConfigureAwait(false));
 
-            Console.WriteLine($"The result is: {runningTasks.GetAwaiter().GetResult().GetAwaiter().GetResult().ProcessResult}.");
+            var resultList = runningTasks.GetAwaiter().GetResult().GetAwaiter().GetResult();
 
+            foreach (var returnType in resultList)
+            {
+                Console.WriteLine($"The result is: {returnType.ProcessResult}.");
+            }
+            
             Console.WriteLine("I hoped you enjoyed it!");
 
         }

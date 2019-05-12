@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
+using DataMungingCore;
 using DataMungingCore.Interfaces;
-using DataMungingCore.Types;
+using Easy.MessageHub;
 using Serilog;
-using WeatherComponent.Constants;
-using WeatherComponent.Processors;
+using WeatherComponent;
 
 namespace DataMungingPartThree
 {
     public class Bootstrapper
     {
-        public async Task<IReturnType> ProcessItemsAsync()
+        public async Task<IList<IReturnType>> ProcessItemsAsync()
         {
             // Need to set up the logs.
             // Need to set up the event system.
@@ -22,40 +23,46 @@ namespace DataMungingPartThree
             // Need to subscribe to the completed events for each component.
 
             var weatherLog = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             var coreLogger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .WriteTo.File("coreLog.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
+
+            var hub = MessageHub.Instance;
 
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Logs created.");
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Creating components...");
 
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Creating 'Weather' component.");
-            var reader = new WeatherReader(new FileSystem(), weatherLog);
-            var mapper = new WeatherMapper(weatherLog);
-            var notifier = new WeatherNotifier(weatherLog);
-            var processor = new WeatherProcessor(reader, mapper, notifier, weatherLog);
-            IReturnType result = new ContainingResultType {ProcessResult = 0};
+            IComponentCreator weatherComponentCreator = new WeatherComponentCreator();
 
-            //Console.WriteLine($"Processing the file '{WeatherConstants.FullFileName}'.");
 
-            coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Processing the file: '{WeatherConstants.FullFileName}'");
+            var componentRegister = new ComponentRegister(hub, coreLogger);
+            var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator, new FileSystem(), weatherLog);
+
+            IList<IReturnType> resultList = new List<IReturnType>();
+
             try
             {
-                 result = await processor.ProcessAsync(WeatherConstants.FullFileName).ConfigureAwait(false);
-                 coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Weather complete. Result: {result.ProcessResult}.");
+                // We don't want to call this anymore, what we want to do is set up the event hub to subscribe
+                // to a call to process the registered components.
+                // Then we want the components to publish a completed event.
+                // Business Business, Numbers... (Psst, is this working?) (Yes) YAAAAYY!!
+
+                resultList = await componentRegister.ProcessComponents().ConfigureAwait(false);
             }
             catch (Exception exception)
             {
-                //Console.WriteLine($"The application threw the following exception: {exception.Message}.");
                 coreLogger.Error($"{GetType().Name} (ProcessItemsAsync): The application threw the following exception: {exception.Message}.");
             }
 
-            return result;
+            return resultList;
         }
     }
 }
