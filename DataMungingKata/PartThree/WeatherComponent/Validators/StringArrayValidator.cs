@@ -26,7 +26,7 @@ namespace WeatherComponent.Validators
             {
                 result = data.First().Equals(WeatherConstants.WeatherHeader);
             }
-            catch (ArgumentNullException)
+            catch (NullReferenceException)
             {
                 result = false;
             }
@@ -45,7 +45,7 @@ namespace WeatherComponent.Validators
             {
                 result = data.Last().Contains(WeatherConstants.WeatherLastRowFirstColumn);
             }
-            catch (ArgumentNullException)
+            catch (NullReferenceException)
             {
                 result = false;
             }
@@ -59,12 +59,23 @@ namespace WeatherComponent.Validators
 
         private bool MustContainDataRows(string[] data)
         {
-            var countOfDataRows = data.Count(item =>
-                !item.Contains(WeatherConstants.WeatherHeader) && 
-                !string.IsNullOrWhiteSpace(item) &&
-                !item.Contains(WeatherConstants.WeatherLastRowFirstColumn));
+            bool result;
 
-            return countOfDataRows > 0;
+            try
+            {
+                var countOfDataRows = data.Count(item =>
+                    !item.Contains(WeatherConstants.WeatherHeader) &&
+                    !string.IsNullOrWhiteSpace(item) &&
+                    !item.Contains(WeatherConstants.WeatherLastRowFirstColumn));
+
+                result = countOfDataRows > 0;
+            }
+            catch (NullReferenceException)
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

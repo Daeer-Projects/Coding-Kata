@@ -38,7 +38,43 @@ namespace WeatherComponent.Tests.Validators
             // Assert.
             result.IsValid.Should().BeFalse("the invalid data provided should produce a false result.");
         }
-        
+
+        [Fact]
+        public void Test_validate_with_first_item_null_returns_false()
+        {
+            // Arrange.
+            string[] data = { null, "hello", "banana"};
+            // Act.
+            var result = _arrayValidator.Validate(data);
+
+            // Assert.
+            result.IsValid.Should().BeFalse("the null data provided should produce a false result.");
+        }
+
+        [Fact]
+        public void Test_validate_with_last_item_null_returns_false()
+        {
+            // Arrange.
+            string[] data = { "yes", "hello", null };
+            // Act.
+            var result = _arrayValidator.Validate(data);
+
+            // Assert.
+            result.IsValid.Should().BeFalse("the null data provided should produce a false result.");
+        }
+
+        [Fact]
+        public void Test_validate_with_middle_item_null_returns_false()
+        {
+            // Arrange.
+            string[] data = { "yes", null, "hello" };
+            // Act.
+            var result = _arrayValidator.Validate(data);
+
+            // Assert.
+            result.IsValid.Should().BeFalse("the null data provided should produce a false result.");
+        }
+
         #region Test Data.
 
         public static IEnumerable<object[]> GetGoodData

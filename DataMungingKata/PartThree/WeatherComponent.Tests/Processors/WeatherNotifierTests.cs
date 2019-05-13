@@ -44,7 +44,7 @@ namespace WeatherComponent.Tests.Processors
             // Assert.
             await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data));
         }
-
+        
         [Fact]
         public async Task Test_get_day_with_null_list_throws_null_exception()
         {

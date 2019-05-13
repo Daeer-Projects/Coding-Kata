@@ -21,13 +21,7 @@ namespace DataMungingPartThree
             // Need to register the component(s).
             // Need to raise the start event.
             // Need to subscribe to the completed events for each component.
-
-            //var weatherLog = new LoggerConfiguration()
-            //    .MinimumLevel.Debug()
-            //    .WriteTo.Console()
-            //    .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
-            //    .CreateLogger();
-
+            
             var coreLogger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()

@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace DataMungingPartThree.Tests
+namespace DataMungingCore.Tests
 {
     public class UnitTest1
     {

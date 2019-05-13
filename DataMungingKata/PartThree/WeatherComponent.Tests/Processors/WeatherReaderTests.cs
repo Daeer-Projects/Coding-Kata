@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-
+using FluentAssertions;
 using NSubstitute;
 using Serilog;
 using WeatherComponent.Processors;
@@ -46,6 +46,21 @@ namespace WeatherComponent.Tests.Processors
             // Assert.
             await Assert.ThrowsAsync<ArgumentNullException>(() =>
                 _weatherReader.ReadAsync(input));
+        }
+
+        [Fact]
+        public async Task Test_get_weather_data_returns_expected_data()
+        {
+            // Arrange.
+            const string input = @"C:\Weather.dat";
+            string[] data = {"header", "data", "footer"};
+            _fileSystem.File.ReadAllLines(Arg.Any<string>()).Returns(data);
+
+            // Act.
+            var result = await _weatherReader.ReadAsync(input).ConfigureAwait(false);
+
+            // Assert.
+            result.Should().BeEquivalentTo(data);
         }
     }
 }

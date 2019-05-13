@@ -38,34 +38,12 @@ namespace WeatherComponent.Tests.Validators
             var result = _weatherValidator.Validate(weather);
 
             // Assert.
+            // If one fails, then it all should fail.  We will see the 'because' detail.
             result.IsValid.Should().BeFalse("the weather data is made up of invalid data.");
+            result.Errors.Count.Should().Be(errorCount, "the count should be what I defined.");
+            result.Errors.Select(m => m.ErrorMessage).Should().BeEquivalentTo(errorMessages, "the error messages need to match.");
         }
-
-        [Theory]
-        [MemberData(nameof(GetBadWeather))]
-        public void Test_validate_with_bad_data_returns_expected_error_count(Weather weather, int errorCount, List<string> errorMessages)
-        {
-            // Arrange.
-            // Act.
-            var result = _weatherValidator.Validate(weather);
-
-            // Assert.
-            result.Errors.Count.Should().Be(errorCount);
-        }
-
-
-        [Theory]
-        [MemberData(nameof(GetBadWeather))]
-        public void Test_validate_with_bad_data_returns_expected_error_messages(Weather weather, int errorCount, List<string> errorMessages)
-        {
-            // Arrange.
-            // Act.
-            var result = _weatherValidator.Validate(weather);
-
-            // Assert.
-            result.Errors.Select(m => m.ErrorMessage).Should().BeEquivalentTo(errorMessages);
-        }
-
+        
         #region Test Data.
 
         public static IEnumerable<object[]> GetGoodWeather

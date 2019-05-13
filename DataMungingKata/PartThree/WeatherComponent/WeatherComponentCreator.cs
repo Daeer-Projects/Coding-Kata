@@ -1,6 +1,4 @@
-﻿using System.IO.Abstractions;
-
-using DataMungingCore.Interfaces;
+﻿using DataMungingCore.Interfaces;
 using Easy.MessageHub;
 using WeatherComponent.Configuration;
 using WeatherComponent.Processors;
@@ -22,11 +20,6 @@ namespace WeatherComponent
             _weatherComponent = new Types.WeatherComponent(reader, mapper, notify, processor, Constants.WeatherConstants.FullFileName);
 
             return _weatherComponent;
-        }
-
-        public void RegisterSubscripts()
-        {
-            _weatherComponent.Processor.RegisterSubscriptions();
         }
     }
 }
