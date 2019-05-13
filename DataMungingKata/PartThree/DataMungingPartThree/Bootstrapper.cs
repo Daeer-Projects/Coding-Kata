@@ -13,7 +13,7 @@ namespace DataMungingPartThree
 {
     public class Bootstrapper
     {
-        public async Task<IList<IReturnType>> ProcessItemsAsync()
+        public void ProcessItemsAsync()
         {
             // Need to set up the logs.
             // Need to set up the event system.
@@ -22,11 +22,11 @@ namespace DataMungingPartThree
             // Need to raise the start event.
             // Need to subscribe to the completed events for each component.
 
-            var weatherLog = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
+            //var weatherLog = new LoggerConfiguration()
+            //    .MinimumLevel.Debug()
+            //    .WriteTo.Console()
+            //    .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
+            //    .CreateLogger();
 
             var coreLogger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -34,7 +34,7 @@ namespace DataMungingPartThree
                 .WriteTo.File("coreLog.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            var hub = MessageHub.Instance;
+             var hub = MessageHub.Instance;
 
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Logs created.");
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Creating components...");
@@ -44,10 +44,13 @@ namespace DataMungingPartThree
 
 
             var componentRegister = new ComponentRegister(hub, coreLogger);
-            var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator, new FileSystem(), weatherLog);
+            var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator);
 
-            IList<IReturnType> resultList = new List<IReturnType>();
+            // Does this work?
+            hub.Subscribe<IReturnType>(r => coreLogger.Information($"The result is: {r.ProcessResult}."));
 
+            // Apparently so.
+            
             try
             {
                 // We don't want to call this anymore, what we want to do is set up the event hub to subscribe
@@ -55,14 +58,14 @@ namespace DataMungingPartThree
                 // Then we want the components to publish a completed event.
                 // Business Business, Numbers... (Psst, is this working?) (Yes) YAAAAYY!!
 
-                resultList = await componentRegister.ProcessComponents().ConfigureAwait(false);
+                //await componentRegister.ProcessComponents().ConfigureAwait(false);
+
+                hub.Publish("Start Processing...");
             }
             catch (Exception exception)
             {
                 coreLogger.Error($"{GetType().Name} (ProcessItemsAsync): The application threw the following exception: {exception.Message}.");
             }
-
-            return resultList;
         }
     }
 }

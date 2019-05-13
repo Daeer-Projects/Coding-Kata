@@ -1,11 +1,9 @@
-﻿using Serilog;
-
-using System.IO.Abstractions;
+﻿using Easy.MessageHub;
 
 namespace DataMungingCore.Interfaces
 {
     public interface IComponentCreator
     {
-        IComponent CreateComponent(IFileSystem file, ILogger logger);
+        IComponent CreateComponent(IMessageHub hub);
     }
 }

@@ -4,7 +4,7 @@ namespace DataMungingCore.Interfaces
 {
     public interface IProcessor
     {
-        Task<IReturnType> ProcessAsync(string fileLocation);
-        //IReturnType ProcessAsync(string fileLocation);
+        void RegisterSubscriptions();
+        Task ProcessAsync(string fileLocation);
     }
 }

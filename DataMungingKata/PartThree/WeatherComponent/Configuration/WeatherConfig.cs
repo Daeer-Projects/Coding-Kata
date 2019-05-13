@@ -1,4 +1,7 @@
-﻿namespace WeatherComponent.Configuration
+﻿using System.IO.Abstractions;
+using Serilog;
+
+namespace WeatherComponent.Configuration
 {
     public class WeatherConfig
     {
@@ -10,5 +13,21 @@
 
         public const int MinTempColumnStart = 11;
         public const int MinTempColumnLength = 6;
+
+        public static ILogger GetLoggerConfiguration()
+        {
+            var weatherLog = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            return weatherLog;
+        }
+
+        public static IFileSystem GetFileSystem()
+        {
+            return new FileSystem();
+        }
     }
 }

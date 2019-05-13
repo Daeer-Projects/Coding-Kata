@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataMungingPartThree
@@ -20,18 +21,26 @@ namespace DataMungingPartThree
 
 
             var boot = new Bootstrapper();
-            var runningTasks = Task.Factory.StartNew(async () => await boot.ProcessItemsAsync().ConfigureAwait(false));
+            boot.ProcessItemsAsync();
+            //var runningTasks = Task.Factory.StartNew(() => boot.ProcessItemsAsync());
 
-            var resultList = runningTasks.GetAwaiter().GetResult().GetAwaiter().GetResult();
-
-            foreach (var returnType in resultList)
+            // Still need to ensure that everything is still running when the results come in.
+            // There has to be a better way of waiting for all tasks and child tasks to complete.
+            //runningTasks.GetAwaiter().GetResult();
+            var completed = false;
+            Console.WriteLine("Process Running...  Press 'q' to quit.");
+            do
             {
-                Console.WriteLine($"The result is: {returnType.ProcessResult}.");
-            }
-            
+                Thread.Sleep(10);
+                var key = Console.ReadKey();
+                if (key.KeyChar.Equals('q'))
+                {
+                    completed = true;
+                }
+            } while (!completed);
+
+
             Console.WriteLine("I hoped you enjoyed it!");
-
         }
-
     }
 }

@@ -54,6 +54,14 @@ The unit tests how now been completed.  They cover the contract requirements tha
 
 The other components have their own tests, so I haven't duplicated them.
 
+## Defects
+
+1. Temperature does not parse due to "*" in data row.
+> I have noticed, when creating part three, that a couple of the temperatures have an "*" in them.  These currently don't parse as valid floats in this version.
+>
+> However, the answer is still the same when I have fixed this issue in part three.
+
+
 ## Part Two
 
 Football Data.
@@ -204,6 +212,8 @@ Had to remove the asyncronous code to make it run straight.  So, need to work on
 
 Breaks all of the unit tests converting to synchronous code for now.
 
+This is now working, but I am still not sure if what I have done is correct.  Unit tests work, and running the program works.
+
 
 ##### Third problem:
 
@@ -236,6 +246,16 @@ As I am writing more of the Weather component, I am noticing that there is a lot
 The Weather component is mostly there now, up to the stage where I could use the part one or part two console apps to use it.  I still need to work out how I am going to do the processing part again.
 
 I didn't like calling the working part a "manager" in the other parts.  A processor is what I think it should be, but it will be done differently if we are using events, not just using it as is.
+
+I have part three running the weather component the same way that part one did.  It works and gives me the same answer, even if the code in part one wasn't correct.
+
+The next step is to start getting the event system running.  Seems to be working, as I am stopping the execution until the user chooses to quit.  I get the process running by raising a string event (start processing).
+
+The component process also raises a completed event.
+
+The next step is to clean up the core project and bootstrap.  Which includes some more unit tests.
+
+Then add the football component, which will be the same as from part two, but with added validation and tests to keep it inline with the new weather component.
 
 
 ## Kata Questions

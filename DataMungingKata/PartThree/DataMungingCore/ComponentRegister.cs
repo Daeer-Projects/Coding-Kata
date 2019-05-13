@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using DataMungingCore.Interfaces;
@@ -21,26 +20,26 @@ namespace DataMungingCore
             Components = new List<IComponent>();
         }
 
-        public bool RegisterComponent(IComponentCreator creator, IFileSystem file, ILogger logger)
+        public bool RegisterComponent(IComponentCreator creator)
         {
             // If any of these things are null, then return false.
-            Components.Add(creator.CreateComponent(file, logger));
+            var component = creator.CreateComponent(Hub);
+            component.Processor.RegisterSubscriptions();
+            Components.Add(component);
             return true; // For now...
         }
 
-        public async Task<IList<IReturnType>> ProcessComponents()
-        {
-            _logger.Information($"{GetType().Name} (ProcessComponents): Starting processing the components.");
-            var resultList = new List<IReturnType>();
+        //// We don't want to do this, we want an event to start the process for the component.
+        //public async Task ProcessComponents()
+        //{
+        //    _logger.Information($"{GetType().Name} (ProcessComponents): Starting processing the components.");
+        //    //var resultList = new List<IReturnType>();
 
-            foreach (var component in Components)
-            {
-                _logger.Debug($"{GetType().Name} (ProcessComponents): Processing: {component.FileLocation}.");
-                var result = await component.Processor.ProcessAsync(component.FileLocation).ConfigureAwait(false);
-                resultList.Add(result);
-            }
-
-            return resultList;
-        }
+        //    foreach (var component in Components)
+        //    {
+        //        _logger.Debug($"{GetType().Name} (ProcessComponents): Processing: {component.FileLocation}.");
+        //        await component.Processor.ProcessAsync(component.FileLocation).ConfigureAwait(false);
+        //    }
+        //}
     }
 }
