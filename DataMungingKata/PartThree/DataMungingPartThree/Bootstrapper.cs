@@ -35,13 +35,19 @@ namespace DataMungingPartThree
 
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Creating 'Weather' component.");
             IComponentCreator weatherComponentCreator = new WeatherComponentCreator();
+            //IComponentCreator weatherComponentCreatorTwo = new WeatherComponentCreator();
+            //IComponentCreator weatherComponentCreatorThree = new WeatherComponentCreator();
 
 
             var componentRegister = new ComponentRegister(hub, coreLogger);
-            var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator);
+            var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator, WeatherComponent.Constants.WeatherConstants.FullFileName);
+            //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorTwo, WeatherComponent.Constants.WeatherConstants.FullFileNameTwo);
+            //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorThree, WeatherComponent.Constants.WeatherConstants.FullFileNameThree);
 
             // Does this work?
-            hub.Subscribe<IReturnType>(r => coreLogger.Information($"The result is: {r.ProcessResult}."));
+            componentRegister.RegisterSubscriptions();
+
+            // hub.Subscribe<IReturnType>(r => coreLogger.Information($"The result is: {r.ProcessResult}."));
 
             // Apparently so.
             

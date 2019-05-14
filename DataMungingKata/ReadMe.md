@@ -253,9 +253,14 @@ The next step is to start getting the event system running.  Seems to be working
 
 The component process also raises a completed event.
 
-The next step is to clean up the core project and bootstrap.  Which includes some more unit tests.
+Made some small changes with how the subscriptions and registrations is done.  The Message Hub sets up the subscriptions within the core project now, not the component.
+
+The next step is to clean up the core project and bootstrap.  Which includes some more unit tests.  As I have cleabed up the code a bit in the core, this leaves me with just the ComponentRegister to unit test.
 
 Then add the football component, which will be the same as from part two, but with added validation and tests to keep it inline with the new weather component.
+
+Did an experiment with creating three weather.dat files and seeing what happened.  Got it to work with the new file name / locations.  All looked good.
+
 
 
 ## Kata Questions

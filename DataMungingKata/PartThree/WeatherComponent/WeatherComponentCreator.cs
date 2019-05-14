@@ -9,7 +9,7 @@ namespace WeatherComponent
     {
         private IComponent _weatherComponent;
 
-        public IComponent CreateComponent(IMessageHub hub)
+        public IComponent CreateComponent(IMessageHub hub, string fileName)
         {
             var file = WeatherConfig.GetFileSystem();
             var logger = WeatherConfig.GetLoggerConfiguration();
@@ -17,7 +17,7 @@ namespace WeatherComponent
             var mapper = new WeatherMapper(logger);
             var notify = new WeatherNotifier(logger);
             var processor = new WeatherProcessor(reader, mapper, notify, hub, logger);
-            _weatherComponent = new Types.WeatherComponent(reader, mapper, notify, processor, Constants.WeatherConstants.FullFileName);
+            _weatherComponent = new Types.WeatherComponent(reader, mapper, notify, processor, fileName);
 
             return _weatherComponent;
         }

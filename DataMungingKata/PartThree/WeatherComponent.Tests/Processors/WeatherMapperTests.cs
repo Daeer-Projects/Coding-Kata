@@ -60,6 +60,17 @@ namespace WeatherComponent.Tests.Processors
         }
 
         [Fact]
+        public async Task Test_get_weather_date_with_invalid_data_logs_invalid_weather()
+        {
+            // Arrange.
+            // Act.
+            await _weatherMapper.MapAsync(GetInvalidData()).ConfigureAwait(false);
+
+            // Assert.
+            _logger.Received(1).Warning(Arg.Is<string>(l => l.Contains("(MapAsync): Item not valid:")));
+        }
+
+        [Fact]
         public async Task Test_get_weather_date_with_invalid_file_throws_exception()
         {
             // Arrange.
@@ -78,6 +89,18 @@ namespace WeatherComponent.Tests.Processors
                 "  Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP",
                 "  ",
                 "   1  12.6   8.1  74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5",
+                "   2  15*    9.3  71          46.5       0.00         330  8.7 340  23  3.3  70 28 1004.5",
+                "  mo  82.9  60.5  71.7    16  58.8       0.00              6.9          5.3"
+            };
+        }
+
+        private string[] GetInvalidData()
+        {
+            return new[]
+            {
+                "  Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP",
+                "  ",
+                "   1  10.6  18.1  74          53.8       0.00 F       280  9.6 270  17  1.6  93 23 1004.5",
                 "   2  15*    9.3  71          46.5       0.00         330  8.7 340  23  3.3  70 28 1004.5",
                 "  mo  82.9  60.5  71.7    16  58.8       0.00              6.9          5.3"
             };

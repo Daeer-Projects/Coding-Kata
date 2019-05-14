@@ -22,7 +22,8 @@ namespace WeatherComponent.Tests
         public void Test_create_returns_valid_component()
         {
             // Arrange.
-            var component = _componentCreator.CreateComponent(_messageHub);
+            const string file = "fileName";
+            var component = _componentCreator.CreateComponent(_messageHub, file);
 
             // Act.
             // Assert.
@@ -33,7 +34,8 @@ namespace WeatherComponent.Tests
         public void Test_create_returns_valid_weather_component()
         {
             // Arrange.
-            var component = _componentCreator.CreateComponent(_messageHub);
+            const string file = "fileName";
+            var component = _componentCreator.CreateComponent(_messageHub, file);
 
             // Act.
             // Assert.
@@ -44,11 +46,12 @@ namespace WeatherComponent.Tests
         public void Test_create_returns_valid_weather_component_and_parts()
         {
             // Arrange.
-            var component = _componentCreator.CreateComponent(_messageHub);
+            const string file = "fileName";
+            var component = _componentCreator.CreateComponent(_messageHub, file);
 
             // Act.
             // Assert.
-            component.FileLocation.Should().Be(WeatherConstants.FullFileName, "that's the file name we set.");
+            component.FileLocation.Should().Be(file, "that's the file name we set.");
             component.Reader.Should().NotBeNull("the reader should be created and initialised.");
             component.Mapper.Should().NotBeNull("the mapper should be created and initialised.");
             component.Notify.Should().NotBeNull("the notify should be created and initialised.");

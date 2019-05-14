@@ -20,26 +20,19 @@ namespace DataMungingCore
             Components = new List<IComponent>();
         }
 
-        public bool RegisterComponent(IComponentCreator creator)
+        public bool RegisterComponent(IComponentCreator creator, string fileName)
         {
             // If any of these things are null, then return false.
-            var component = creator.CreateComponent(Hub);
-            component.Processor.RegisterSubscriptions();
+            var component = creator.CreateComponent(Hub, fileName);
+            Hub.Subscribe<string>(async (s) => await component.Processor.ProcessAsync(fileName).ConfigureAwait(false));
             Components.Add(component);
             return true; // For now...
         }
 
-        //// We don't want to do this, we want an event to start the process for the component.
-        //public async Task ProcessComponents()
-        //{
-        //    _logger.Information($"{GetType().Name} (ProcessComponents): Starting processing the components.");
-        //    //var resultList = new List<IReturnType>();
-
-        //    foreach (var component in Components)
-        //    {
-        //        _logger.Debug($"{GetType().Name} (ProcessComponents): Processing: {component.FileLocation}.");
-        //        await component.Processor.ProcessAsync(component.FileLocation).ConfigureAwait(false);
-        //    }
-        //}
+        public bool RegisterSubscriptions()
+        {
+            Hub.Subscribe<IReturnType>(r => _logger.Information($"The result is: {r.ProcessResult}."));
+            return true; // For now...
+        }
     }
 }

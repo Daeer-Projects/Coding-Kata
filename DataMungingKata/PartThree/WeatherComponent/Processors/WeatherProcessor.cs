@@ -25,12 +25,7 @@ namespace WeatherComponent.Processors
             _messageHub = hub ?? throw new ArgumentNullException(nameof(hub), "The hub can't be null.");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "The logger can't be null.");
         }
-
-        public void RegisterSubscriptions()
-        {
-            _messageHub.Subscribe<string>(async (s) => await ProcessAsync(WeatherConstants.FullFileName).ConfigureAwait(false));
-        }
-
+        
         public async Task ProcessAsync(string fileLocation)
         {
             // Contract requirements.

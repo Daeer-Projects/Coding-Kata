@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		football.dat = football.dat
 		ReadMe.md = ReadMe.md
 		weather.dat = weather.dat
+		weather2.dat = weather2.dat
+		weather3.dat = weather3.dat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMungingKata.Tests", "DataMungingKata.Tests\DataMungingKata.Tests.csproj", "{FD16133B-49D7-4CD7-AEBC-032D7B86F8DB}"
@@ -28,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherComponent", "PartThr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherComponent.Tests", "PartThree\WeatherComponent.Tests\WeatherComponent.Tests.csproj", "{DB439428-930F-4682-A733-D3678D4417E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMungingCore.Tests", "PartThree\DataMungingCore.Tests\DataMungingCore.Tests.csproj", "{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMungingCore.Tests", "PartThree\DataMungingCore.Tests\DataMungingCore.Tests.csproj", "{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -73,7 +73,7 @@ namespace WeatherComponent.Tests.Processors
             _messageHub.Received(1)
                 .Publish<IReturnType>(Arg.Is<ContainingResultType>(result => result.ProcessResult.Equals(expected)));
         }
-
+        
         #region Test Data.
 
         public static IEnumerable<object[]> GetMixedConstructorParameters

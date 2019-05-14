@@ -18,7 +18,6 @@ namespace WeatherComponent.Configuration
         {
             var weatherLog = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                //.WriteTo.Console()
                 .WriteTo.File("weatherLog.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 

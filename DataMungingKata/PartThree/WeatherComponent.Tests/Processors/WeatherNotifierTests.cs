@@ -60,7 +60,7 @@ namespace WeatherComponent.Tests.Processors
         {
             // Arrange.
             // Act.
-            var actualDay = await _weatherNotifier.NotifyAsync(data).ConfigureAwait(false);
+            var actualDay = await _weatherNotifier.NotifyAsync(data).ConfigureAwait(true);
 
             // Assert.
             actualDay.ProcessResult.Should().Be(expectedDay);
