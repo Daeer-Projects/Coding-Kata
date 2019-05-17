@@ -44,12 +44,7 @@ namespace DataMungingPartThree
             //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorTwo, WeatherComponent.Constants.WeatherConstants.FullFileNameTwo);
             //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorThree, WeatherComponent.Constants.WeatherConstants.FullFileNameThree);
 
-            // Does this work?
             componentRegister.RegisterSubscriptions();
-
-            // hub.Subscribe<IReturnType>(r => coreLogger.Information($"The result is: {r.ProcessResult}."));
-
-            // Apparently so.
             
             try
             {
@@ -57,9 +52,7 @@ namespace DataMungingPartThree
                 // to a call to process the registered components.
                 // Then we want the components to publish a completed event.
                 // Business Business, Numbers... (Psst, is this working?) (Yes) YAAAAYY!!
-
-                //await componentRegister.ProcessComponents().ConfigureAwait(false);
-
+                
                 hub.Publish("Start Processing...");
             }
             catch (Exception exception)
