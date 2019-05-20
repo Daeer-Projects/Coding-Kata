@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherComponent.Tests", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMungingCore.Tests", "PartThree\DataMungingCore.Tests\DataMungingCore.Tests.csproj", "{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootballComponent", "PartThree\FootballComponent\FootballComponent.csproj", "{435CE8F4-974A-4FAC-A920-47942F0B3118}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{435CE8F4-974A-4FAC-A920-47942F0B3118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{435CE8F4-974A-4FAC-A920-47942F0B3118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{435CE8F4-974A-4FAC-A920-47942F0B3118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{435CE8F4-974A-4FAC-A920-47942F0B3118}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{36B6D9E7-4E75-4BC6-8F3B-C98A0D0A54B0} = {F9E00131-A7DB-47A4-9216-3BC75D96DAA0}
 		{DB439428-930F-4682-A733-D3678D4417E4} = {F9E00131-A7DB-47A4-9216-3BC75D96DAA0}
 		{4F0B4FDD-E1EE-4EB2-98F3-B52F89ED8A57} = {F9E00131-A7DB-47A4-9216-3BC75D96DAA0}
+		{435CE8F4-974A-4FAC-A920-47942F0B3118} = {F9E00131-A7DB-47A4-9216-3BC75D96DAA0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05442B03-91AC-47E9-9151-BD2B9F5A27F4}

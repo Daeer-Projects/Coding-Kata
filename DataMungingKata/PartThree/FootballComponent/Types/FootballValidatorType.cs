@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace WeatherComponent.Types
+namespace FootballComponent.Types
 {
-    public class WeatherValidationType
+    public class FootballValidatorType
     {
-        public Weather Weather { get; set; }
+        public Football Football { get; set; }
         public bool IsValid { get; set; }
         public List<string> ErrorList { get; }
 
-        public WeatherValidationType()
+        public FootballValidatorType()
         {
-            Weather = new Weather();
+            Football = new Football();
             IsValid = false;
             ErrorList = new List<string>();
         }

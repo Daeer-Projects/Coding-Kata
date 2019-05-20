@@ -41,7 +41,7 @@ namespace DataMungingCore
         public bool RegisterSubscriptions()
         {
             Hub.Subscribe<IReturnType>(r => _logger.Information($"The result is: {r.ProcessResult}."));
-            return true; // For now...
+            return true;
         }
     }
 }

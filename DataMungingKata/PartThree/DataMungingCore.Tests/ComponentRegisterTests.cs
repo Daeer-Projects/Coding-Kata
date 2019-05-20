@@ -61,6 +61,21 @@ namespace DataMungingCore.Tests
         }
 
         [Fact]
+        public void Test_register_with_valid_parameters_returns_true()
+        {
+            // Arrange.
+            var creator = Substitute.For<IComponentCreator>();
+            const string input = "fileName";
+
+            // Act.
+            var result = _componentRegister.RegisterComponent(creator, input);
+
+            // Assert.
+            result.Should()
+                .BeTrue("we have a creator and we have a file, so we should be able to register the component.");
+        }
+
+        [Fact]
         public void Test_register_with_valid_parameters_adds_component_to_list()
         {
             // Arrange.
@@ -72,6 +87,28 @@ namespace DataMungingCore.Tests
 
             // Assert.
             _componentRegister.Components.Count.Should().BeGreaterThan(0, "we have just added a new component to it.");
+        }
+
+        [Fact]
+        public void Test_subscribe_returns_true()
+        {
+            // Arrange.
+            // Act.
+            var result = _componentRegister.RegisterSubscriptions();
+
+            // Assert.
+            result.Should().BeTrue("if it didn't raise an exception, then the hub is ready.");
+        }
+
+        [Fact]
+        public void Test_subscribe_is_received_by_the_hub()
+        {
+            // Arrange.
+            // Act.
+            _componentRegister.RegisterSubscriptions();
+
+            // Assert.
+            _hub.Received(1).Subscribe(Arg.Any<Action<IReturnType>>());
         }
 
         #region Test Data.

@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
-    <PackageReference Include="NSubstitute" Version="4.1.0" />
+    <PackageReference Include="NSubstitute" Version="4.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="4.2.13" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="4.2.13" />
     <PackageReference Include="xunit" Version="2.4.1" />

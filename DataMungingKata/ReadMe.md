@@ -262,6 +262,11 @@ Then add the football component, which will be the same as from part two, but wi
 Did an experiment with creating three weather.dat files and seeing what happened.  Got it to work with the new file name / locations.  All looked good.
 
 
+Working on the Football Component now, and I am seeing duplication of code in the extension methods and validators.  Now, the validators are specific to the component, but the extensions are not.
+
+Can I get the extensions to use the expected validator based on something that is contained in the call?
+
+
 
 ## Kata Questions
 
