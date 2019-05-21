@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataMungingCore;
 using DataMungingCore.Interfaces;
 using Easy.MessageHub;
+using FootballComponent;
 using Serilog;
 using WeatherComponent;
 
@@ -27,7 +28,7 @@ namespace DataMungingPartThree
                 .WriteTo.Console()
                 .WriteTo.File("coreLog.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-
+             
              var hub = MessageHub.Instance;
 
             coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Logs created.");
@@ -38,11 +39,16 @@ namespace DataMungingPartThree
             //IComponentCreator weatherComponentCreatorTwo = new WeatherComponentCreator();
             //IComponentCreator weatherComponentCreatorThree = new WeatherComponentCreator();
 
+            coreLogger.Information($"{GetType().Name} (ProcessItemsAsync): Creating 'Football' component.");
+            IComponentCreator footballComponentCreator = new FootballComponentCreator();
+
 
             var componentRegister = new ComponentRegister(hub, coreLogger);
             var registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreator, WeatherComponent.Constants.WeatherConstants.FullFileName);
             //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorTwo, WeatherComponent.Constants.WeatherConstants.FullFileNameTwo);
             //registeredCorrectly = componentRegister.RegisterComponent(weatherComponentCreatorThree, WeatherComponent.Constants.WeatherConstants.FullFileNameThree);
+            registeredCorrectly = componentRegister.RegisterComponent(footballComponentCreator,
+                FootballComponent.Constants.FootballConstants.FullFileName);
 
             componentRegister.RegisterSubscriptions();
             

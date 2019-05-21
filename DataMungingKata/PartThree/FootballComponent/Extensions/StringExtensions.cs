@@ -48,10 +48,9 @@ namespace FootballComponent.Extensions
 
         private static void ExtractFootballItems(this FootballValidatorType isFootballValidType, IReadOnlyList<string> data)
         {
-            var team = data[0].Substring(FootballConfig.TeamColumnStart, FootballConfig.TeamColumnLength);
-            var forPoints = data[1].Substring(FootballConfig.ForColumnStart, FootballConfig.ForColumnLength);
-            var againstPoints = data[2].Substring(FootballConfig.AgainstColumnStart, FootballConfig.AgainstColumnLength);
-
+            var team = data[0];
+            var forPoints = data[1];
+            var againstPoints = data[2];
 
             if (int.TryParse(forPoints, out var forAsInt) && int.TryParse(againstPoints, out var againstAsInt))
             {
@@ -82,7 +81,7 @@ namespace FootballComponent.Extensions
             else
             {
                 isFootballValidType.IsValid = false;
-                isFootballValidType.ErrorList.Add($"Invalid Weather.");
+                isFootballValidType.ErrorList.Add($"Invalid Football.");
 
                 foreach (var validationResultError in validationResult.Errors)
                 {

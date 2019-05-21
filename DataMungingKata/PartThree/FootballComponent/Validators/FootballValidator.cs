@@ -17,7 +17,7 @@ namespace FootballComponent.Validators
 
         private bool TeamNameMustNotBeNullOrWhiteSpace(string teamName)
         {
-            return string.IsNullOrWhiteSpace(teamName);
+            return !string.IsNullOrWhiteSpace(teamName);
         }
     }
 }

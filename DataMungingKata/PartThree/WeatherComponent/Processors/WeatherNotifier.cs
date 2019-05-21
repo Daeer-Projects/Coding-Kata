@@ -57,7 +57,7 @@ namespace WeatherComponent.Processors
                 IReturnType day = new ContainingResultType { ProcessResult = dayOfLeastChange };
 
                 return day;
-            });
+            }).ConfigureAwait(false);
             
             _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
             return result;

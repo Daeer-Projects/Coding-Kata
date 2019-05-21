@@ -266,6 +266,11 @@ Working on the Football Component now, and I am seeing duplication of code in th
 
 Can I get the extensions to use the expected validator based on something that is contained in the call?
 
+I have completed the rough football component now. Still needs some clean up and summary blocks.
+
+Next stage is the unit tests for the football component.
+
+Then we can see how much of the code is duplicated, as there is a lot that looks so very similar, as each component does the same thing.
 
 
 ## Kata Questions

@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Processors\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Easy.MessageHub" Version="4.0.1" />
     <PackageReference Include="FluentValidation" Version="8.4.0" />
     <PackageReference Include="Serilog" Version="2.8.0" />

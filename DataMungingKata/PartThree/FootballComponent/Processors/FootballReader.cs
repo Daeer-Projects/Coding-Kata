@@ -5,18 +5,15 @@ using System.Threading.Tasks;
 using DataMungingCore.Interfaces;
 using Serilog;
 
-namespace WeatherComponent.Processors
+namespace FootballComponent.Processors
 {
-    public class WeatherReader : IReader
+    public class FootballReader : IReader
     {
-        /// <summary>
-        /// The file system that works with the File class.
-        /// </summary>
         private readonly IFileSystem _fileSystem;
 
         private readonly ILogger _logger;
 
-        public WeatherReader(IFileSystem fileSystem, ILogger logger)
+        public FootballReader(IFileSystem fileSystem, ILogger logger)
         {
             _fileSystem = fileSystem;
             _logger = logger;

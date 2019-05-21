@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 
 using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
+using FootballComponent.Constants;
+using FootballComponent.Extensions;
 using Serilog;
-using WeatherComponent.Constants;
-using WeatherComponent.Extensions;
 
-namespace WeatherComponent.Processors
+namespace FootballComponent.Processors
 {
-    public class WeatherMapper : IMapper
+    public class FootballMapper : IMapper
     {
         private readonly ILogger _logger;
 
-        public WeatherMapper(ILogger logger)
+        public FootballMapper(ILogger logger)
         {
             _logger = logger;
         }
@@ -31,19 +31,17 @@ namespace WeatherComponent.Processors
             {
                 IList<IDataType> taskResults = new List<IDataType>();
 
-                // ToDo: Convert to Linq when we have the logging sorted.
                 foreach (var item in fileData)
                 {
                     // Need to use the config to extract out the items...
-                    if (!item.Equals(WeatherConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item) && !item.Contains("mo"))
+                    if (!item.Equals(FootballConstants.FootballHeader) && !item.Equals(FootballConstants.FootballDivider))
                     {
-                        // So, not the header and not the empty line.
-                        var weatherData = item.ToWeather();
-                        if (weatherData.IsValid)
+                        // So, not the header and not the divider.
+                        var footballData = item.ToFootball();
+                        if (footballData.IsValid)
                         {
                             _logger.Debug($"{GetType().Name} (MapAsync): Item valid: {item}.");
-                            taskResults.Add(new ContainingDataType
-                            { Data = weatherData.Weather });
+                            taskResults.Add(new ContainingDataType { Data = footballData.Football });
                         }
                         else
                         {
@@ -55,7 +53,7 @@ namespace WeatherComponent.Processors
 
                 return taskResults;
             }).ConfigureAwait(false);
-            
+
             _logger.Information($"{GetType().Name} (MapAsync): Mapping complete.");
             return results;
         }

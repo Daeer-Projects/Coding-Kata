@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 using FluentValidation;
 using FootballComponent.Constants;
 
@@ -90,7 +89,7 @@ namespace FootballComponent.Validators
                 {
                     if (data[index].Equals(FootballConstants.FootballDivider))
                     {
-                        indexOfDivider = index;
+                        indexOfDivider = index + 1;
                     }
                 }
 

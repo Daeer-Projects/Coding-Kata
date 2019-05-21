@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using System;
+using FluentValidation.Results;
 using FootballComponent.Types;
 using FootballComponent.Validators;
 
@@ -13,6 +14,11 @@ namespace FootballComponent.Extensions
             var result = validator.Validate(football);
 
             return result;
+        }
+
+        public static int CalculatePointDifference(this Football football)
+        {
+            return Math.Abs(football.ForPoints - football.AgainstPoints);
         }
     }
 }

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataMungingCore\DataMungingCore.csproj" />
+    <ProjectReference Include="..\FootballComponent\FootballComponent.csproj" />
     <ProjectReference Include="..\WeatherComponent\WeatherComponent.csproj" />
   </ItemGroup>
 
