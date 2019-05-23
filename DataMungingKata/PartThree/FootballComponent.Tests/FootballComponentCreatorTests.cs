@@ -4,17 +4,18 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace WeatherComponent.Tests
+namespace FootballComponent.Tests
 {
-    public class WeatherComponentCreatorTests
+    public class FootballComponentCreatorTests
     {
+
         private readonly IMessageHub _messageHub;
         private readonly IComponentCreator _componentCreator;
 
-        public WeatherComponentCreatorTests()
+        public FootballComponentCreatorTests()
         {
             _messageHub = Substitute.For<IMessageHub>();
-            _componentCreator = new WeatherComponentCreator();
+            _componentCreator = new FootballComponentCreator();
         }
 
         [Fact]
@@ -30,7 +31,7 @@ namespace WeatherComponent.Tests
         }
 
         [Fact]
-        public void Test_create_returns_valid_weather_component()
+        public void Test_create_returns_valid_football_component()
         {
             // Arrange.
             const string file = "fileName";
@@ -38,11 +39,11 @@ namespace WeatherComponent.Tests
 
             // Act.
             // Assert.
-            component.Should().BeOfType<Types.WeatherComponent>("the creator creates weather components.");
+            component.Should().BeOfType<Types.FootballComponent>("the creator creates football components.");
         }
 
         [Fact]
-        public void Test_create_returns_valid_weather_component_and_parts()
+        public void Test_create_returns_valid_football_component_and_parts()
         {
             // Arrange.
             const string file = "fileName";

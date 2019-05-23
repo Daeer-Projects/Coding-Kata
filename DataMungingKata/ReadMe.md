@@ -272,6 +272,12 @@ Next stage is the unit tests for the football component.
 
 Then we can see how much of the code is duplicated, as there is a lot that looks so very similar, as each component does the same thing.
 
+So, now I have got to the stage where the application actually works, and most of the unit tests cover the code.  I just need to finish the football component tests, mainly the processors.  The tests are pretty much the same as the tests for the weather component.
+
+What I am seeing is a lot of similar code, or at worst, duplicated code.
+
+When I have finished the unit tests, then, I can figure out some way of refactoring the components into the core project.
+
 
 ## Kata Questions
 
@@ -281,6 +287,6 @@ Then we can see how much of the code is duplicated, as there is a lot that looks
 
 ### Answers
 
-1. To do.
+1. The common code seemed to fit nicely with the idea of the reader, mapper, notify pattern that I used.  What I am not liking is that the code in the components still looks the same.
 2. Yes, very much so.  It was almost a copy of the first.
-3. To do.
+3. Leaving the code with lots of similar code makes it easy to maintain, as each component has a specific template that it needs to follow.  This would make it easy to create new components.  The problem is, the code is a lot to write for a component.
