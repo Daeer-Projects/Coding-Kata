@@ -6,8 +6,16 @@ using FootballComponent.Types;
 
 namespace FootballComponent.Extensions
 {
+    /// <summary>
+    /// Extension methods to extract football information out of a string.
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// The main extension method that takes a string and returns a football object.
+        /// </summary>
+        /// <param name="item"> The string we are processing. </param>
+        /// <returns> The football validator type that contains a football object if validation passed. </returns>
         public static FootballValidatorType ToFootball(this string item)
         {
             var isFootballValidType = new FootballValidatorType();

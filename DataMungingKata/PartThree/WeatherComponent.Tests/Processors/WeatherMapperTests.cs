@@ -53,7 +53,7 @@ namespace WeatherComponent.Tests.Processors
             };
 
             // Act.
-            var actual = await _weatherMapper.MapAsync(GetGoodData()).ConfigureAwait(false);
+            var actual = await _weatherMapper.MapAsync(GetGoodData()).ConfigureAwait(true);
 
             // Assert.
             actual.Should().BeEquivalentTo(expectedList);
@@ -64,7 +64,7 @@ namespace WeatherComponent.Tests.Processors
         {
             // Arrange.
             // Act.
-            await _weatherMapper.MapAsync(GetInvalidData()).ConfigureAwait(false);
+            await _weatherMapper.MapAsync(GetInvalidData()).ConfigureAwait(true);
 
             // Assert.
             _logger.Received(1).Warning(Arg.Is<string>(l => l.Contains("(MapAsync): Item not valid:")));
@@ -77,7 +77,7 @@ namespace WeatherComponent.Tests.Processors
             // Act.
             // Assert.
             await Assert.ThrowsAsync<InvalidDataException>(() =>
-                _weatherMapper.MapAsync(GetBadData()));
+                _weatherMapper.MapAsync(GetBadData())).ConfigureAwait(true);
         }
 
         #region Test Data

@@ -5,31 +5,32 @@ using System.Threading.Tasks;
 using DataMungingCore.Interfaces;
 using DataMungingCore.Types;
 using Easy.MessageHub;
+using FootballComponent.Processors;
 using NSubstitute;
 using Serilog;
-using WeatherComponent.Processors;
 using Xunit;
 
-namespace WeatherComponent.Tests.Processors
+namespace FootballComponent.Tests.Processors
 {
-    public class WeatherProcessorTests
+    public class FootballProcessorTests
     {
         private readonly IReader _reader;
         private readonly IMapper _mapper;
         private readonly INotify _notify;
         private readonly ILogger _logger;
         private readonly IMessageHub _messageHub;
-        private WeatherProcessor _processor;
+        private FootballProcessor _processor;
 
-        public WeatherProcessorTests()
+        public FootballProcessorTests()
         {
             _reader = Substitute.For<IReader>();
             _mapper = Substitute.For<IMapper>();
             _notify = Substitute.For<INotify>();
             _logger = Substitute.For<ILogger>();
             _messageHub = Substitute.For<IMessageHub>();
-            _processor = new WeatherProcessor(_reader, _mapper, _notify, _messageHub, _logger);
+            _processor = new FootballProcessor(_reader, _mapper, _notify, _messageHub, _logger);
         }
+
 
         [Theory]
         [MemberData(nameof(GetMixedConstructorParameters))]
@@ -38,7 +39,7 @@ namespace WeatherComponent.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _processor = new WeatherProcessor(reader, mapper, notify, hub, logger));
+            Assert.Throws<ArgumentNullException>(() => _processor = new FootballProcessor(reader, mapper, notify, hub, logger));
         }
 
         [Theory]
@@ -54,15 +55,15 @@ namespace WeatherComponent.Tests.Processors
         }
 
         [Fact]
-        public async Task Test_process_with_valid_input_and_data_returns_expected_day()
+        public async Task Test_process_with_valid_input_and_data_returns_expected_team()
         {
             // Arrange.
-            const int expected = 4;
+            const string expected = "Bournemouth";
             const string input = "fullFileName";
 
-            _reader.ReadAsync(Arg.Any<string>()).Returns(new[] {"hello"});
+            _reader.ReadAsync(Arg.Any<string>()).Returns(new[] { "hello" });
             _mapper.MapAsync(Arg.Any<string[]>()).Returns(new List<IDataType>());
-            _notify.NotifyAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType {ProcessResult = 4});
+            _notify.NotifyAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType { ProcessResult = "Bournemouth" });
 
             // Act.
             await _processor.ProcessAsync(input).ConfigureAwait(false);
@@ -71,7 +72,7 @@ namespace WeatherComponent.Tests.Processors
             _messageHub.Received(1)
                 .Publish<IReturnType>(Arg.Is<ContainingResultType>(result => result.ProcessResult.Equals(expected)));
         }
-        
+
         #region Test Data.
 
         public static IEnumerable<object[]> GetMixedConstructorParameters

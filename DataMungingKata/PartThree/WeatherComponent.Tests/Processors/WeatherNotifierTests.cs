@@ -32,7 +32,7 @@ namespace WeatherComponent.Tests.Processors
 
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data));
+            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data)).ConfigureAwait(true);
         }
 
         [Theory]
@@ -42,7 +42,7 @@ namespace WeatherComponent.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data));
+            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data)).ConfigureAwait(true);
         }
         
         [Fact]
@@ -51,7 +51,7 @@ namespace WeatherComponent.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _weatherNotifier.NotifyAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _weatherNotifier.NotifyAsync(null)).ConfigureAwait(true);
         }
 
         [Theory]

@@ -3,6 +3,9 @@ using Serilog;
 
 namespace WeatherComponent.Configuration
 {
+    /// <summary>
+    /// The configuration for the weather component.
+    /// </summary>
     public class WeatherConfig
     {
         public const int DayColumnStart = 1;

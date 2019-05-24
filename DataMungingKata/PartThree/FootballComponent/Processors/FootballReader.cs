@@ -7,6 +7,9 @@ using Serilog;
 
 namespace FootballComponent.Processors
 {
+    /// <summary>
+    /// The reader for the football component.
+    /// </summary>
     public class FootballReader : IReader
     {
         private readonly IFileSystem _fileSystem;
@@ -19,6 +22,11 @@ namespace FootballComponent.Processors
             _logger = logger;
         }
 
+        /// <summary>
+        /// Reads in the rows from the file.
+        /// </summary>
+        /// <param name="fileLocation"> The full file path to the file we are reading. </param>
+        /// <returns> The rows of data in the file. </returns>
         public async Task<string[]> ReadAsync(string fileLocation)
         {
             _logger.Information($"{GetType().Name} (ReadAsync): Starting reading from file: {fileLocation ?? string.Empty}.");

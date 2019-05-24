@@ -1,5 +1,8 @@
 ﻿namespace WeatherComponent.Constants
 {
+    /// <summary>
+    /// The constants used by the weather component.
+    /// </summary>
     public class WeatherConstants
     {
         public const string FullFileName = @"..\..\..\..\..\weather.dat";

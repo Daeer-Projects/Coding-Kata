@@ -10,6 +10,9 @@ using Serilog;
 
 namespace FootballComponent.Processors
 {
+    /// <summary>
+    /// The football mapper.
+    /// </summary>
     public class FootballMapper : IMapper
     {
         private readonly ILogger _logger;
@@ -19,6 +22,11 @@ namespace FootballComponent.Processors
             _logger = logger;
         }
 
+        /// <summary>
+        /// Maps the data into football objects.
+        /// </summary>
+        /// <param name="fileData"> The data we are converting to football objects. </param>
+        /// <returns> A collection of football objects. </returns>
         public async Task<IList<IDataType>> MapAsync(string[] fileData)
         {
             _logger.Information($"{GetType().Name} (MapAsync): Starting to map the data.");

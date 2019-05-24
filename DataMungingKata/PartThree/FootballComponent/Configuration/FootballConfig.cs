@@ -3,6 +3,10 @@ using Serilog;
 
 namespace FootballComponent.Configuration
 {
+    /// <summary>
+    /// The configuration settings for the football component.
+    /// Should be extracted out as a config file, or database entries.
+    /// </summary>
     public class FootballConfig
     {
         public const int TeamColumnStart = 7;

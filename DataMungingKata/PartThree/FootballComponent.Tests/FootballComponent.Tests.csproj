@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Processors\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DataMungingCore\DataMungingCore.csproj" />
     <ProjectReference Include="..\FootballComponent\FootballComponent.csproj" />
   </ItemGroup>

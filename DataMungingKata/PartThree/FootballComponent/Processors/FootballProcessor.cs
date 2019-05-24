@@ -7,6 +7,9 @@ using Serilog;
 
 namespace FootballComponent.Processors
 {
+    /// <summary>
+    /// The processing system for the football component.
+    /// </summary>
     public class FootballProcessor : IProcessor
     {
         private readonly IReader _footballReader;
@@ -25,6 +28,11 @@ namespace FootballComponent.Processors
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "The logger can't be null.");
         }
 
+        /// <summary>
+        /// Processes the file location and returns the team with the least points difference.
+        /// </summary>
+        /// <param name="fileLocation"> The full path to the file we are processing. </param>
+        /// <returns> The team with the least points difference. </returns>
         public async Task ProcessAsync(string fileLocation)
         {
             // Contract requirements.

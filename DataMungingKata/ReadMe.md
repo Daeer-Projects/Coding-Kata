@@ -279,14 +279,29 @@ What I am seeing is a lot of similar code, or at worst, duplicated code.
 When I have finished the unit tests, then, I can figure out some way of refactoring the components into the core project.
 
 
+So, I have finally finished the unit tests. Just some summary blocks to clean up and then we can start some refactoring.  You get the idea with the summary blocks.  Most are there, but not going to fill in all of them for this exercise.
+
+
+
+
+
 ## Kata Questions
 
-1. To what extent did the design decisions you made when writing the original programs make it easier or harder to factor out common code?
-2. Was the way you wrote the second program influenced by writing the first?
-3. Is factoring out as much common code as possible always a good thing? Did the readability of the programs suffer because of this requirement? How about the maintainability?
+1. 
+> To what extent did the design decisions you made when writing the original programs make it easier or harder to factor out common code?
+2. 
+> Was the way you wrote the second program influenced by writing the first?
+3. 
+> Is factoring out as much common code as possible always a good thing? Did the readability of the programs suffer because of this requirement? How about the maintainability?
 
 ### Answers
 
-1. The common code seemed to fit nicely with the idea of the reader, mapper, notify pattern that I used.  What I am not liking is that the code in the components still looks the same.
-2. Yes, very much so.  It was almost a copy of the first.
-3. Leaving the code with lots of similar code makes it easy to maintain, as each component has a specific template that it needs to follow.  This would make it easy to create new components.  The problem is, the code is a lot to write for a component.
+1. 
+> The common code seemed to fit nicely with the idea of the reader, mapper, notify pattern that I used.  What I am not liking is that the code in the components still looks the same.
+2. 
+> Yes, very much so.  It was almost a copy of the first.
+3. 
+> I don't think it is always the best thing to do, as it can make the code very hard to follow.  In this example, I think I can still do some more factoring out, without making it too unreadable.
+> At the stage of writing this, before I do more refactoring, the program is easy to follow.  The template is fairly rigid, so would be easy to add more components.
+> For how I have done, I have left the code in an easily maintainable state.  When I do the refactoring later, then I might screw it up.  The problem is, the code is a lot to write for a component with the template the way it is.
+> If I can do a little bit more extraction, then the template should be smaller to duplicate.
