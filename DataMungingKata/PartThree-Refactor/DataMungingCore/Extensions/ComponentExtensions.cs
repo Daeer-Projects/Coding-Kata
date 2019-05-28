@@ -15,5 +15,13 @@ namespace DataMungingCoreV2.Extensions
 
             return result;
         }
+
+        public static ValidationResult IsValid<T>(this T component, AbstractValidator<T> validator)
+            where T : class
+        {
+            var result = validator.Validate(component);
+
+            return result;
+        }
     }
 }

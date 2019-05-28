@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text;
 using DataMungingCoreV2.Extensions;
+using DataMungingCoreV2.Helpers;
 using DataMungingCoreV2.Tests.TestTypes;
 using FluentAssertions;
 using Xunit;
 
-namespace DataMungingCoreV2.Tests.Extensions
+namespace DataMungingCoreV2.Tests.Helpers
 {
-    public class ComponentExtensionTests
+    public class ComponentTests
     {
         [Theory]
         [MemberData(nameof(GetGoodTestType))]
@@ -16,7 +17,8 @@ namespace DataMungingCoreV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = testType.IsValid<TestType, TestValidator>();
+            var result = Component.IsValid(testType, new TestValidator()); //testType.IsValid<TestType, TestValidator>();
+            //var result = testType.IsValid(new TestValidator());
 
             // Assert.
             result.IsValid.Should().BeTrue("the testType data is all made up of valid data.");
@@ -29,30 +31,6 @@ namespace DataMungingCoreV2.Tests.Extensions
             // Arrange.
             // Act.
             var result = testType.IsValid<TestType, TestValidator>();
-
-            // Assert.
-            result.IsValid.Should().BeFalse("the testType data is made up of invalid data.");
-        }
-
-        [Theory]
-        [MemberData(nameof(GetGoodTestType))]
-        public void Test_is_valid_two_with_valid_test_type_returns_true(TestType testType)
-        {
-            // Arrange.
-            // Act.
-            var result = testType.IsValid(new TestValidator());
-
-            // Assert.
-            result.IsValid.Should().BeTrue("the testType data is all made up of valid data.");
-        }
-
-        [Theory]
-        [MemberData(nameof(GetBadTestType))]
-        public void Test_is_valid_two_with_invalid_football_returns_false(TestType testType)
-        {
-            // Arrange.
-            // Act.
-            var result = testType.IsValid(new TestValidator());
 
             // Assert.
             result.IsValid.Should().BeFalse("the testType data is made up of invalid data.");

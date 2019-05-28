@@ -37,6 +37,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FootballComponent.Tests", "PartThree\FootballComponent.Tests\FootballComponent.Tests.csproj", "{5E736DF1-0E84-4002-9C40-233D8D78664F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PartThree-Refactor", "PartThree-Refactor", "{0F5F923A-B76D-4CFE-B866-7FB229D7C7D6}"
+	ProjectSection(SolutionItems) = preProject
+		PartThree-Refactor\ReadMe.md = PartThree-Refactor\ReadMe.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataMungingCoreV2", "PartThree-Refactor\DataMungingCore\DataMungingCoreV2.csproj", "{1AD58FA7-8EEF-4067-AAB4-8DE0FE818380}"
 EndProject
