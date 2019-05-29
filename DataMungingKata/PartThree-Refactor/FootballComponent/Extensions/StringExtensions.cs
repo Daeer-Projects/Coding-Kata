@@ -82,7 +82,7 @@ namespace FootballComponentV2.Extensions
 
         private static void ProcessFootballValidation(this FootballValidatorType isFootballValidType, Football result)
         {
-            var validationResult = result.IsValid<Football, FootballValidator>();
+            var validationResult = result.IsValid(new FootballValidator());
             if (validationResult.IsValid)
             {
                 isFootballValidType.IsValid = true;

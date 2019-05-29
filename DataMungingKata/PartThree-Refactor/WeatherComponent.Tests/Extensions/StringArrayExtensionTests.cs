@@ -15,7 +15,7 @@ namespace WeatherComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = data.IsValid<string[], StringArrayValidator>().IsValid;
+            var result = data.IsValid(new StringArrayValidator()).IsValid;
 
             // Assert.
             result.Should().BeTrue("the data provided should produce a true result.");
@@ -27,7 +27,7 @@ namespace WeatherComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = data.IsValid<string[], StringArrayValidator>().IsValid;
+            var result = data.IsValid(new StringArrayValidator()).IsValid;
 
             // Assert.
             result.Should().BeFalse("the invalid data provided should produce a false result.");

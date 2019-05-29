@@ -81,7 +81,7 @@ namespace WeatherComponentV2.Extensions
 
         private static void ProcessWeatherValidation(this WeatherValidationType isWeatherValidType, Weather result)
         {
-            var validationResult = result.IsValid<Weather, WeatherValidator>();
+            var validationResult = result.IsValid(new WeatherValidator());
             if (validationResult.IsValid)
             {
                 isWeatherValidType.IsValid = true;

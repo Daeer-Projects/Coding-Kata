@@ -16,7 +16,7 @@ namespace FootballComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = football.IsValid<Football, FootballValidator>();
+            var result = football.IsValid(new FootballValidator());
 
             // Assert.
             result.IsValid.Should().BeTrue("the football data is all made up of valid data.");
@@ -28,7 +28,7 @@ namespace FootballComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = football.IsValid<Football, FootballValidator>();
+            var result = football.IsValid(new FootballValidator());
 
             // Assert.
             result.IsValid.Should().BeFalse("the football data is made up of invalid data.");

@@ -17,7 +17,7 @@ namespace WeatherComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = weather.IsValid<Weather, WeatherValidator>();
+            var result = weather.IsValid(new WeatherValidator());
 
             // Assert.
             result.IsValid.Should().BeTrue("the weather data is all made up of valid data.");
@@ -29,7 +29,7 @@ namespace WeatherComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = weather.IsValid<Weather, WeatherValidator>();
+            var result = weather.IsValid(new WeatherValidator());
 
             // Assert.
             result.IsValid.Should().BeFalse("the weather data is made up of invalid data.");

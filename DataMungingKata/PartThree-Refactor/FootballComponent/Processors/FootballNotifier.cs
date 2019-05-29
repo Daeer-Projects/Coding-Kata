@@ -48,7 +48,7 @@ namespace FootballComponentV2.Processors
                     if (type.Data is Football football)
                     {
                         // Contract requirements. Duplicating the validation here. Should we?
-                        var footballValidationResult = football.IsValid<Football, FootballValidator>();
+                        var footballValidationResult = football.IsValid(new FootballValidator());
                         if (!footballValidationResult.IsValid)
                         {
                             throw new ArgumentException(footballValidationResult.Errors.Select(m => m.ErrorMessage).ToString());

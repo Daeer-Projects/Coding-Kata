@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
 using DataMungingCoreV2.Types;
@@ -26,7 +27,7 @@ namespace WeatherComponentV2.Processors
 
             // Convert this to a type with specific validation.
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
-            if (!fileData.IsValid<string[], StringArrayValidator>().IsValid) throw new InvalidDataException("Invalid Data File.");
+            if (!fileData.IsValid(new StringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
 
             var results = await Task.Factory.StartNew(() =>
             {

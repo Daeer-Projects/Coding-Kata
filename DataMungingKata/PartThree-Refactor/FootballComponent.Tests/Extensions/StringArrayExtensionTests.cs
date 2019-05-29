@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+
 using DataMungingCoreV2.Extensions;
 using FluentAssertions;
-using FootballComponentV2.Extensions;
 using FootballComponentV2.Validators;
 using Xunit;
 
@@ -16,7 +16,7 @@ namespace FootballComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = data.IsValid<string[], StringArrayValidator>().IsValid;
+            var result = data.IsValid(new StringArrayValidator()).IsValid;
 
             // Assert.
             result.Should().BeTrue("the data provided should produce a true result.");
@@ -28,7 +28,7 @@ namespace FootballComponentV2.Tests.Extensions
         {
             // Arrange.
             // Act.
-            var result = data.IsValid<string[], StringArrayValidator>().IsValid;
+            var result = data.IsValid(new StringArrayValidator()).IsValid;
 
             // Assert.
             result.Should().BeFalse("the invalid data provided should produce a false result.");

@@ -39,7 +39,7 @@ namespace WeatherComponentV2.Processors
                     if (type.Data is Weather weather)
                     {
                         // Contract requirements. Duplicating the validation here. Should we?
-                        var weatherValidationResult = weather.IsValid<Weather, WeatherValidator>();
+                        var weatherValidationResult = weather.IsValid(new WeatherValidator());
                         if (!weatherValidationResult.IsValid)
                         {
                             throw new ArgumentException(weatherValidationResult.Errors.Select(m => m.ErrorMessage).ToString());

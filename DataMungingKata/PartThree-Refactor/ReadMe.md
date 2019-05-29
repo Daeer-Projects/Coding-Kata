@@ -63,6 +63,8 @@ I have a couple of solutions.  Neither one perfect.
 
 Out of the three ideas, I prefer the last one.  The extension with the ```new Validator()``` passed into it.
 
+Tests and code updated to use this version of the extension method.
+
 ##### Helper Class
 
 ``` csharp
