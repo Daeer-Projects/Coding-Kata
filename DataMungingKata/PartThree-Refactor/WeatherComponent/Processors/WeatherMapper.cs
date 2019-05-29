@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
+using DataMungingCoreV2.Processors;
 using DataMungingCoreV2.Types;
 using Serilog;
 using WeatherComponentV2.Constants;
@@ -29,15 +30,15 @@ namespace WeatherComponentV2.Processors
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
             if (!fileData.IsValid(new StringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
 
-            var results = await Task.Factory.StartNew(() =>
+            var results = await Mapper.MapWork(() =>
             {
                 IList<IDataType> taskResults = new List<IDataType>();
 
-                // ToDo: Convert to Linq when we have the logging sorted.
                 foreach (var item in fileData)
                 {
                     // Need to use the config to extract out the items...
-                    if (!item.Equals(WeatherConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item) && !item.Contains("mo"))
+                    if (!item.Equals(WeatherConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item) &&
+                        !item.Contains("mo"))
                     {
                         // So, not the header and not the empty line.
                         var weatherData = item.ToWeather();
@@ -45,11 +46,10 @@ namespace WeatherComponentV2.Processors
                         {
                             _logger.Debug($"{GetType().Name} (MapAsync): Item valid: {item}.");
                             taskResults.Add(new ContainingDataType
-                            { Data = weatherData.Weather });
+                                {Data = weatherData.Weather});
                         }
                         else
                         {
-                            // Do some logging here when we sort that out.
                             _logger.Warning($"{GetType().Name} (MapAsync): Item not valid: {item}.");
                         }
                     }

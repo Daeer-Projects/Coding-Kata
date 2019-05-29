@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
+using DataMungingCoreV2.Processors;
 using DataMungingCoreV2.Types;
 using FootballComponentV2.Constants;
 using FootballComponentV2.Extensions;
@@ -36,7 +37,7 @@ namespace FootballComponentV2.Processors
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
             if (!fileData.IsValid(new StringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
 
-            var results = await Task.Factory.StartNew(() =>
+            var results = await Mapper.MapWork(() =>
             {
                 IList<IDataType> taskResults = new List<IDataType>();
 
@@ -54,7 +55,6 @@ namespace FootballComponentV2.Processors
                         }
                         else
                         {
-                            // Do some logging here when we sort that out.
                             _logger.Warning($"{GetType().Name} (MapAsync): Item not valid: {item}.");
                         }
                     }
