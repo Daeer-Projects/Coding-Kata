@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
+using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
+using DataMungingCoreV2.Validators;
 
 namespace DataMungingCoreV2.Processors
 {
@@ -14,6 +17,10 @@ namespace DataMungingCoreV2.Processors
             Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
         {
             // Need to add some contract requirements.
+            if (fileData == null) throw new ArgumentNullException(nameof(fileData), "Invalid Data File.");
+            if (!fileData.IsValid(new BaseStringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
+            if (checkItemRow == null) throw new ArgumentNullException(nameof(checkItemRow), "Invalid CheckItemRow function.");
+            if (addDataItem == null) throw new ArgumentNullException(nameof(addDataItem), "Invalid addDataItem function.");
 
             return Task.Factory.StartNew(() => MapDataToResultsList(fileData, checkItemRow, addDataItem));
         }

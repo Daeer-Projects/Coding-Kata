@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 using DataMungingCoreV2.Interfaces;
@@ -25,8 +26,39 @@ namespace DataMungingCoreV2.Tests.Processors
             results.Should().BeEquivalentTo(GetExpectedData());
         }
 
+        [Theory]
+        [MemberData(nameof(GetInvalidData))]
+        public async Task Test_map_work_with_invalid_file_data_throws_exception(string[] data)
+        {
+            // Arrange.
+            // Act.
+            // Assert.
+            await Assert.ThrowsAsync<InvalidDataException>(() => Mapper.MapWork(data, CheckItemRow, AddDataItem))
+                .ConfigureAwait(true);
+        }
+
+        [Fact]
+        public async Task Test_map_work_with_null_check_row_throws_exception()
+        {
+            // Arrange.
+            // Act.
+            // Assert.
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Mapper.MapWork(GetData(), null, AddDataItem))
+                .ConfigureAwait(true);
+        }
+
+        [Fact]
+        public async Task Test_map_work_with_null_add_data_throws_exception()
+        {
+            // Arrange.
+            // Act.
+            // Assert.
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Mapper.MapWork(GetData(), CheckItemRow, null))
+                .ConfigureAwait(true);
+        }
+
         #region Testing Methods
-        
+
         /// <summary>
         /// The test version of the row checker.
         /// </summary>
@@ -76,6 +108,21 @@ namespace DataMungingCoreV2.Tests.Processors
             };
         }
 
+        public static IEnumerable<object[]> GetInvalidData
+        {
+            get
+            {
+                yield return new object[]
+                {
+                    new string[] {}
+                };
+                yield return new object[]
+                {
+                    new[] {string.Empty}
+                };
+            }
+        }
+        
         private List<IDataType> GetExpectedData()
         {
             var expectedList = new List<IDataType>
