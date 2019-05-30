@@ -16,9 +16,45 @@ I would like to do the following:
 
 ### Readers
 
+The reader was just a call to wrap a function into an async task.  It was done using an extension method.
+
 
 ### Mappers
 
+The mapper extraction was a bit more complicated.
+
+#### Processes
+
+1. We still had to wrap it into an async task.
+2. We still had to check the string based on the configuration or the component.
+3. We still had to convert the item into a type that the component required.
+4. We still had to check if that type is valid, based on the component validation.
+5. We still had to add the valid type into the result list.
+
+
+#### Solution
+
+I created a static mapper class in the core project to accept some inputs, and process the data.
+
+The component has to pass in the string[] fileData to the static core mapper.
+The component has to define its own CheckItemRow() method and pass that function to the core mapper.
+The component has to define its own AddDataItem() method which converts the string into a type, validates it, and then adds the valid type to the results list.
+
+This last sentence seems long, and it sounds as if the method is doing more than one thing.  However, the code is split into other methods.
+
+So, to call the core mapper, we would use code like this:
+
+``` csharp
+    var results = await Mapper.MapWork(fileData, CheckItemRow, AddDataItem).ConfigureAwait(false);
+```
+
+The mapper interface looks like this:
+
+``` csharp
+    public static Task<IList<IDataType>> MapWork(string[] fileData,
+        Func<string, bool> checkItemRow,
+        Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
+```
 
 ### Notifiers
 

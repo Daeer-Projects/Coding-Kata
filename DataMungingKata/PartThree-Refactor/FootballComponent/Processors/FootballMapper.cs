@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
 using DataMungingCoreV2.Processors;
 using DataMungingCoreV2.Types;
 using FootballComponentV2.Constants;
 using FootballComponentV2.Extensions;
-using FootballComponentV2.Types;
 using FootballComponentV2.Validators;
 using Serilog;
 
@@ -39,30 +38,15 @@ namespace FootballComponentV2.Processors
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
             if (!fileData.IsValid(new StringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
 
-            var results = await Mapper.MapWork(() => MapDataToResults(fileData)).ConfigureAwait(false);
-            //var results = await Mapper.ExperimentalMapWork(fileData, CheckItemRow, AddDataItem).ConfigureAwait(false);
+            var results = await Mapper.MapWork(fileData, CheckItemRow, AddDataItem).ConfigureAwait(false);
 
             _logger.Information($"{GetType().Name} (MapAsync): Mapping complete.");
             return results;
         }
-
-        private IList<IDataType> MapDataToResults(string[] fileData)
+        
+        private static bool CheckItemRow(string item)
         {
-            IList<IDataType> taskResults = new List<IDataType>();
-
-            return fileData.Aggregate(taskResults, (current, item) => AddData(item, current));
-        }
-
-        private IList<IDataType> AddData(string item, IList<IDataType> taskResults)
-        {
-            var results = taskResults;
-            if (CheckItemRow(item))
-            {
-                // So, not the header and not the divider.
-                results = AddDataItem(item, results);
-            }
-
-            return results;
+            return !item.Equals(FootballConstants.FootballHeader) && !item.Equals(FootballConstants.FootballDivider);
         }
 
         private IList<IDataType> AddDataItem(string item, IList<IDataType> results)
@@ -80,11 +64,6 @@ namespace FootballComponentV2.Processors
             }
 
             return dataResults;
-        }
-
-        private static bool CheckItemRow(string item)
-        {
-            return !item.Equals(FootballConstants.FootballHeader) && !item.Equals(FootballConstants.FootballDivider);
         }
     }
 }

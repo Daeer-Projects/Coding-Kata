@@ -30,36 +30,34 @@ namespace WeatherComponentV2.Processors
             // We want to check the file has a header, an empty row, a footer and at least one row with data in it.
             if (!fileData.IsValid(new StringArrayValidator()).IsValid) throw new InvalidDataException("Invalid Data File.");
 
-            var results = await Mapper.MapWork(() =>
-            {
-                IList<IDataType> taskResults = new List<IDataType>();
-
-                foreach (var item in fileData)
-                {
-                    // Need to use the config to extract out the items...
-                    if (!item.Equals(WeatherConstants.WeatherHeader) && !string.IsNullOrWhiteSpace(item) &&
-                        !item.Contains("mo"))
-                    {
-                        // So, not the header and not the empty line.
-                        var weatherData = item.ToWeather();
-                        if (weatherData.IsValid)
-                        {
-                            _logger.Debug($"{GetType().Name} (MapAsync): Item valid: {item}.");
-                            taskResults.Add(new ContainingDataType
-                                {Data = weatherData.Weather});
-                        }
-                        else
-                        {
-                            _logger.Warning($"{GetType().Name} (MapAsync): Item not valid: {item}.");
-                        }
-                    }
-                }
-
-                return taskResults;
-            }).ConfigureAwait(false);
+            var results = await Mapper.MapWork(fileData, CheckItemRow, AddDataItem).ConfigureAwait(false);
             
             _logger.Information($"{GetType().Name} (MapAsync): Mapping complete.");
             return results;
+        }
+
+        private static bool CheckItemRow(string item)
+        {
+            return !item.Equals(WeatherConstants.WeatherHeader) && 
+                   !string.IsNullOrWhiteSpace(item) &&
+                   !item.Contains("mo");
+        }
+
+        private IList<IDataType> AddDataItem(string item, IList<IDataType> results)
+        {
+            var dataResults = results;
+            var weatherData = item.ToWeather();
+            if (weatherData.IsValid)
+            {
+                _logger.Debug($"{GetType().Name} (MapAsync): Item valid: {item}.");
+                dataResults.Add(new ContainingDataType { Data = weatherData.Weather });
+            }
+            else
+            {
+                _logger.Warning($"{GetType().Name} (MapAsync): Item not valid: {item}.");
+            }
+
+            return dataResults;
         }
     }
 }

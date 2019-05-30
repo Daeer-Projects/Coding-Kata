@@ -9,22 +9,18 @@ namespace DataMungingCoreV2.Processors
 {
     public static class Mapper
     {
-        public static Task<IList<IDataType>> MapWork(Func<IList<IDataType>> mapResults)
+        public static Task<IList<IDataType>> MapWork(string[] fileData,
+            Func<string, bool> checkItemRow,
+            Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
         {
-            return Task.Factory.StartNew(mapResults);
+            // Need to add some contract requirements.
+
+            return Task.Factory.StartNew(() => MapDataToResultsList(fileData, checkItemRow, addDataItem));
         }
 
-        public static IList<IDataType> ExperimentalMapWork(string[] fileData,
+        private static IList<IDataType> MapDataToResultsList(string[] fileData,
             Func<string, bool> checkItemRow,
-            Func<IList<IDataType>, string, IList<IDataType>> addDataItem)
-        {
-            var taskResults = MapDataToResults(fileData, checkItemRow, addDataItem);
-            return taskResults;
-        }
-
-        private static IList<IDataType> MapDataToResults(string[] fileData,
-            Func<string, bool> checkItemRow,
-            Func<IList<IDataType>, string, IList<IDataType>> addDataItem)
+            Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
         {
             IList<IDataType> taskResults = new List<IDataType>();
 
@@ -34,12 +30,12 @@ namespace DataMungingCoreV2.Processors
         private static IList<IDataType> AddData(string item, 
             IList<IDataType> taskResults,
             Func<string, bool> checkItemRow,
-            Func<IList<IDataType>, string, IList<IDataType>> addDataItem)
+            Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
         {
             var results = taskResults;
             if (checkItemRow(item))
             {
-                results = addDataItem(results, item);
+                results = addDataItem(item, results);
             }
 
             return results;
