@@ -38,39 +38,65 @@ namespace FootballComponentV2.Processors
             if (data is null) throw new ArgumentNullException(nameof(data), "The football data can not be null.");
             if (data.Count < 1) throw new ArgumentException("The football data must contain data.");
 
-            var result = await Task.Factory.StartNew(() =>
-            {
-                var teamWithSmallestPointRange = string.Empty;
-                var smallestRange = int.MaxValue;
-
-                foreach (var type in data)
-                {
-                    if (type.Data is Football football)
-                    {
-                        // Contract requirements. Duplicating the validation here. Should we?
-                        var footballValidationResult = football.IsValid(new FootballValidator());
-                        if (!footballValidationResult.IsValid)
-                        {
-                            throw new ArgumentException(footballValidationResult.Errors.Select(m => m.ErrorMessage).ToString());
-                        }
-
-                        var range = football.CalculatePointDifference();
-
-                        if (range < smallestRange)
-                        {
-                            smallestRange = range;
-                            teamWithSmallestPointRange = football.TeamName;
-                        }
-                    }
-                }
-
-                IReturnType team = new ContainingResultType { ProcessResult = teamWithSmallestPointRange };
-
-                return team;
-            }).ConfigureAwait(false);
+            var result = await Task.Factory.StartNew(() => NotificationWork(data)).ConfigureAwait(false);
 
             _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
             return result;
+        }
+
+        private IReturnType NotificationWork(IEnumerable<IDataType> data)
+        {
+            var (_, teamWithSmallestPointRange) = data.Aggregate((int.MaxValue, string.Empty), (current, type) => SmallestRange<Football>(type, current));
+
+            IReturnType team = new ContainingResultType {ProcessResult = teamWithSmallestPointRange};
+
+            return team;
+        }
+
+        private (int, string) SmallestRange<T>(IDataType type, (int, string) currentRange) where  T : class
+        {
+            if (type.Data is T componentType)
+            {
+                currentRange = CurrentRange(currentRange, componentType);
+            }
+
+            return currentRange;
+        }
+
+        private (int, string) CurrentRange<T>((int, string) currentRange, T componentType) where T : class
+        {
+            // Casting to expected type.
+            var specificType = componentType as Football;
+
+            // Contract requirements. Duplicating the validation here. Should we?
+            ValidationConfirmation(specificType);
+
+            var pointDifference = specificType.CalculatePointDifference();
+            _logger.Debug($"{GetType().Name} (NotifyAsync): Point difference calculated: {pointDifference}.");
+
+            currentRange = EvaluateData(currentRange, pointDifference, specificType);
+
+            return currentRange;
+        }
+
+        private static (int, string) EvaluateData((int, string) currentRange, int range, Football specificType)
+        {
+            if (range < currentRange.Item1)
+            {
+                currentRange.Item1 = range;
+                currentRange.Item2 = specificType.TeamName;
+            }
+
+            return currentRange;
+        }
+
+        private static void ValidationConfirmation(Football football)
+        {
+            var footballValidationResult = football.IsValid(new FootballValidator());
+            if (!footballValidationResult.IsValid)
+            {
+                throw new ArgumentException(footballValidationResult.Errors.Select(m => m.ErrorMessage).ToString());
+            }
         }
     }
 }
