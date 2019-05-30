@@ -38,6 +38,16 @@ namespace DataMungingCoreV2.Tests.Processors
         }
 
         [Fact]
+        public async Task Test_map_work_with_null_file_data_throws_exception()
+        {
+            // Arrange.
+            // Act.
+            // Assert.
+            await Assert.ThrowsAsync<ArgumentNullException>(() => Mapper.MapWork(null, CheckItemRow, AddDataItem))
+                .ConfigureAwait(true);
+        }
+
+        [Fact]
         public async Task Test_map_work_with_null_check_row_throws_exception()
         {
             // Arrange.

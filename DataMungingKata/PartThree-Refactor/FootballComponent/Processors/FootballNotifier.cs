@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
+using DataMungingCoreV2.Processors;
 using DataMungingCoreV2.Types;
 using FootballComponentV2.Extensions;
 using FootballComponentV2.Types;
@@ -37,32 +38,14 @@ namespace FootballComponentV2.Processors
             // Contract requirements.
             if (data is null) throw new ArgumentNullException(nameof(data), "The football data can not be null.");
             if (data.Count < 1) throw new ArgumentException("The football data must contain data.");
-
-            var result = await Task.Factory.StartNew(() => NotificationWork(data)).ConfigureAwait(false);
+            
+            var result = await Notify.NotificationWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
+                .ConfigureAwait(false);
 
             _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
             return result;
         }
-
-        private IReturnType NotificationWork(IEnumerable<IDataType> data)
-        {
-            var (_, teamWithSmallestPointRange) = data.Aggregate((int.MaxValue, string.Empty), (current, type) => SmallestRange<Football>(type, current));
-
-            IReturnType team = new ContainingResultType {ProcessResult = teamWithSmallestPointRange};
-
-            return team;
-        }
-
-        private (int, string) SmallestRange<T>(IDataType type, (int, string) currentRange) where  T : class
-        {
-            if (type.Data is T componentType)
-            {
-                currentRange = CurrentRange(currentRange, componentType);
-            }
-
-            return currentRange;
-        }
-
+        
         private (int, string) CurrentRange<T>((int, string) currentRange, T componentType) where T : class
         {
             // Casting to expected type.

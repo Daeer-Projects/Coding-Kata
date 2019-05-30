@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
-using DataMungingCoreV2.Types;
+using DataMungingCoreV2.Processors;
 using Serilog;
 using WeatherComponentV2.Extensions;
 using WeatherComponentV2.Types;
@@ -30,32 +30,14 @@ namespace WeatherComponentV2.Processors
             if (data is null) throw new ArgumentNullException(nameof(data), "The weather data can not be null.");
             if (data.Count < 1) throw new ArgumentException("The weather data must contain data.");
 
-            var result = await Task.Factory.StartNew(() => NotificationWork(data)).ConfigureAwait(false);
-            
+            var result = await Notify.NotificationWork<Weather, float, int>(data, (float.MaxValue, 0), CurrentRange)
+                .ConfigureAwait(false);
+
+
             _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
             return result;
         }
-
-        private IReturnType NotificationWork(IEnumerable<IDataType> data)
-        {
-            var (_, dayOfLeastChange) =
-                data.Aggregate((float.MaxValue, 0), (current, type) => SmallestRange<Weather>(type, current));
-
-            IReturnType day = new ContainingResultType {ProcessResult = dayOfLeastChange};
-
-            return day;
-        }
-
-        private (float, int) SmallestRange<T>(IDataType type, (float, int) currentRange) where T : class
-        {
-            if (type.Data is T weather)
-            {
-                currentRange = CurrentRange(currentRange, weather);
-            }
-
-            return currentRange;
-        }
-
+        
         private (float, int) CurrentRange<T>((float, int) currentRange, T componentType) where T : class
         {
             // Casting to expected type.

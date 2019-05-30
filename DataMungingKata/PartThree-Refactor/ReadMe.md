@@ -58,6 +58,31 @@ The mapper interface looks like this:
 
 ### Notifiers
 
+This one looks nicer, but has less code in the core project.  Still working though.
+
+
+#### Solution
+
+The notifier is a static notify class in the core project.
+
+So, to call the core notify, we would use code like this:
+
+``` csharp
+    var result = await Notify.NotificationWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
+        .ConfigureAwait(false);
+```
+
+The notify interface looks like this:
+
+``` csharp
+    public static Task<IReturnType> NotificationWork<T, TU, TV>(IEnumerable<IDataType> data,
+        (TU, TV) defaultParameters,
+        Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange) 
+        where T: class
+        where TU: object
+        where TV: object
+```
+
 
 ### Is Valid
 
