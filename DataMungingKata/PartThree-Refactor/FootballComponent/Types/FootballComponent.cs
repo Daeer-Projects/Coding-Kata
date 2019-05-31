@@ -6,15 +6,15 @@ namespace FootballComponentV2.Types
     {
         public IReader Reader { get; }
         public IMapper Mapper { get; }
-        public INotify Notify { get; }
+        public IWriter Writer { get; }
         public IProcessor Processor { get; }
         public string FileLocation { get; }
 
-        public FootballComponent(IReader reader, IMapper mapper, INotify notify, IProcessor processor, string fileLocation)
+        public FootballComponent(IReader reader, IMapper mapper, IWriter writer, IProcessor processor, string fileLocation)
         {
             Reader = reader;
             Mapper = mapper;
-            Notify = notify;
+            Writer = writer;
             Processor = processor;
             FileLocation = fileLocation;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using DataMungingCoreV2.Interfaces;
 using DataMungingCoreV2.Types;
 using FluentAssertions;
@@ -12,15 +13,15 @@ using Xunit;
 
 namespace FootballComponentV2.Tests.Processors
 {
-    public class FootballNotifierTests
+    public class FootballWriterTests
     {
         private readonly ILogger _logger;
-        private readonly FootballNotifier _footballNotifier;
+        private readonly FootballWriter _footballWriter;
 
-        public FootballNotifierTests()
+        public FootballWriterTests()
         {
             _logger = Substitute.For<ILogger>();
-            _footballNotifier = new FootballNotifier(_logger);
+            _footballWriter = new FootballWriter(_logger);
         }
 
 
@@ -32,7 +33,7 @@ namespace FootballComponentV2.Tests.Processors
 
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _footballNotifier.NotifyAsync(data)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentException>(() => _footballWriter.WriteAsync(data)).ConfigureAwait(true);
         }
 
         [Theory]
@@ -42,7 +43,7 @@ namespace FootballComponentV2.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _footballNotifier.NotifyAsync(data)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentException>(() => _footballWriter.WriteAsync(data)).ConfigureAwait(true);
         }
 
         [Fact]
@@ -51,7 +52,7 @@ namespace FootballComponentV2.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _footballNotifier.NotifyAsync(null)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _footballWriter.WriteAsync(null)).ConfigureAwait(true);
         }
 
         [Theory]
@@ -60,7 +61,7 @@ namespace FootballComponentV2.Tests.Processors
         {
             // Arrange.
             // Act.
-            var actualTeam = await _footballNotifier.NotifyAsync(data).ConfigureAwait(true);
+            var actualTeam = await _footballWriter.WriteAsync(data).ConfigureAwait(true);
 
             // Assert.
             actualTeam.ProcessResult.Should().Be(expectedTeam);

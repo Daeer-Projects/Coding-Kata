@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using DataMungingCoreV2.Interfaces;
 using DataMungingCoreV2.Types;
 using FluentAssertions;
@@ -12,15 +13,15 @@ using Xunit;
 
 namespace WeatherComponentV2.Tests.Processors
 {
-    public class WeatherNotifierTests
+    public class WeatherWriterTests
     {
         private readonly ILogger _logger;
-        private readonly WeatherNotifier _weatherNotifier;
+        private readonly WeatherWriter _weatherWriter;
 
-        public WeatherNotifierTests()
+        public WeatherWriterTests()
         {
             _logger = Substitute.For<ILogger>();
-            _weatherNotifier = new WeatherNotifier(_logger);
+            _weatherWriter = new WeatherWriter(_logger);
         }
 
         [Fact]
@@ -31,7 +32,7 @@ namespace WeatherComponentV2.Tests.Processors
 
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentException>(() => _weatherWriter.WriteAsync(data)).ConfigureAwait(true);
         }
 
         [Theory]
@@ -41,7 +42,7 @@ namespace WeatherComponentV2.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentException>(() => _weatherNotifier.NotifyAsync(data)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentException>(() => _weatherWriter.WriteAsync(data)).ConfigureAwait(true);
         }
         
         [Fact]
@@ -50,7 +51,7 @@ namespace WeatherComponentV2.Tests.Processors
             // Arrange.
             // Act.
             // Assert.
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _weatherNotifier.NotifyAsync(null)).ConfigureAwait(true);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _weatherWriter.WriteAsync(null)).ConfigureAwait(true);
         }
 
         [Theory]
@@ -59,7 +60,7 @@ namespace WeatherComponentV2.Tests.Processors
         {
             // Arrange.
             // Act.
-            var actualDay = await _weatherNotifier.NotifyAsync(data).ConfigureAwait(true);
+            var actualDay = await _weatherWriter.WriteAsync(data).ConfigureAwait(true);
 
             // Assert.
             actualDay.ProcessResult.Should().Be(expectedDay);

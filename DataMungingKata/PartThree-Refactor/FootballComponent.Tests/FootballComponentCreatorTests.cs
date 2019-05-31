@@ -39,7 +39,7 @@ namespace FootballComponentV2.Tests
 
             // Act.
             // Assert.
-            component.Should().BeOfType<FootballComponentV2.Types.FootballComponent>("the creator creates football components.");
+            component.Should().BeOfType<Types.FootballComponent>("the creator creates football components.");
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace FootballComponentV2.Tests
             component.FileLocation.Should().Be(file, "that's the file name we set.");
             component.Reader.Should().NotBeNull("the reader should be created and initialised.");
             component.Mapper.Should().NotBeNull("the mapper should be created and initialised.");
-            component.Notify.Should().NotBeNull("the notify should be created and initialised.");
+            component.Writer.Should().NotBeNull("the writer should be created and initialised.");
             component.Processor.Should().NotBeNull("the processor should be created and initialised.");
         }
     }

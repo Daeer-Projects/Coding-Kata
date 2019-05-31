@@ -15,9 +15,9 @@ namespace WeatherComponentV2
             var logger = WeatherConfig.GetLoggerConfiguration();
             var reader = new WeatherReader(file, logger);
             var mapper = new WeatherMapper(logger);
-            var notify = new WeatherNotifier(logger);
-            var processor = new WeatherProcessor(reader, mapper, notify, hub, logger);
-            _weatherComponent = new Types.WeatherComponent(reader, mapper, notify, processor, fileName);
+            var writer = new WeatherWriter(logger);
+            var processor = new WeatherProcessor(reader, mapper, writer, hub, logger);
+            _weatherComponent = new Types.WeatherComponent(reader, mapper, writer, processor, fileName);
 
             return _weatherComponent;
         }

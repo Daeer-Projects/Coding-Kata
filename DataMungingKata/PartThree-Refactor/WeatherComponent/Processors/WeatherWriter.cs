@@ -13,28 +13,28 @@ using WeatherComponentV2.Validators;
 
 namespace WeatherComponentV2.Processors
 {
-    public class WeatherNotifier : INotify
+    public class WeatherWriter : IWriter
     {
         private readonly ILogger _logger;
 
-        public WeatherNotifier(ILogger logger)
+        public WeatherWriter(ILogger logger)
         {
             _logger = logger;
         }
 
-        public async Task<IReturnType> NotifyAsync(IList<IDataType> data)
+        public async Task<IReturnType> WriteAsync(IList<IDataType> data)
         {
-            _logger.Information($"{GetType().Name} (NotifyAsync): Starting to calculate the result.");
+            _logger.Information($"{GetType().Name} (WriteAsync): Starting to calculate the result.");
 
             // Contract requirements.
             if (data is null) throw new ArgumentNullException(nameof(data), "The weather data can not be null.");
             if (data.Count < 1) throw new ArgumentException("The weather data must contain data.");
 
-            var result = await Notify.NotificationWork<Weather, float, int>(data, (float.MaxValue, 0), CurrentRange)
+            var result = await Writer.WriteWork<Weather, float, int>(data, (float.MaxValue, 0), CurrentRange)
                 .ConfigureAwait(false);
 
 
-            _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
+            _logger.Information($"{GetType().Name} (WriteAsync): Notification complete.");
             return result;
         }
         
@@ -47,7 +47,7 @@ namespace WeatherComponentV2.Processors
             ValidationConfirmation(specificType);
 
             var temperatureChange = specificType.CalculateWeatherChange();
-            _logger.Debug($"{GetType().Name} (NotifyAsync): Temperature change calculated: {temperatureChange}.");
+            _logger.Debug($"{GetType().Name} (WriteAsync): Temperature change calculated: {temperatureChange}.");
 
             currentRange = EvaluateData(currentRange, temperatureChange, specificType);
 

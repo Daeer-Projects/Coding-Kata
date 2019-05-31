@@ -28,5 +28,11 @@ namespace DataMungingCoreV2.Tests.Helpers
 
             return isTestValidType;
         }
+
+        public static int CalculateTestIdentity(this TestType testItem)
+        {
+            var weirdCalculation = (DateTime.Now - testItem.TestDateTime).Days + testItem.TestIdentity;
+            return weirdCalculation;
+        }
     }
 }

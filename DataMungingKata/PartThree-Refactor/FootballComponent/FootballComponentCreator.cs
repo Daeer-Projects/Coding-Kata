@@ -15,9 +15,9 @@ namespace FootballComponentV2
             var logger = FootballConfig.GetLoggerConfiguration();
             var reader = new FootballReader(file, logger);
             var mapper = new FootballMapper(logger);
-            var notify = new FootballNotifier(logger);
-            var processor = new FootballProcessor(reader, mapper, notify, hub, logger);
-            _footballComponent = new Types.FootballComponent(reader, mapper, notify, processor, fileName);
+            var writer = new FootballWriter(logger);
+            var processor = new FootballProcessor(reader, mapper, writer, hub, logger);
+            _footballComponent = new Types.FootballComponent(reader, mapper, writer, processor, fileName);
 
             return _footballComponent;
         }

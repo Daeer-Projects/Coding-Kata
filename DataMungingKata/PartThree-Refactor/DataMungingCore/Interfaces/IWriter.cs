@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace DataMungingCoreV2.Interfaces
 {
-    public interface INotify
+    public interface IWriter
     {
-         Task<IReturnType> NotifyAsync(IList<IDataType> data);
+         Task<IReturnType> WriteAsync(IList<IDataType> data);
     }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
 using DataMungingCoreV2.Processors;
-using DataMungingCoreV2.Types;
 using FootballComponentV2.Extensions;
 using FootballComponentV2.Types;
 using FootballComponentV2.Validators;
@@ -15,13 +14,13 @@ using Serilog;
 namespace FootballComponentV2.Processors
 {
     /// <summary>
-    /// The notifier returns the results of answering the question about the data.
+    /// The writer returns the results of answering the question about the data.
     /// </summary>
-    public class FootballNotifier : INotify
+    public class FootballWriter : IWriter
     {
         private readonly ILogger _logger;
 
-        public FootballNotifier(ILogger logger)
+        public FootballWriter(ILogger logger)
         {
             _logger = logger;
         }
@@ -31,18 +30,18 @@ namespace FootballComponentV2.Processors
         /// </summary>
         /// <param name="data"> The football data we are asking the question against. </param>
         /// <returns> The result of asking the question. </returns>
-        public async Task<IReturnType> NotifyAsync(IList<IDataType> data)
+        public async Task<IReturnType> WriteAsync(IList<IDataType> data)
         {
-            _logger.Information($"{GetType().Name} (NotifyAsync): Starting to calculate the result.");
+            _logger.Information($"{GetType().Name} (WriteAsync): Starting to calculate the result.");
 
             // Contract requirements.
             if (data is null) throw new ArgumentNullException(nameof(data), "The football data can not be null.");
             if (data.Count < 1) throw new ArgumentException("The football data must contain data.");
             
-            var result = await Notify.NotificationWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
+            var result = await Writer.WriteWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
                 .ConfigureAwait(false);
 
-            _logger.Information($"{GetType().Name} (NotifyAsync): Notification complete.");
+            _logger.Information($"{GetType().Name} (WriteAsync): Notification complete.");
             return result;
         }
         
@@ -55,7 +54,7 @@ namespace FootballComponentV2.Processors
             ValidationConfirmation(specificType);
 
             var pointDifference = specificType.CalculatePointDifference();
-            _logger.Debug($"{GetType().Name} (NotifyAsync): Point difference calculated: {pointDifference}.");
+            _logger.Debug($"{GetType().Name} (WriteAsync): Point difference calculated: {pointDifference}.");
 
             currentRange = EvaluateData(currentRange, pointDifference, specificType);
 

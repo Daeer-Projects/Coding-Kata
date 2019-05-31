@@ -4,7 +4,7 @@
     {
         IReader Reader { get; }
         IMapper Mapper { get; }
-        INotify Notify { get; }
+        IWriter Writer { get; }
         IProcessor Processor { get; }
         string FileLocation { get; }
     }

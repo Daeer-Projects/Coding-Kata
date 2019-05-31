@@ -15,7 +15,7 @@ namespace FootballComponentV2.Tests.Processors
     {
         private readonly IReader _reader;
         private readonly IMapper _mapper;
-        private readonly INotify _notify;
+        private readonly IWriter _writer;
         private readonly ILogger _logger;
         private readonly IMessageHub _messageHub;
         private FootballProcessor _processor;
@@ -24,21 +24,21 @@ namespace FootballComponentV2.Tests.Processors
         {
             _reader = Substitute.For<IReader>();
             _mapper = Substitute.For<IMapper>();
-            _notify = Substitute.For<INotify>();
+            _writer = Substitute.For<IWriter>();
             _logger = Substitute.For<ILogger>();
             _messageHub = Substitute.For<IMessageHub>();
-            _processor = new FootballProcessor(_reader, _mapper, _notify, _messageHub, _logger);
+            _processor = new FootballProcessor(_reader, _mapper, _writer, _messageHub, _logger);
         }
 
 
         [Theory]
         [MemberData(nameof(GetMixedConstructorParameters))]
-        public void Test_construction_with_mixed_null_parameters_throws_null_exception(IReader reader, IMapper mapper, INotify notify, IMessageHub hub, ILogger logger)
+        public void Test_construction_with_mixed_null_parameters_throws_null_exception(IReader reader, IMapper mapper, IWriter writer, IMessageHub hub, ILogger logger)
         {
             // Arrange.
             // Act.
             // Assert.
-            Assert.Throws<ArgumentNullException>(() => _processor = new FootballProcessor(reader, mapper, notify, hub, logger));
+            Assert.Throws<ArgumentNullException>(() => _processor = new FootballProcessor(reader, mapper, writer, hub, logger));
         }
 
         [Theory]
@@ -62,7 +62,7 @@ namespace FootballComponentV2.Tests.Processors
 
             _reader.ReadAsync(Arg.Any<string>()).Returns(new[] { "hello" });
             _mapper.MapAsync(Arg.Any<string[]>()).Returns(new List<IDataType>());
-            _notify.NotifyAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType { ProcessResult = "Bournemouth" });
+            _writer.WriteAsync(Arg.Any<IList<IDataType>>()).Returns(new ContainingResultType { ProcessResult = "Bournemouth" });
 
             // Act.
             await _processor.ProcessAsync(input).ConfigureAwait(false);
@@ -82,7 +82,7 @@ namespace FootballComponentV2.Tests.Processors
                 {
                     null,
                     Substitute.For<IMapper>(),
-                    Substitute.For<INotify>(),
+                    Substitute.For<IWriter>(),
                     Substitute.For<IMessageHub>(),
                     Substitute.For<ILogger>()
                 };
@@ -90,7 +90,7 @@ namespace FootballComponentV2.Tests.Processors
                 {
                     Substitute.For<IReader>(),
                     null,
-                    Substitute.For<INotify>(),
+                    Substitute.For<IWriter>(),
                     Substitute.For<IMessageHub>(),
                     Substitute.For<ILogger>()
                 };
@@ -106,7 +106,7 @@ namespace FootballComponentV2.Tests.Processors
                 {
                     Substitute.For<IReader>(),
                     Substitute.For<IMapper>(),
-                    Substitute.For<INotify>(),
+                    Substitute.For<IWriter>(),
                     null,
                     Substitute.For<ILogger>()
                 };
@@ -114,7 +114,7 @@ namespace FootballComponentV2.Tests.Processors
                 {
                     Substitute.For<IReader>(),
                     Substitute.For<IMapper>(),
-                    Substitute.For<INotify>(),
+                    Substitute.For<IWriter>(),
                     Substitute.For<IMessageHub>(),
                     null
                 };

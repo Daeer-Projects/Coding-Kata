@@ -8,24 +8,31 @@ using DataMungingCoreV2.Types;
 
 namespace DataMungingCoreV2.Processors
 {
-    public static class Notify
+    public static class Writer
     {
-        public static Task<IReturnType> NotificationWork<T, TU, TV>(IEnumerable<IDataType> data,
+        public static Task<IReturnType> WriteWork<T, TU, TV>(IEnumerable<IDataType> data,
             (TU, TV) defaultParameters,
             Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange) 
             where T: class
             where TU: object
             where TV: object
         {
+            // Contract requirements.
+            if (data is null) throw new ArgumentNullException(nameof(data), "The data to be processed must not be null.");
+            if (!data.Any()) throw new ArgumentException(nameof(data), "The data to process must contain data.");
+            if (defaultParameters.Item1 is null) throw new ArgumentNullException(nameof(data), "Default Parameters: The first item in the default parameters is null.");
+            if (defaultParameters.Item2 is null) throw new ArgumentNullException(nameof(data), "Default Parameters: The second item in the default parameters is null.");
+            if (evaluateCurrentRange is null) throw new ArgumentNullException(nameof(evaluateCurrentRange), "The expected function to process the data is null.");
+
             return Task.Factory.StartNew(() =>
             {
                 var dataResults =
                     data.Aggregate((defaultParameters),
                         (current, type) => SmallestRange<T, TU, TV>(type, current, evaluateCurrentRange));
 
-                IReturnType day = new ContainingResultType {ProcessResult = dataResults.Item2};
+                IReturnType answer = new ContainingResultType {ProcessResult = dataResults.Item2};
 
-                return day;
+                return answer;
             });
         }
 

@@ -13,16 +13,16 @@ namespace FootballComponentV2.Processors
     {
         private readonly IReader _footballReader;
         private readonly IMapper _footballMapper;
-        private readonly INotify _footballNotify;
+        private readonly IWriter _footballWriter;
         private readonly IMessageHub _messageHub;
         private readonly ILogger _logger;
 
-        public FootballProcessor(IReader reader, IMapper mapper, INotify notify, IMessageHub hub, ILogger logger)
+        public FootballProcessor(IReader reader, IMapper mapper, IWriter writer, IMessageHub hub, ILogger logger)
         {
             // Contract requirements.
             _footballReader = reader ?? throw new ArgumentNullException(nameof(reader), "The file reader can't be null.");
             _footballMapper = mapper ?? throw new ArgumentNullException(nameof(reader), "The data mapper can't be null.");
-            _footballNotify = notify ?? throw new ArgumentNullException(nameof(notify), "The notifier can't be null.");
+            _footballWriter = writer ?? throw new ArgumentNullException(nameof(writer), "The notifier can't be null.");
             _messageHub = hub ?? throw new ArgumentNullException(nameof(hub), "The hub can't be null.");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "The logger can't be null.");
         }
@@ -39,7 +39,7 @@ namespace FootballComponentV2.Processors
 
             var footballData = await _footballReader.ReadAsync(fileLocation).ConfigureAwait(false);
             var mappedData = await _footballMapper.MapAsync(footballData).ConfigureAwait(false);
-            var result = await _footballNotify.NotifyAsync(mappedData).ConfigureAwait(false);
+            var result = await _footballWriter.WriteAsync(mappedData).ConfigureAwait(false);
 
             _messageHub.Publish(result);
         }
