@@ -20,8 +20,8 @@ namespace DataMungingCoreV2.Processors
             // Contract requirements.
             if (data is null) throw new ArgumentNullException(nameof(data), "The data to be processed must not be null.");
             if (!data.Any()) throw new ArgumentException(nameof(data), "The data to process must contain data.");
-            if (defaultParameters.Item1 is null) throw new ArgumentNullException(nameof(data), "Default Parameters: The first item in the default parameters is null.");
-            if (defaultParameters.Item2 is null) throw new ArgumentNullException(nameof(data), "Default Parameters: The second item in the default parameters is null.");
+            if (defaultParameters.Item1 is null) throw new ArgumentNullException(nameof(defaultParameters.Item1), "Default Parameters: The first item in the default parameters is null.");
+            if (defaultParameters.Item2 is null) throw new ArgumentNullException(nameof(defaultParameters.Item2), "Default Parameters: The second item in the default parameters is null.");
             if (evaluateCurrentRange is null) throw new ArgumentNullException(nameof(evaluateCurrentRange), "The expected function to process the data is null.");
 
             return Task.Factory.StartNew(() =>

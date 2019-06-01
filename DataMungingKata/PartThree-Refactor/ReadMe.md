@@ -16,7 +16,7 @@ I would like to do the following:
 
 ### Readers
 
-The reader was just a call to wrap a function into an async task.  It was done using an extension method.
+The reader was just a call to wrap a function into an async task.
 
 
 ### Mappers
@@ -56,32 +56,37 @@ The mapper interface looks like this:
         Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
 ```
 
-### Notifiers
+### Writer
 
 This one looks nicer, but has less code in the core project.  Still working though.
 
 
 #### Solution
 
-The notifier is a static notify class in the core project.
+The writer is a static writer class in the core project.
 
 So, to call the core notify, we would use code like this:
 
 ``` csharp
-    var result = await Notify.NotificationWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
+    var result = await Writer.WriteWork<Football, int, string>(data, (int.MaxValue, string.Empty), CurrentRange)
         .ConfigureAwait(false);
 ```
 
 The notify interface looks like this:
 
 ``` csharp
-    public static Task<IReturnType> NotificationWork<T, TU, TV>(IEnumerable<IDataType> data,
+    public static Task<IReturnType> WriterWork<T, TU, TV>(IEnumerable<IDataType> data,
         (TU, TV) defaultParameters,
         Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange) 
         where T: class
         where TU: object
         where TV: object
 ```
+
+### Processor
+
+I passed the instances of the reader, mapper, and writer into the static processor and returned the results.
+
 
 
 ### Is Valid

@@ -2,8 +2,8 @@
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
-using DataMungingCoreV2.Extensions;
 using DataMungingCoreV2.Interfaces;
+using DataMungingCoreV2.Processors;
 using Serilog;
 
 namespace FootballComponentV2.Processors
@@ -35,7 +35,7 @@ namespace FootballComponentV2.Processors
             // Contract checks.
             if (string.IsNullOrWhiteSpace(fileLocation)) throw new ArgumentNullException(nameof(fileLocation), "The file location can not be null.");
             
-            var file = await _fileSystem.File.ReadAllLinesAsync(fileLocation).ConfigureAwait(false);
+            var file = await Reader.ReadWork(_fileSystem.File, fileLocation).ConfigureAwait(false);
 
             _logger.Information($"{GetType().Name} (ReadAsync): Reading complete.");
             return file;

@@ -39,7 +39,19 @@ namespace DataMungingCoreV2.Tests.Processors
         }
 
         [Fact]
-        public async Task Test_write_work_with_null_default_parameters_throws_exception()
+        public async Task Test_write_work_with_empty_data_throws_exception()
+        {
+            // Arrange.
+            var data = new List<IDataType>();
+            // Act.
+            // Assert.
+            await Assert
+                .ThrowsAsync<ArgumentException>(() =>
+                    Writer.WriteWork<TestType, int?, int?>(data, (int.MaxValue, 0), CurrentRange)).ConfigureAwait(true);
+        }
+
+        [Fact]
+        public async Task Test_write_work_with_null_first_default_parameters_throws_exception()
         {
             // Arrange.
             var data = new List<IDataType>
@@ -52,7 +64,24 @@ namespace DataMungingCoreV2.Tests.Processors
             // Assert.
             await Assert
                 .ThrowsAsync<ArgumentNullException>(() =>
-                    Writer.WriteWork<TestType, int?, int?>(data, (null, null), CurrentRange)).ConfigureAwait(true);
+                    Writer.WriteWork<TestType, int?, int?>(data, (null, 0), CurrentRange)).ConfigureAwait(true);
+        }
+
+        [Fact]
+        public async Task Test_write_work_with_null_second_default_parameters_throws_exception()
+        {
+            // Arrange.
+            var data = new List<IDataType>
+            {
+                new ContainingDataType
+                    {Data = new TestType {TestIdentity = 1, TestName = "Pooh", TestDateTime = DateTime.Now.AddDays(-1)}}
+            };
+
+            // Act.
+            // Assert.
+            await Assert
+                .ThrowsAsync<ArgumentNullException>(() =>
+                    Writer.WriteWork<TestType, int?, int?>(data, (int.MaxValue, null), CurrentRange)).ConfigureAwait(true);
         }
 
         [Fact]
