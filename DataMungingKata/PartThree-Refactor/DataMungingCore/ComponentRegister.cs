@@ -15,12 +15,12 @@ namespace DataMungingCoreV2
         /// <summary>
         /// The components that have been registered in the system.
         /// </summary>
-        public IList<IComponent> Components;
+        public readonly IList<IComponent> Components;
 
         /// <summary>
         /// The hub that deals with all of the events.
         /// </summary>
-        private IMessageHub Hub;
+        private readonly IMessageHub Hub;
 
         /// <summary>
         /// The logging system.

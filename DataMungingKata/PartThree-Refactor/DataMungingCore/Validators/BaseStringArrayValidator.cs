@@ -4,8 +4,14 @@ using FluentValidation;
 
 namespace DataMungingCoreV2.Validators
 {
+    /// <summary>
+    /// A basic validator for a string array.
+    /// </summary>
     public class BaseStringArrayValidator : AbstractValidator<string[]>
     {
+        /// <summary>
+        /// A simple set of validation before thorough validation by the validators in the components.
+        /// </summary>
         public BaseStringArrayValidator()
         {
             RuleFor(data => data).NotNull();

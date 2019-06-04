@@ -18,6 +18,17 @@ I would like to do the following:
 
 The reader was just a call to wrap a function into an async task.
 
+So, the call to the core reader, we would use code like this:
+
+``` chsarp
+    var file = await Reader.ReadWork(_fileSystem.File, fileLocation).ConfigureAwait(false);
+```
+
+The reader interface looks like this:
+
+``` csharp
+    public static Task<string[]> ReadWork(IFile fileSystem, string fileLocation)
+```
 
 ### Mappers
 
@@ -87,6 +98,22 @@ The notify interface looks like this:
 
 I passed the instances of the reader, mapper, and writer into the static processor and returned the results.
 
+So, to call the core processor, we would use code like this:
+
+``` csharp
+    var result = await Processor.ProcessorWork(fileLocation, _footballReader, _footballMapper, _footballWriter)
+        .ConfigureAwait(false);
+```
+
+The processor interface looks like this:
+
+``` csharp
+    public static async Task<IReturnType> ProcessorWork(string fileLocation, IReader reader, IMapper mapper, IWriter writer)
+```
+
+## Additional Methods
+
+The following is to show some of the problems and solutions that were discovered. 
 
 
 ### Is Valid
