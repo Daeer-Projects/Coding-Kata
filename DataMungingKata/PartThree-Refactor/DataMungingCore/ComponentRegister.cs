@@ -20,7 +20,7 @@ namespace DataMungingCoreV2
         /// <summary>
         /// The hub that deals with all of the events.
         /// </summary>
-        private readonly IMessageHub Hub;
+        private readonly IMessageHub _hub;
 
         /// <summary>
         /// The logging system.
@@ -35,7 +35,7 @@ namespace DataMungingCoreV2
         public ComponentRegister(IMessageHub hub, ILogger logger)
         {
             // Contract requirements.
-            Hub = hub ?? throw new ArgumentNullException(nameof(hub), "The hub can't be null.");
+            _hub = hub ?? throw new ArgumentNullException(nameof(hub), "The hub can't be null.");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "The logger can't be null.");
             Components = new List<IComponent>();
         }
@@ -45,7 +45,9 @@ namespace DataMungingCoreV2
         /// </summary>
         /// <param name="creator"> The specific component creator. </param>
         /// <param name="fileName"> The filename (location) that the component uses to read from. </param>
-        /// <returns></returns>
+        /// <returns>
+        /// If the registration process was successful.
+        /// </returns>
         public bool RegisterComponent(IComponentCreator creator, string fileName)
         {
             var response = false;
@@ -53,8 +55,8 @@ namespace DataMungingCoreV2
             // Contract requirements.
             if (creator != null && !string.IsNullOrWhiteSpace(fileName))
             {
-                var component = creator.CreateComponent(Hub, fileName);
-                Hub.Subscribe<string>(async (s) => await component.Processor.ProcessAsync(fileName).ConfigureAwait(false));
+                var component = creator.CreateComponent(_hub, fileName);
+                _hub.Subscribe<string>(async (s) => await component.Processor.ProcessAsync(fileName).ConfigureAwait(false));
                 Components.Add(component);
                 response = true;
             }
@@ -68,7 +70,7 @@ namespace DataMungingCoreV2
         /// <returns></returns>
         public bool RegisterSubscriptions()
         {
-            Hub.Subscribe<IReturnType>(r => _logger.Information($"The result is: {r.ProcessResult}."));
+            _hub.Subscribe<IReturnType>(r => _logger.Information($"The result is: {r.ProcessResult}."));
             return true;
         }
     }

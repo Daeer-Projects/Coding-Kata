@@ -52,8 +52,7 @@ namespace DataMungingPartThreeV2
             
             try
             {
-                // We don't want to call this anymore, what we want to do is set up the event hub to subscribe
-                // to a call to process the registered components.
+                // We want to set up the event hub to subscribe to a call to process the registered components.
                 // Then we want the components to publish a completed event.
                 // Business Business, Numbers... (Psst, is this working?) (Yes) YAAAAYY!!
                 

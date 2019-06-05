@@ -9,17 +9,14 @@ namespace DataMungingPartThreeV2
         {
             Console.WriteLine("Hello.");
             Console.WriteLine("With this version, I am going to try and refactor the components into the core project more.");
-
-            // To get the first component running and ensuring it works correctly, I am just creating things here.
-
-            // We need to register the components (only one at the moment).
+            
+            // We need to register the components.
             // We need to set up the event hub.
             // We need to set up the logging for the core, components and program.
 
             var boot = new Bootstrapper();
             boot.ProcessItemsAsync();
 
-            // Still need to ensure that everything is still running when the results come in.
             var completed = false;
             Console.WriteLine("Process Running...  Press 'q' to quit.");
             do
