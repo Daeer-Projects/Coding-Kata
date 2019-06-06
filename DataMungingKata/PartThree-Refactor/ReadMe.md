@@ -200,12 +200,12 @@ var result = testType.IsValid(new TestValidator());
 
 ## Contents
 
-* 1 -Introduction
+* 1 - Introduction
 * 2 - Solution Parts
-* 3 - Example Project
-* 4 - Core
-* 5 - Component
-* 6 - Main Program
+* 3 - Core
+* 4 - Component
+* 5 - Main Program
+* 6 - Example Project
 
 
 ## 1 - Introduction
@@ -269,6 +269,313 @@ It is assumed that the solution you are creating needs to process files and prod
 Your solution will need to set up the core project and components so that they can be used effectively.
 
 
+## 3 - Core
+
+### Component Register
+
+The main part of the core is:
+
+```ComponentRegister.cs```
+
+This is the object that is created with the MessageHub and Logger.  Once created the components can be registered.
+
+The registration process creates the component, and then sets up a subscription and the method the component will execute when that event is raised.
+
+The component register will then set up a subscription for the results that the components raise when they have completed their processing.
+
+#### Creation
+
+To create an instance of the ComponentRegister:
+
+``` csharp
+var componentRegister = new ComponentRegister(hub, coreLogger);
+```
+
+#### Register Component
+
+The signature of the method:
+
+``` csharp
+public bool RegisterComponent(IComponentCreator creator, string fileName)
+```
+
+The ```IComponentCreator``` will be discussed later.  The file name is the location of the file the component is going to process.
+
+To register a component, so that it can be used to process files:
+
+``` csharp
+if (componentRegister.RegisterComponent(weatherComponentCreator, WeatherConstants.FullFileName))
+{
+        // all good.
+}
+else
+{
+        // do some complaining.
+}
+```
+
+The registration process will return a true or false based on if the registration process was successful.
+
+#### Register Subscriptions
+
+The ComponentRegister will need to be set up to handle any results raised by the components.
+
+``` csharp
+componentRegister.RegisterSubscriptions();
+```
+
+### Extensions
+
+The core project has only one extension.
+
+That extension is the "IsValid" extension used by the components when requesting validation of the types used.
+
+Signature:
+
+``` csharp
+public static ValidationResult IsValid<T>(this T component, AbstractValidator<T> validator)
+        where T : class
+```
+
+Usage:
+
+``` csharp
+var result = testType.IsValid(new TestValidator());
+```
+
+### Interfaces
+
+The core project defines some interfaces that the components will need to use for the abstraction process to work.
+
+* IComponent
+* IComponentCreator
+* IDataType
+* IMapper
+* IProcessor
+* IReturnType
+* IWriter
+
+
+### Processors
+
+These are the processors that the components processors will use.  They are static classes with the template layout of instructions for the components to define.
+
+* Mapper
+* Processor
+* Reader
+* Writer
+
+
+#### Mapper
+
+This class executes the mapper code from the component.  It takes the data read in and converts it to specific types, as defined by the components.
+
+##### Signature
+
+``` csharp
+public static Task<IList<IDataType>> MapWork(string[] fileData,
+        Func<string, bool> checkItemRow,
+        Func<string, IList<IDataType>, IList<IDataType>> addDataItem)
+```
+
+##### Usage
+
+``` csharp
+var results = await Mapper.MapWork(GetData(), CheckItemRow, AddDataItem).ConfigureAwait(false);
+```
+
+##### Parameters
+
+* ```string[] fileData```
+* ```Func<string, bool> checkItemRow```
+* ```Func<string, IList<IDataType>, IList<IDataType>> addDataItem```
+
+###### fileData
+
+This is the string array of data to be mapped.
+
+###### checkItemRow
+
+This is a function, defined in the component, that checks the data meets the criteria before it is added to the mapped data.
+
+####### Example
+
+``` csharp
+private static bool CheckItemRow(string item)
+{
+        return !item.Equals(string.Empty) &&
+                !item.Equals("banana") &&
+                !item.Equals("-----------------------------------------");
+}
+```
+
+###### addDataItem
+
+This is a function, defined in the component, that adds the data to the mapped data.  So, after the data has met the criteria defined, we would then do some validation in this function before fully adding it to the mapped data.
+
+####### Example
+
+``` csharp
+private IList<IDataType> AddDataItem(string item, IList<IDataType> results)
+{
+        var dataResults = results;
+        var data = item.ToTestType();
+        if (data.IsValid)
+        {
+                dataResults.Add(new ContainingDataType { Data = data.TestType });
+        }
+
+        return dataResults;
+}
+```
+
+#### Processor
+
+This class executes the processor code from the component.  The processor executes the code in the other processors.
+
+
+##### Signature
+
+``` csharp
+public static async Task<IReturnType> ProcessorWork(string fileLocation, IReader reader, IMapper mapper, IWriter writer)
+```
+
+##### Usage
+
+``` csharp
+var actual = await Processor.ProcessorWork(input, _reader, _mapper, _writer).ConfigureAwait(false);
+```
+
+##### Parameters
+
+* ```string fileLocation```
+* ```IReader reader```
+* ```IMapper mapper```
+* ```IWriter writer```
+
+These parameters are instances of the processors created by the component.  The fileLocation is just the location of the file that is going to be processed.
+
+
+#### Reader
+
+This class executes the reader code defined by the component.  It is a simple wrapper on the code to start a new task using the components code.
+
+
+##### Signature
+
+``` csharp
+public static Task<string[]> ReadWork(IFile fileSystem, string fileLocation)
+```
+
+##### Usage
+
+``` csharp
+var actual = await Reader.ReadWork(_file, input).ConfigureAwait(false);
+```
+
+##### Parameters
+
+* ```IFile fileSystem```
+* ```string fileLocation```
+
+
+###### fileSystem
+
+The IFile is an interface defined by using the NuGet package, ```System.IO.Abstractions```.  It is an interface for a wrapper around the basic file system.  The interface is only there to aid in unit testing.
+
+
+###### fileLocation
+
+The location of the file that we are about to read.
+
+
+#### Writer
+
+This class executes the writer code defined by the component.  It analyses the mapped data to find out the answer being asked by the component.
+
+
+##### Signature
+
+``` csharp
+public static Task<IReturnType> WriteWork<T, TU, TV>(IEnumerable<IDataType> data,
+        (TU, TV) defaultParameters,
+        Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange) 
+        where T: class
+        where TU: object
+        where TV: object
+```
+
+##### Usage
+
+``` csharp
+var results = await Writer.WriteWork<TestType, int?, int?>(data, (int.MaxValue, 0), CurrentRange).ConfigureAwait(false);
+```
+
+##### Parameters
+
+* ```IEnumerable<IDataType> data```
+* ```(TU, TV) defaultParameters```
+* ```Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange)```
+
+
+###### data
+
+This is the mapped data that is going to be analysed.
+
+
+###### defaultParameters
+
+This is a tuple of two types.  The types are defined by the component.
+
+The first item in the example provided is the comparison value.
+
+The second item in the example is the data that may end up being the final result.
+
+
+###### evaluateCurrentRange
+
+This is the function defined by the component that does the analysis of the data.  As the analysis could be anything, most of the code will be contained in the components.
+
+
+####### Example
+
+``` csharp
+private (int?, int?) CurrentRange<T>((int?, int?) currentRange, T componentType) where T : class
+{
+        // Casting to expected type.
+        var specificType = componentType as TestType;
+        var calculation = specificType.CalculateTestIdentity();
+
+        if (calculation < currentRange.Item1)
+        {
+                currentRange.Item1 = calculation;
+                currentRange.Item2 = specificType.TestIdentity;
+        }
+
+        return currentRange;
+}
+```
+
+### Types
+
+The concrete types used to wrap data or the result into objects.
+
+* ContainingDataType
+* ContainingResultType
+
+
+
+
+## 4 - Component
+
+This section is about the components and how they are made up.
+
+
+## 5 - Main Program
+
+This section contains details of what you need to do in your program to use the components and the core project.
+
+
 ## 3 - Example Project
 
 For the purpose of this document, we are going to use a simple console application that has two components registered.
@@ -322,61 +629,3 @@ IComponentCreator footballComponentCreator = new FootballComponentCreator();
 ```
 
 This instantiates the component creators.
-
-
-
-## 4 - Core
-
-#### Component Register
-
-The main part of the core is:
-
-```ComponentRegister.cs```
-
-This is the object that is created with the MessageHub and Logger.  Once created the components can be registered.
-
-The registration process creates the component, and then sets up a subscription and the method the component will execute when that event is raised.
-
-The component register will then set up a subscription for the results that the components raise when they have completed their processing.
-
-##### Creation
-
-To create an instance of the ComponentRegister:
-
-``` csharp
-var componentRegister = new ComponentRegister(hub, coreLogger);
-```
-
-##### Register Component
-
-The signature of the method:
-
-``` csharp
-public bool RegisterComponent(IComponentCreator creator, string fileName)
-```
-
-The ```IComponentCreator``` will be discussed later.  The file name is the location of the file the component is going to process.
-
-To register a component, so that it can be used to process files:
-
-``` csharp
-if (componentRegister.RegisterComponent(weatherComponentCreator, WeatherConstants.FullFileName))
-{
-        // all good.
-}
-else
-{
-        // do some complaining.
-}
-```
-
-The registration process will return a true or false based on if the registration process was successful.
-
-##### Register Subscriptions
-
-The ComponentRegister will need to be set up to handle any results raised by the components.
-
-``` csharp
-componentRegister.RegisterSubscriptions();
-```
-
