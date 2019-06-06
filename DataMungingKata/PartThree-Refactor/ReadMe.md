@@ -15,14 +15,13 @@ I would like to do the following:
 1. Extract the code from the readers, mappers and notifiers into the core project.
 2. I want to create a generic IsValid() method that the components can use specifying the validator required.
 
-
 ### Readers
 
 The reader was just a call to wrap a function into an async task.
 
 So, the call to the core reader, we would use code like this:
 
-``` chsarp
+``` csharp
     var file = await Reader.ReadWork(_fileSystem.File, fileLocation).ConfigureAwait(false);
 ```
 
@@ -43,7 +42,6 @@ The mapper extraction was a bit more complicated.
 3. We still had to convert the item into a type that the component required.
 4. We still had to check if that type is valid, based on the component validation.
 5. We still had to add the valid type into the result list.
-
 
 #### Solution
 
@@ -73,8 +71,7 @@ The mapper interface looks like this:
 
 This one looks nicer, but has less code in the core project.  Still working though.
 
-
-#### Solution
+#### Solution - Writer
 
 The writer is a static writer class in the core project.
 
@@ -117,7 +114,6 @@ The processor interface looks like this:
 
 The following is to show some of the problems and solutions that were discovered. 
 
-
 ### Is Valid
 
 I am wondering if it is possible to add an extension to a class or type called IsValid, as I did in part three, but the class or type would be generic.
@@ -129,7 +125,7 @@ public static ValidationResult IsValid<T>(this T component)
 
 That would work for making it a generic IsValid method, but how would I supply the validator for that type?
 
-Currenlty I have:
+Currently I have:
 
 ``` csharp
         public static ValidationResult IsValid<T, TV>(this T component)
@@ -195,7 +191,6 @@ Used like this:
 var result = testType.IsValid(new TestValidator());
 ```
 
-
 # Documentation
 
 ## Contents
@@ -206,7 +201,6 @@ var result = testType.IsValid(new TestValidator());
 * 4 - Component
 * 5 - Main Program
 * 6 - Example Project
-
 
 ## 1 - Introduction
 
@@ -219,11 +213,8 @@ This project is to give you the consumer, a centralised system for processing fi
 The basis of this project is based on the coding kata, "Data Munging".  This kata is to process two different file types and return an answer.  It was divided up into three parts.
 
 > Part One: Extract data from a Weather.dat file and find out which day had the least temperature change.
-
 > Part Two: Extract data from a Football.dat file and find out which team has the smallest difference between for and against goals.
-
 > Part Three: Take the two programs and extract duplicated code into a core project that could be used by both components.
-
 
 ## 2 - Solution Parts
 
@@ -232,13 +223,9 @@ The project that you will create is up to you.  What this core project requires 
 > 1. Core - instantiate and set up the core objects.
 > * Event - Message Hub.
 > * Component Register.
-
 > 3. Logging - Serilog.
-
 > 2. Components - create the components.
-
 > 3. Main Solution - add / reference the components and core in the main solution.
-
 
 ### Core Sections
 
@@ -251,23 +238,19 @@ The core is set up to extract out as much code as possible to make it easier for
 * Types
 * Validators
 
-
 ### Logging Section
 
 The core project is set up to use Serilog.
 
-
 ### Components
 
 The core project is not limited to how many components can be created and registered.  The limitation will be on how much the hardware it is installed on can handle.
-
 
 ### Main Solution
 
 It is assumed that the solution you are creating needs to process files and produce some kind of assessment on the data contained in the file.
 
 Your solution will need to set up the core project and components so that they can be used effectively.
-
 
 ## 3 - Core
 
@@ -355,7 +338,6 @@ The core project defines some interfaces that the components will need to use fo
 * IReturnType
 * IWriter
 
-
 ### Processors
 
 These are the processors that the components processors will use.  They are static classes with the template layout of instructions for the components to define.
@@ -364,7 +346,6 @@ These are the processors that the components processors will use.  They are stat
 * Processor
 * Reader
 * Writer
-
 
 #### Mapper
 
@@ -429,24 +410,23 @@ private IList<IDataType> AddDataItem(string item, IList<IDataType> results)
 }
 ```
 
-#### Processor
+#### Processor - Core
 
 This class executes the processor code from the component.  The processor executes the code in the other processors.
 
-
-##### Signature
+##### Signature - Processor
 
 ``` csharp
 public static async Task<IReturnType> ProcessorWork(string fileLocation, IReader reader, IMapper mapper, IWriter writer)
 ```
 
-##### Usage
+##### Usage - Processor
 
 ``` csharp
 var actual = await Processor.ProcessorWork(input, _reader, _mapper, _writer).ConfigureAwait(false);
 ```
 
-##### Parameters
+##### Parameters - Processor
 
 * ```string fileLocation```
 * ```IReader reader```
@@ -455,46 +435,40 @@ var actual = await Processor.ProcessorWork(input, _reader, _mapper, _writer).Con
 
 These parameters are instances of the processors created by the component.  The fileLocation is just the location of the file that is going to be processed.
 
-
 #### Reader
 
 This class executes the reader code defined by the component.  It is a simple wrapper on the code to start a new task using the components code.
 
-
-##### Signature
+##### Signature - Reader
 
 ``` csharp
 public static Task<string[]> ReadWork(IFile fileSystem, string fileLocation)
 ```
 
-##### Usage
+##### Usage - Reader
 
 ``` csharp
 var actual = await Reader.ReadWork(_file, input).ConfigureAwait(false);
 ```
 
-##### Parameters
+##### Parameters - Reader
 
 * ```IFile fileSystem```
 * ```string fileLocation```
-
 
 ###### fileSystem
 
 The IFile is an interface defined by using the NuGet package, ```System.IO.Abstractions```.  It is an interface for a wrapper around the basic file system.  The interface is only there to aid in unit testing.
 
-
 ###### fileLocation
 
 The location of the file that we are about to read.
 
-
-#### Writer
+#### Writer - Core
 
 This class executes the writer code defined by the component.  It analyses the mapped data to find out the answer being asked by the component.
 
-
-##### Signature
+##### Signature - Writer
 
 ``` csharp
 public static Task<IReturnType> WriteWork<T, TU, TV>(IEnumerable<IDataType> data,
@@ -505,23 +479,21 @@ public static Task<IReturnType> WriteWork<T, TU, TV>(IEnumerable<IDataType> data
         where TV: object
 ```
 
-##### Usage
+##### Usage - Writer
 
 ``` csharp
 var results = await Writer.WriteWork<TestType, int?, int?>(data, (int.MaxValue, 0), CurrentRange).ConfigureAwait(false);
 ```
 
-##### Parameters
+##### Parameters - Writer
 
 * ```IEnumerable<IDataType> data```
 * ```(TU, TV) defaultParameters```
 * ```Func<(TU, TV), T, (TU, TV)> evaluateCurrentRange)```
 
-
 ###### data
 
 This is the mapped data that is going to be analysed.
-
 
 ###### defaultParameters
 
@@ -531,11 +503,9 @@ The first item in the example provided is the comparison value.
 
 The second item in the example is the data that may end up being the final result.
 
-
 ###### evaluateCurrentRange
 
 This is the function defined by the component that does the analysis of the data.  As the analysis could be anything, most of the code will be contained in the components.
-
 
 ####### Example
 
@@ -563,12 +533,35 @@ The concrete types used to wrap data or the result into objects.
 * ContainingDataType
 * ContainingResultType
 
+### Validators
 
+There is only one base validator in the core project.  It is expected that the components will create their own validators for their types.
 
+The base validator is the ```BaseStringArrayValidator```
+
+It is used to validate the string array passed into the core Mapper.  Only has the basic checks for the string array.
 
 ## 4 - Component
 
-This section is about the components and how they are made up.
+This section is about the components and how they are made up.  I will describe how the components are required to be created.
+
+### Required Parts
+
+The component needs to be created with the following parts:
+
+* Configuration
+* Constants
+* Extensions
+* Processors
+* Types
+* Validators
+* Component Creator
+
+### Configuration
+
+The component will need configuration set up to identify the parts of the file that needs to be extracted into an object for processing.  The file will have headers, data rows, weird rows and footers.
+
+The files will be different for each component, so only the component creators will know how the files will be made up.
 
 
 ## 5 - Main Program
