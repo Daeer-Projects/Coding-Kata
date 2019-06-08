@@ -381,7 +381,7 @@ This is the string array of data to be mapped.
 
 This is a function, defined in the component, that checks the data meets the criteria before it is added to the mapped data.
 
-####### Example
+**Example:**
 
 ``` csharp
 private static bool CheckItemRow(string item)
