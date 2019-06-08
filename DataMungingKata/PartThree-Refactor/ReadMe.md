@@ -220,12 +220,12 @@ The basis of this project is based on the coding kata, "Data Munging".  This kat
 
 The project that you will create is up to you.  What this core project requires of you to set up are the following:
 
-> 1. Core - instantiate and set up the core objects.
-> * Event - Message Hub.
-> * Component Register.
-> 3. Logging - Serilog.
-> 2. Components - create the components.
-> 3. Main Solution - add / reference the components and core in the main solution.
+1. Core - instantiate and set up the core objects.
+   1. Event - Message Hub.
+   2. Component Register. 
+   3. Logging - Serilog.
+2. Components - create the components.
+3. Main Solution - add / reference the components and core in the main solution.
 
 ### Core Sections
 
@@ -394,7 +394,7 @@ private static bool CheckItemRow(string item)
 
 This is a function, defined in the component, that adds the data to the mapped data.  So, after the data has met the criteria defined, we would then do some validation in this function before fully adding it to the mapped data.
 
-####### Example
+**Example:**
 
 ``` csharp
 private IList<IDataType> AddDataItem(string item, IList<IDataType> results)
@@ -507,7 +507,7 @@ The second item in the example is the data that may end up being the final resul
 
 This is the function defined by the component that does the analysis of the data.  As the analysis could be anything, most of the code will be contained in the components.
 
-####### Example
+**Example:**
 
 ``` csharp
 private (int?, int?) CurrentRange<T>((int?, int?) currentRange, T componentType) where T : class
@@ -563,11 +563,21 @@ The component will need configuration set up to identify the parts of the file t
 
 The files will be different for each component, so only the component creators will know how the files will be made up.
 
+### Constants
+
+To avoid magic strings and numbers in the component, it is expected that you will need some kind of constants class.  However, that is up to the developer, and I will not force coding standards onto the developer.  I will just encourage it.
+
+### Extensions - Component
+
+Extension methods are not necessary, but can be quite useful.  The example project uses them in the component to convert a string to the specific type, and a calculation.
+
+### Processors - Component
+
+The component will need to implement the ```IReader```, ```IMapper```, ```IWriter``` and the ```IProcessor```.
 
 ## 5 - Main Program
 
 This section contains details of what you need to do in your program to use the components and the core project.
-
 
 ## 3 - Example Project
 
@@ -575,11 +585,9 @@ For the purpose of this document, we are going to use a simple console applicati
 
 This sample project is contained in the SampleProject folder.
 
-
 ### Program.Main()
 
 The main entry point into the console application is pretty empty.  We just write to the console that the application is running, and then we use a ```Bootstrapper.cs``` class to get everything going.
-
 
 ### Bootstrapper
 
