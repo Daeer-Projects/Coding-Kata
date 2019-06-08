@@ -82,7 +82,7 @@ So, to call the core notify, we would use code like this:
         .ConfigureAwait(false);
 ```
 
-The notify interface looks like this:
+The writer interface looks like this:
 
 ``` csharp
     public static Task<IReturnType> WriterWork<T, TU, TV>(IEnumerable<IDataType> data,
@@ -212,9 +212,11 @@ This project is to give you the consumer, a centralised system for processing fi
 
 The basis of this project is based on the coding kata, "Data Munging".  This kata is to process two different file types and return an answer.  It was divided up into three parts.
 
-> Part One: Extract data from a Weather.dat file and find out which day had the least temperature change.
-> Part Two: Extract data from a Football.dat file and find out which team has the smallest difference between for and against goals.
-> Part Three: Take the two programs and extract duplicated code into a core project that could be used by both components.
+* Part One: Extract data from a Weather.dat file and find out which day had the least temperature change.
+
+* Part Two: Extract data from a Football.dat file and find out which team has the smallest difference between for and against goals.
+
+* Part Three: Take the two programs and extract duplicated code into a core project that could be used by both components.
 
 ## 2 - Solution Parts
 
