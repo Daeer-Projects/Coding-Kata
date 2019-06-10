@@ -201,6 +201,7 @@ var result = testType.IsValid(new TestValidator());
 * 4 - Component
 * 5 - Main Program
 * 6 - Example Project
+* 7 - References
 
 ## 1 - Introduction
 
@@ -224,7 +225,7 @@ The project that you will create is up to you.  What this core project requires 
 
 1. Core - instantiate and set up the core objects.
    1. Event - Message Hub.
-   2. Component Register. 
+   2. Component Register.
    3. Logging - Serilog.
 2. Components - create the components.
 3. Main Solution - add / reference the components and core in the main solution.
@@ -577,11 +578,53 @@ Extension methods are not necessary, but can be quite useful.  The example proje
 
 The component will need to implement the ```IReader```, ```IMapper```, ```IWriter``` and the ```IProcessor```.
 
+### Types - Component
+
+The component will need to define the types that will be used for data collection.  The example project is a class, but a struct could also be used.
+
+The main type will be what the data in the file can be mapped to.  A class or struct that contains all of the data items that will be extracted from the file for use in the calculation.
+
+A version of the IComponent will need to be created.  This IComponent is what is returned when we create the specific component.
+
+### Validators - Component
+
+Any validations that are needed to be run on the components will need to be created.  The core project has a basic string array validator, but you might want to add more validation for the file that you are processing.
+
+The main type you create might need validation, to ensure the data is correct when we populate the component type.
+
+### Component Creator
+
+Each component will need to implement its own creator.  The example components accept parameters and create the concrete versions of the IReader, IMapper, IWriter and IProcessor.  The processors are all created into an IComponent.
+
+#### Signature - Component Creator
+
+``` csharp
+public IComponent CreateComponent(IMessageHub hub, string fileName)
+```
+
 ## 5 - Main Program
 
 This section contains details of what you need to do in your program to use the components and the core project.
 
-## 3 - Example Project
+* Your application needs to set up logging using Serilog for the core and components to use.  The components set up their own logger in the configuration.  This helps to split the log files up, so all of the logs are not in one place.
+
+* The application will need to instantiate the component creators for each of the components that are going to be created.
+
+* The MessageHub will need to be instantiated.
+
+* The ComponentRegister will need to be instantiated with the MessageHub and core logger.
+
+* The components need to be registered by calling the ```RegisterComponent``` method using the component creator already instantiated.
+
+* The subscriptions will need to be set up in the RegisterComponent by calling the ```RegisterSubscriptions``` method.
+
+* Lastly, the main application will need to start of the processing by publishing a string.
+
+``` csharp
+        hub.Publish("Start Processing...");
+```
+
+## 6 - Example Project
 
 For the purpose of this document, we are going to use a simple console application that has two components registered.
 
@@ -632,3 +675,98 @@ IComponentCreator footballComponentCreator = new FootballComponentCreator();
 ```
 
 This instantiates the component creators.
+
+### Component Creation Process
+
+This is how we created the Football Component.  This is an example of how a component can be created and used by the core project.
+
+#### Configuring the Football Component
+
+The Football component needs some configuration to help it work with the core project and read in a file.
+
+The ```Configuration.FootballConfig.cs``` class requires the following details:
+
+* Column start and lengths - for finding the strings that need to be extracted into the Football type.
+* Logger - the details of how to set up the logger.
+* File System - create an instance of the FileSystem to be used in the processor.
+
+For full details on how this is done, see the example project supplied.
+
+### Constants - to prevent magic strings
+
+I've set up a constants class that points to the following:
+
+* FullFileName - this is where the file is located for our processing.
+* FootballHeader - this is how the header of the file is going to be defined.  We validate that the file we are processing has a header like this, otherwise it fails.
+* FootballDivider - the Football file has a divider to show the last three teams, that are in the relegation section.
+
+### Extensions for the Football Component
+
+For this component we only have two classes to help us process the Football data.
+
+* FootballExtensions
+* StringExtensions
+
+#### FootballExtensions
+
+The Football Extensions contains just one method: ```CalculatePointDifference```.  This is to identify how many points difference the data has.
+
+#### StringExtensions
+
+This is the most complicated extension, as it takes in a string, which is a line from the file, and converts it to the Football type.
+
+This involves, using the configuration to locate the parts of the row, that we need to extract.
+
+##### ToFootball
+
+``` csharp
+public static FootballValidatorType ToFootball(this string item)
+```
+
+If you look at the example project, you will see that the main method calls to three other private methods that help with the extraction process.
+
+The method returns a FootballValidatorType, that includes the Football type itself, if we can extract it, and the validation errors, if it failed.
+
+## 7 - References
+
+This section is for all of the references and NuGet packages.
+
+### Coding Kata
+
+[Data Munging - Kata 04](http://codekata.com/kata/kata04-data-munging/)
+
+### GitHub Projects
+
+[Easy.MessageHub](https://github.com/NimaAra/Easy.MessageHub)
+
+[Fluent Assertions](https://github.com/fluentassertions/fluentassertions/issues)
+
+[Fluent Validation](https://github.com/JeremySkinner/FluentValidation)
+
+[NSubstitute](https://github.com/nsubstitute/NSubstitute)
+
+[Serilog](https://github.com/serilog/serilog)
+
+[System.IO.Abstractions](https://github.com/System-IO-Abstractions/System.IO.Abstractions)
+
+### NuGet
+
+[Easy.MessageHub](https://www.nuget.org/packages/Easy.MessageHub/)
+
+[Fluent Assertions](https://www.nuget.org/packages/FluentAssertions/)
+
+[Fluent Validation](https://www.nuget.org/packages/FluentValidation/8.5.0-preview1)
+
+[NSubstitute](https://www.nuget.org/packages/NSubstitute/)
+
+[Serilog](https://www.nuget.org/packages/Serilog/2.9.0-dev-01091)
+
+[System.IO.Abstractions](https://www.nuget.org/packages/System.IO.Abstractions/)
+
+### Web Sites
+
+[Fluent Assertions](https://fluentassertions.com/)
+
+[Fluent Validation](https://fluentvalidation.net/)
+
+[NSubstitute](https://nsubstitute.github.io/)
