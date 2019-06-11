@@ -692,7 +692,7 @@ The ```Configuration.FootballConfig.cs``` class requires the following details:
 
 For full details on how this is done, see the example project supplied.
 
-### Constants - to prevent magic strings
+#### Constants - to prevent magic strings
 
 I've set up a constants class that points to the following:
 
@@ -700,24 +700,24 @@ I've set up a constants class that points to the following:
 * FootballHeader - this is how the header of the file is going to be defined.  We validate that the file we are processing has a header like this, otherwise it fails.
 * FootballDivider - the Football file has a divider to show the last three teams, that are in the relegation section.
 
-### Extensions for the Football Component
+#### Extensions for the Football Component
 
 For this component we only have two classes to help us process the Football data.
 
 * FootballExtensions
 * StringExtensions
 
-#### FootballExtensions
+##### FootballExtensions
 
 The Football Extensions contains just one method: ```CalculatePointDifference```.  This is to identify how many points difference the data has.
 
-#### StringExtensions
+##### StringExtensions
 
 This is the most complicated extension, as it takes in a string, which is a line from the file, and converts it to the Football type.
 
 This involves, using the configuration to locate the parts of the row, that we need to extract.
 
-##### ToFootball
+###### ToFootball
 
 ``` csharp
 public static FootballValidatorType ToFootball(this string item)
@@ -726,6 +726,31 @@ public static FootballValidatorType ToFootball(this string item)
 If you look at the example project, you will see that the main method calls to three other private methods that help with the extraction process.
 
 The method returns a FootballValidatorType, that includes the Football type itself, if we can extract it, and the validation errors, if it failed.
+
+#### Football Processors
+
+##### The Reader Implementation
+
+As said before, the reader is just a call to the FileSystem to ```ReadAllLines()```.  The reader, passes in the instance of the FileSystem, and the file location to the static core ```Reader.ReadWork()```.
+
+##### The Mapper Implementation
+
+The mapper is what takes the rows of text from the file, and converts them into a processable type.
+
+There's a lot going on in the mapper.  The static core mapper, does a ```foreach``` loop through all of the items in the data that we got from the reader.
+
+For each of the data items, we need to do the following:
+
+* Check that the data row in not a header, or divider.  That is where we use the private method ```CheckItemRow()```.
+* Then we need to convert them to a Football type.  This is where we use the extension method.
+* If the type has been converted successfully, then we add it to the results that are passed onto the writer.
+* If the conversion failed, then we log the details of why it failed.
+
+Look into the sample project and see the ```CheckItemRow()``` and ```AddDataItem()``` methods.  These are the small parts that the static core mapper requires.
+
+##### The Writer Implementation
+
+The writer is the most complicated part of the component.  This is because it is the object that processes the data and produces an answer.  So, most of the code in the writer is component specific, and can't be extracted into the core writer.
 
 ## 7 - References
 
