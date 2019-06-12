@@ -752,6 +752,66 @@ Look into the sample project and see the ```CheckItemRow()``` and ```AddDataItem
 
 The writer is the most complicated part of the component.  This is because it is the object that processes the data and produces an answer.  So, most of the code in the writer is component specific, and can't be extracted into the core writer.
 
+To see how the writer in this example was made, lets look at the original version from the Part Three exercise.  This code was the basis for this version.  I've skipped the contract requirements sections, where we throw exceptions if the input parameter is null.  This is just the main part of code to calculate the answer.
+
+``` csharp
+var teamWithSmallestPointRange = string.Empty;
+var smallestRange = int.MaxValue;
+
+foreach (var data in footballData)
+{
+        if (type.Data is Football football)
+        {
+                // Contract requirements. Duplicating the validation here. Should we?
+                var footballValidationResult = football.IsValid();
+                if (!footballValidationResult.IsValid)
+                {
+                        throw new ArgumentException(footballValidationResult.Errors.Select(m => m.ErrorMessage).ToString());
+                }
+
+                var range = football.CalculatePointDifference();
+
+                if (range < smallestRange)
+                {
+                        smallestRange = range;
+                        teamWithSmallestPointRange = football.TeamName;
+                }
+        }
+}
+
+return teamWithSmallestPointRange;
+```
+
+Things to note:
+
+* We keep track of two variables that are set or updated from within the loop.
+* We confirm the data type is the correct type.
+* We validate the data.
+* We make the calculation for points difference.
+* We check against the variables and update as necessary.
+
+Comparing that against the current writer and core writer, we can see there is a lot more code.
+
+* The core writer has the default parameters passed into it, which is what we use to store the information.  This replaces the two variables from the original version.
+* The core writer uses Linq to Aggregate() through the list.  This is the same as using a for each loop.
+* The core does the same validation of the data.
+* We calculate the points difference the same way.
+* We check against the variables and update as necessary.
+
+So:
+
+* For each -> Linq.Aggregate()
+* If type.Data is Football -> type.Data is T componentType
+* IsValid() section -> ValidationConfirmation()
+* range = football.CalculatePointDifference() -> pointDifference = specificType.CalculatePointDifference()
+* If range < smallestRange code -> EvaluateData()
+
+###### Writer Changes Conclusion
+
+As you can see from the comparison, the code that was in the original writer has been extracted out into smaller methods, but it is essentially the same.
+
+When I was going through these changes, I used the unit tests for the original writer, and ensured that they passed as I made the refactoring.  If a test failed, then I assumed my refactoring didn't work, so I changed it to make the test pass again.
+
 ## 7 - References
 
 This section is for all of the references and NuGet packages.
