@@ -735,7 +735,31 @@ As said before, the reader is just a call to the FileSystem to ```ReadAllLines()
 
 ##### The Mapper Implementation
 
-The mapper is what takes the rows of text from the file, and converts them into a processable type.
+The mapper is what takes the rows of text from the file, and converts them into a processable type.  Lets look at the original version from Part Three.
+
+```csharp
+IList<IDataType> taskResults = new List<IDataType>();
+
+foreach (var item in fileData)
+{
+        // Need to use the config to extract out the items...
+        if (!item.Equals(FootballConstants.FootballHeader) && !item.Equals(FootballConstants.FootballDivider))
+        {
+                // So, not the header and not the divider.
+                var footballData = item.ToFootball();
+                if (footballData.IsValid)
+                {
+                        _logger.Debug($"{GetType().Name} (MapAsync): Item valid: {item}.");
+                        taskResults.Add(new ContainingDataType { Data = footballData.Football });
+                }
+                else
+                {
+                        // Do some logging here when we sort that out.
+                        _logger.Warning($"{GetType().Name} (MapAsync): Item not valid: {item}.");
+                }
+        }
+}
+```
 
 There's a lot going on in the mapper.  The static core mapper, does a ```foreach``` loop through all of the items in the data that we got from the reader.
 
@@ -747,6 +771,10 @@ For each of the data items, we need to do the following:
 * If the conversion failed, then we log the details of why it failed.
 
 Look into the sample project and see the ```CheckItemRow()``` and ```AddDataItem()``` methods.  These are the small parts that the static core mapper requires.
+
+So, to convert the original code to the refactored version, we took parts of the original and converted it to methods.
+
+A good way to start a component mapper, is to write it locally, extract it out to methods, and then map your methods to the parts required by the core mapper.
 
 ##### The Writer Implementation
 
@@ -805,6 +833,8 @@ So:
 * IsValid() section -> ValidationConfirmation()
 * range = football.CalculatePointDifference() -> pointDifference = specificType.CalculatePointDifference()
 * If range < smallestRange code -> EvaluateData()
+
+That is how I extracted out the original code into the refactored version.  As long, as any new components that are created, use the same steps, then the core project will accept the writer implementation.
 
 ###### Writer Changes Conclusion
 
