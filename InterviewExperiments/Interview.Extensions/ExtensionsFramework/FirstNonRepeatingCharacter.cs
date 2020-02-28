@@ -1,9 +1,8 @@
 ﻿using System.Collections.Concurrent;
 
-// 23280720276767
-namespace Extensions
+namespace ExtensionsFramework
 {
-    public static class FirstNonRepeatedCharacter
+    public static class FirstNonRepeatingCharacter
     {
         public static char GetFirstNonRepeatedCharacter(this string paragraph)
         {
@@ -18,7 +17,7 @@ namespace Extensions
                     characters.AddOrUpdate(paragraph[i], 1,
                         (key, existingValue) => existingValue + 1);
                 }
-                
+
                 foreach (var character in characters)
                 {
                     if (character.Value == 1)

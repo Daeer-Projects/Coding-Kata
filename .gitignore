@@ -41,3 +41,7 @@
 /InterviewExperiments/Interview.Extensions/Extensions/bin/Debug/netcoreapp3.1
 /InterviewExperiments/Interview.Extensions/Extensions.Tests/bin/Debug/netcoreapp3.1
 /InterviewExperiments/Interview.Extensions/Extensions.Tests/obj
+/InterviewExperiments/Interview.Extensions/ExtensionsFramework/obj/Debug
+/InterviewExperiments/Interview.Extensions/ExtensionsFramework.Tests/bin/Debug
+/InterviewExperiments/Interview.Extensions/ExtensionsFramework.Tests/obj/Debug
+/InterviewExperiments/Interview.Extensions/packages
