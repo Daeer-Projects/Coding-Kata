@@ -40,7 +40,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <LangVersion>5</LangVersion>
+    <LangVersion>4</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentAssertions, Version=5.10.2.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -74,6 +74,8 @@
     <Compile Include="CellCompleteTests.cs" />
     <Compile Include="FirstNonRepeatingCharacterTests.cs" />
     <Compile Include="GreatestCommonDivisorTests.cs" />
+    <Compile Include="MinimumDaysTests.cs" />
+    <Compile Include="PopularNToysTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
