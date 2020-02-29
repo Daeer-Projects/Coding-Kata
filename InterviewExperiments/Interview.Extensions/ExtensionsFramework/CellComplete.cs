@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-// 23280720246824
 namespace ExtensionsFramework
 {
     public class CellComplete
@@ -11,6 +10,7 @@ namespace ExtensionsFramework
 
             for (var day = 0; day < days; day++)
             {
+                // So this is a loop for each day.
                 result = SetResult(states, day, result);
             }
 
@@ -19,19 +19,18 @@ namespace ExtensionsFramework
 
         private static int[] SetResult(int[] states, int day, int[] result)
         {
-            // So this is a loop for each day.
             var currentState = day == 0 ? states : result;
             var tempState = SetTempState(currentState);
 
             return tempState;
         }
 
-        private static int[] SetTempState(int[] currentState)
+        private static int[] SetTempState(IReadOnlyList<int> currentState)
         {
             var tempState = new int[8];
 
             // So we need to go through the array and update the states of the cells.
-            for (var element = 0; element < currentState.Length; element++)
+            for (var element = 0; element < currentState.Count; element++)
             {
                 var beforeCell = element == 0 ? 0 : currentState[element - 1];
                 var afterCell = element == 7 ? 0 : currentState[element + 1];

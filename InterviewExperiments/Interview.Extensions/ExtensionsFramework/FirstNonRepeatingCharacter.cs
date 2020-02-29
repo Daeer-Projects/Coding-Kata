@@ -12,9 +12,9 @@ namespace ExtensionsFramework
             {
                 var characters = new ConcurrentDictionary<char, int>();
 
-                for (var i = 0; i < paragraph.Length; i++)
+                foreach (var character in paragraph)
                 {
-                    characters.AddOrUpdate(paragraph[i], 1,
+                    characters.AddOrUpdate(character, 1,
                         (key, existingValue) => existingValue + 1);
                 }
 

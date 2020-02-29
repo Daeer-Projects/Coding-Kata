@@ -17,8 +17,8 @@ namespace ExtensionsFramework.Tests
         {
             // Arrange.
             const int expected = 1;
-            var numInput = 5;
-            var arrayInput = new int[] { 2, 3, 4, 5, 6 };
+            const int numInput = 5;
+            var arrayInput = new[] { 2, 3, 4, 5, 6 };
 
             // Act.
             var result = _greatestCommonDivisor.generalizedGCD(numInput, arrayInput);
@@ -32,8 +32,8 @@ namespace ExtensionsFramework.Tests
         {
             // Arrange.
             const int expected = 2;
-            var numInput = 5;
-            var arrayInput = new int[] { 2, 4, 6, 8, 10 };
+            const int numInput = 5;
+            var arrayInput = new[] { 2, 4, 6, 8, 10 };
 
             // Act.
             var result = _greatestCommonDivisor.generalizedGCD(numInput, arrayInput);
