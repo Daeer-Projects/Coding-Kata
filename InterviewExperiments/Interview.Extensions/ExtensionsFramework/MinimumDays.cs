@@ -1,99 +1,96 @@
-﻿namespace ExtensionsFramework
+﻿using System;
+
+namespace ExtensionsFramework
 {
     public class MinimumDays
     {
-        // METHOD SIGNATURE BEGINS, THIS METHOD IS REQUIRED
         public int minimumDays(int rows, int columns, int[,] grid)
         {
             var result = 0;
-            var currentGrid = grid;
             
             do
             {
-                result = UpdateGrid(rows, columns, grid, currentGrid, result);
+                grid = UpdateGrid(rows, columns, grid);
+                result++;
             } while (!CheckGrid(rows, columns, grid));
             
             return result;
         }
 
-        private int UpdateGrid(int rows, int columns, int[,] grid, int[,] currentGrid, int result)
+        private int[,] UpdateGrid(int rows, int columns, int[,] grid)
         {
-            for (int rowIndex = 0; rowIndex < rows - 1; rowIndex++)
+            var currentGrid = new int[rows, columns];
+            Array.Copy(grid, currentGrid, grid.Length);
+
+            for (var rowIndex = 0; rowIndex < rows; rowIndex++)
             {
-                for (int columnIndex = 0; columnIndex < columns - 1; columnIndex++)
+                for (var columnIndex = 0; columnIndex < columns; columnIndex++)
                 {
-                    // Is this element a 0 or 1?
                     var element = grid[rowIndex, columnIndex];
 
-                    if (element == 0)
-                    {
-                        // In-active.
-                    }
-                    else
+                    if (IsElementActive(element))
                     {
                         // Active, so great!
-                        // What can we activate?
-                        if (rowIndex == 0)
-                        {
-                            if (columnIndex == 0)
-                            {
-                                currentGrid[rowIndex + 1, columnIndex] = 1;
-                                currentGrid[rowIndex, columnIndex + 1] = 1;
-                            }
-                            else if (columnIndex == columns - 1)
-                            {
-                                currentGrid[rowIndex + 1, columnIndex] = 1;
-                                currentGrid[rowIndex, columnIndex - 1] = 1;
-                            }
-                            else
-                            {
-                                currentGrid[rowIndex + 1, columnIndex] = 1;
-                            }
-                        } else if (rowIndex == rows - 1)
-                        {
-                            if (columnIndex == 0)
-                            {
-                                currentGrid[rowIndex - 1, columnIndex] = 1;
-                                currentGrid[rowIndex, columnIndex + 1] = 1;
-                            }
-                            else if (columnIndex == columns - 1)
-                            {
-                                currentGrid[rowIndex - 1, columnIndex] = 1;
-                                currentGrid[rowIndex, columnIndex - 1] = 1;
-                            }
-                            else
-                            {
-                                currentGrid[rowIndex - 1, columnIndex] = 1;
-                            }
-                        }
-                        else
-                        {
-                            currentGrid[rowIndex + 1, columnIndex] = 1;
-                            currentGrid[rowIndex, columnIndex + 1] = 1;
-                            currentGrid[rowIndex - 1, columnIndex] = 1;
-                            currentGrid[rowIndex, columnIndex - 1] = 1;
-                        }
+                        UpdateTopRow(rowIndex, currentGrid, columnIndex);
+                        UpdateBottomRow(rows, rowIndex, currentGrid, columnIndex);
+                        UpdateLeftColumn(columnIndex, currentGrid, rowIndex);
+                        UpdateRightColumn(columns, columnIndex, currentGrid, rowIndex);
                     }
                 }
             }
 
-            return ++result;
+            return currentGrid;
         }
-        // METHOD SIGNATURE ENDS
+
+        private static bool IsElementActive(int element)
+        {
+            return element != 0;
+        }
+
+        private static void UpdateTopRow(int rowIndex, int[,] currentGrid, int columnIndex)
+        {
+            if (rowIndex != 0)
+            {
+                currentGrid[rowIndex - 1, columnIndex] = 1;
+            }
+        }
+
+        private static void UpdateBottomRow(int rows, int rowIndex, int[,] currentGrid, int columnIndex)
+        {
+            if (rowIndex != rows - 1)
+            {
+                currentGrid[rowIndex + 1, columnIndex] = 1;
+            }
+        }
+
+        private static void UpdateLeftColumn(int columnIndex, int[,] currentGrid, int rowIndex)
+        {
+            if (columnIndex != 0)
+            {
+                currentGrid[rowIndex, columnIndex - 1] = 1;
+            }
+        }
+
+        private static void UpdateRightColumn(int columns, int columnIndex, int[,] currentGrid, int rowIndex)
+        {
+            if (columnIndex != columns - 1)
+            {
+                currentGrid[rowIndex, columnIndex + 1] = 1;
+            }
+        }
 
         private bool CheckGrid(int rows, int columns, int[,] grid)
         {
             var result = true;
 
-            for (int rowIndex = 0; rowIndex < rows - 1; rowIndex++)
+            for (int rowIndex = 0; rowIndex < rows; rowIndex++)
             {
-                for (int columnIndex = 0; columnIndex < columns - 1; columnIndex++)
+                for (int columnIndex = 0; columnIndex < columns; columnIndex++)
                 {
                     var element = grid[rowIndex, columnIndex];
                     if (element == 0)
                     {
-                        result = false;
-                        break;
+                        return false;
                     }
                 }
             }
