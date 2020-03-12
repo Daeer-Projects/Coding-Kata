@@ -6,6 +6,40 @@ namespace CalculatorTests
 {
     public class CalculatorExtensionsTests
     {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Test_calculate_with_empty_input_returns_zero(string input)
+        {
+            // Arrange.
+            const string expected = "0";
+
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("hello")]
+        [InlineData("a")]
+        [InlineData("!£$%^&")]
+        [InlineData(",.|;:'@#~[]{}`¬")]
+        [InlineData("<>?=")]
+        //[InlineData("*-/+()-*/")]
+        public void Test_calculate_with_invalid_input_returns_zero(string input)
+        {
+            // Arrange.
+            const string expected = "0";
+
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
         [Fact]
         public void Test_calculate_with_simple_input_returns_expected()
         {
@@ -39,7 +73,7 @@ namespace CalculatorTests
         {
             // Arrange.
             const string expected = "35/4";
-            const string input = "1*4 + 5 5 2-3 + 6/8";
+            const string input = "1*4 + 5 + 2-3 + 6/8";
 
             // Act.
             var actual = input.CalculateValue();
