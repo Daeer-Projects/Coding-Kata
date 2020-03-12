@@ -45,3 +45,6 @@
 /InterviewExperiments/Interview.Extensions/ExtensionsFramework.Tests/bin/Debug
 /InterviewExperiments/Interview.Extensions/ExtensionsFramework.Tests/obj/Debug
 /InterviewExperiments/Interview.Extensions/packages
+/InterviewExperiments/AlgebraicCalculator/AlgebraicCalculator/Calculator/obj
+/InterviewExperiments/AlgebraicCalculator/AlgebraicCalculator/CalculatorTests/bin/Debug/netcoreapp3.1
+/InterviewExperiments/AlgebraicCalculator/AlgebraicCalculator/CalculatorTests/obj
