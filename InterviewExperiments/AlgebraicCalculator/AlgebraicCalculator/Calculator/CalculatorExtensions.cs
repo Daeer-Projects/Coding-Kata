@@ -33,7 +33,7 @@ namespace Calculator
         /// </returns>
         public static string CalculateValue(this string input)
         {
-            var result = string.Empty;
+            var result = "0";
 
             if (ValidateInput(input))
             {
@@ -47,17 +47,15 @@ namespace Calculator
 
                 if (additionAndSubtraction.First().Contains('.'))
                 {
-                    var decimalVersion = double.Parse(additionAndSubtraction.First());
-                    result = decimalVersion.ToFraction();
+                    if (double.TryParse(additionAndSubtraction.First(), out var decimalVersion))
+                    {
+                        result = decimalVersion.ToFraction();
+                    }
                 }
                 else
                 {
                     result = additionAndSubtraction.First();
                 }
-            }
-            else
-            {
-                result = "0";
             }
 
             return result;
@@ -105,22 +103,22 @@ namespace Calculator
 
             if (inputArray.Length > 1)
             {
-                for (var i = 0; i < inputArray.Length; i++)
+                for (var index = 0; index < inputArray.Length; index++)
                 {
-                    if (i != inputArray.Length && char.IsDigit(inputArray[i]))
+                    if (index != inputArray.Length && char.IsDigit(inputArray[index]))
                     {
-                        if (i + 1 < inputArray.Length && char.IsDigit(inputArray[i + 1]))
+                        if (index + 1 < inputArray.Length && char.IsDigit(inputArray[index + 1]))
                         {
-                            sortedList.Add(inputArray[i].ToString() + inputArray[i + 1]);
+                            sortedList.Add(inputArray[index].ToString() + inputArray[index + 1]);
                         }
                         else
                         {
-                            sortedList.Add(inputArray[i].ToString());
+                            sortedList.Add(inputArray[index].ToString());
                         }
                     }
                     else
                     {
-                        sortedList.Add(inputArray[i].ToString());
+                        sortedList.Add(inputArray[index].ToString());
                     }
                 }
             }
@@ -138,67 +136,27 @@ namespace Calculator
 
             if (input.Count > 1)
             {
-                for (var i = 1; i < input.Count; i++)
+                for (var index = 1; index < input.Count; index++)
                 {
-                    if (input[i] == "/")
+                    switch (input[index])
                     {
-                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
-                        var rightValue = double.Parse(input[i + 1]);
-                        var calculation = (leftValue / rightValue).ToString(CultureInfo.InvariantCulture);
-
-                        if (processed.Any())
-                        {
-                            var tempList = processed.Select(element => element == processed.Last()
-                                    ? (leftValue.Equals(0) ? rightValue.ToString(CultureInfo.InvariantCulture) :
-                                        rightValue.Equals(0) ? leftValue.ToString(CultureInfo.InvariantCulture) :
-                                        calculation)
-                                    : element)
-                                .ToList();
-
-                            processed = tempList;
-                        }
-                        else
-                        {
-                            processed.Add(leftValue.Equals(0) ? rightValue.ToString(CultureInfo.InvariantCulture) :
-                                rightValue.Equals(0) ? leftValue.ToString(CultureInfo.InvariantCulture) :
-                                calculation);
-                        }
-
-                        i++;
-                    }
-                    else if (input[i] == "*")
-                    {
-                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
-                        var rightValue = double.Parse(input[i + 1]);
-                        var calculation = (leftValue * rightValue).ToString(CultureInfo.InvariantCulture);
-
-                        if (processed.Any())
-                        {
-                            var tempList = processed.Select(element => element == processed.Last()
-                                    ? calculation
-                                    : element)
-                                .ToList();
-
-                            processed = tempList;
-                        }
-                        else
-                        {
-                            processed.Add(calculation);
-                        }
-
-                        i++;
-                    }
-                    else
-                    {
-                        if (i == 1)
-                        {
-                            processed.Add(input[i - 1]);
-                            processed.Add(input[i]);
-                        }
-                        else
-                        {
-                            processed.Add(input[i]);
-                        }
+                        case "/":
+                            {
+                                processed = ProcessDivision(input, processed, index);
+                                index++;
+                                break;
+                            }
+                        case "*":
+                            {
+                                processed = ProcessMultiplication(input, processed, index);
+                                index++;
+                                break;
+                            }
+                        default:
+                            {
+                                StandardAddToProcessed(input, processed, index);
+                                break;
+                            }
                     }
                 }
             }
@@ -216,63 +174,27 @@ namespace Calculator
 
             if (input.Count > 1)
             {
-                for (var i = 1; i < input.Count; i++)
+                for (var index = 1; index < input.Count; index++)
                 {
-                    if (input[i] == "+")
+                    switch (input[index])
                     {
-                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
-                        var rightValue = double.Parse(input[i + 1]);
-                        var calculation = (leftValue + rightValue).ToString(CultureInfo.InvariantCulture);
-
-                        if (processed.Any())
-                        {
-                            var tempList = processed.Select(element => element == processed.Last()
-                                    ? calculation
-                                    : element)
-                                .ToList();
-
-                            processed = tempList;
-                        }
-                        else
-                        {
-                            processed.Add(calculation);
-                        }
-
-                        i++;
-                    }
-                    else if (input[i] == "-")
-                    {
-                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
-                        var rightValue = double.Parse(input[i + 1]);
-                        var calculation = (leftValue - rightValue).ToString(CultureInfo.InvariantCulture);
-
-                        if (processed.Any())
-                        {
-                            var tempList = processed.Select(element => element == processed.Last()
-                                    ? calculation
-                                    : element)
-                                .ToList();
-
-                            processed = tempList;
-                        }
-                        else
-                        {
-                            processed.Add(calculation);
-                        }
-
-                        i++;
-                    }
-                    else
-                    {
-                        if (i == 1)
-                        {
-                            processed.Add(input[i - 1]);
-                            processed.Add(input[i]);
-                        }
-                        else
-                        {
-                            processed.Add(input[i]);
-                        }
+                        case "+":
+                            {
+                                processed = ProcessAddition(input, processed, index);
+                                index++;
+                                break;
+                            }
+                        case "-":
+                            {
+                                processed = ProcessSubtraction(input, processed, index);
+                                index++;
+                                break;
+                            }
+                        default:
+                            {
+                                StandardAddToProcessed(input, processed, index);
+                                break;
+                            }
                     }
                 }
             }
@@ -282,6 +204,112 @@ namespace Calculator
             }
 
             return processed;
+        }
+
+        private static List<string> ProcessDivision(IReadOnlyList<string> input, List<string> processed, int index)
+        {
+            var result = ProcessCalculation(input, processed, index, PerformDivisionCalculation);
+            return result;
+        }
+
+        private static List<string> ProcessMultiplication(IReadOnlyList<string> input, List<string> processed, int index)
+        {
+            var result = ProcessCalculation(input, processed, index, PerformMultiplicationCalculation);
+            return result;
+        }
+
+        private static List<string> ProcessAddition(IReadOnlyList<string> input, List<string> processed, int index)
+        {
+            var result = ProcessCalculation(input, processed, index, PerformAdditionCalculation);
+            return result;
+        }
+
+        private static List<string> ProcessSubtraction(IReadOnlyList<string> input, List<string> processed, int index)
+        {
+            var result = ProcessCalculation(input, processed, index, PerformSubtractionCalculation);
+            return result;
+        }
+
+        private static List<string> ProcessCalculation(IReadOnlyList<string> input, List<string> processed, int index,
+            Func<double, double, string> performCalculation)
+        {
+            var leftValue = GetLeftValue(input, processed, index);
+            var rightValue = GetRightValue(input, index);
+            var calculation = performCalculation(leftValue, rightValue);
+
+            if (processed.Any())
+            {
+                var tempList = DefineTempList(processed, calculation);
+                processed = tempList;
+            }
+            else
+            {
+                processed.Add(calculation);
+            }
+
+            return processed;
+        }
+
+        private static void StandardAddToProcessed(IReadOnlyList<string> input, ICollection<string> processed, int index)
+        {
+            if (index == 1)
+            {
+                processed.Add(input[index - 1]);
+                processed.Add(input[index]);
+            }
+            else
+            {
+                processed.Add(input[index]);
+            }
+        }
+
+        private static double GetLeftValue(IReadOnlyList<string> input, List<string> processed, int index)
+        {
+            return processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[index - 1]);
+        }
+
+        private static double GetRightValue(IReadOnlyList<string> input, int i)
+        {
+            return double.Parse(input[i + 1]);
+        }
+
+        private static string PerformDivisionCalculation(double leftValue, double rightValue)
+        {
+            var calculation = GetDivisionCalculation(leftValue, rightValue, (leftValue / rightValue).ToString(CultureInfo.InvariantCulture));
+            return calculation;
+        }
+
+        private static string PerformMultiplicationCalculation(double leftValue, double rightValue)
+        {
+            var calculation = (leftValue * rightValue).ToString(CultureInfo.InvariantCulture);
+            return calculation;
+        }
+
+        private static string PerformAdditionCalculation(double leftValue, double rightValue)
+        {
+            var calculation = (leftValue + rightValue).ToString(CultureInfo.InvariantCulture);
+            return calculation;
+        }
+
+        private static string PerformSubtractionCalculation(double leftValue, double rightValue)
+        {
+            var calculation = (leftValue - rightValue).ToString(CultureInfo.InvariantCulture);
+            return calculation;
+        }
+
+        private static string GetDivisionCalculation(double leftValue, double rightValue, string calculation)
+        {
+            return (leftValue.Equals(0) ? rightValue.ToString(CultureInfo.InvariantCulture) :
+                rightValue.Equals(0) ? leftValue.ToString(CultureInfo.InvariantCulture) : calculation);
+        }
+
+        private static List<string> DefineTempList(List<string> processed, string calculation)
+        {
+            var tempList = processed.Select(element => element == processed.Last()
+                    ? calculation
+                    : element)
+                .ToList();
+            return tempList;
         }
     }
 }
