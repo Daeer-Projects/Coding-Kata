@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,8 +9,6 @@ namespace Calculator
 {
     public static class CalculatorExtensions
     {
-        private static char[] InvalidCharacters = new[] { '`', '¬', '!', '"', '£', '$' };
-
         /// <summary>
         /// Implement a basic algebraic calculator that takes an expression string as input and provides
         /// the result as output.
@@ -37,10 +36,27 @@ namespace Calculator
 
             if (ValidateInput(input))
             {
+                // So, this would work, if I could use it!
+                //var dt = new DataTable();
+                //var thing = dt.Compute(input, string.Empty);
+
                 var array = input.ToCharArray();
                 var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString()) && !c.Equals('(') && !c.Equals(')')).Select(c => c).ToArray();
 
                 var sortedList = SortList(strippedArray);
+
+                // Not BODMAS - so results are failures.
+                //var everythingExperiment = ProcessEverythingExperiment(sortedList);
+                //result = GetResult(everythingExperiment);
+
+                // Totally BODMAS, but results are wrong.
+                //var division = ProcessDivision(sortedList);
+                //var multiplication = ProcessMultiplication(division);
+                //var addition = ProcessAddition(multiplication);
+                //var subtraction = ProcessSubtraction(addition);
+                //result = GetResult(subtraction);
+
+                // Totally BODMAS - with multiplication and division together, only one test fails.
                 var divisionAndMultiplication = ProcessDivisionAndMultiplication(sortedList);
                 var additionAndSubtraction = ProcessAdditionAndSubtraction(divisionAndMultiplication);
                 result = GetResult(additionAndSubtraction);
@@ -116,6 +132,184 @@ namespace Calculator
             }
 
             return sortedList;
+        }
+
+        private static List<string> ProcessEverythingExperiment(this IReadOnlyList<string> input)
+        {
+            var processed = new List<string>();
+
+            if (input.Count > 1)
+            {
+                for (var index = 1; index < input.Count; index++)
+                {
+                    switch (input[index])
+                    {
+                        case "/":
+                        {
+                            processed = ProcessDivision(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        case "*":
+                        {
+                            processed = ProcessMultiplication(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        case "+":
+                        {
+                            processed = ProcessAddition(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        case "-":
+                        {
+                            processed = ProcessSubtraction(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        default:
+                        {
+                            StandardAddToProcessed(input, processed, index);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                processed.Add(input[0]);
+            }
+
+            return processed;
+        }
+
+        private static List<string> ProcessDivision(this IReadOnlyList<string> input)
+        {
+            var processed = new List<string>();
+
+            if (input.Count > 1)
+            {
+                for (var index = 1; index < input.Count; index++)
+                {
+                    switch (input[index])
+                    {
+                        case "/":
+                        {
+                            processed = ProcessDivision(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        default:
+                        {
+                            StandardAddToProcessed(input, processed, index);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                processed.Add(input[0]);
+            }
+
+            return processed;
+        }
+
+        private static List<string> ProcessMultiplication(this IReadOnlyList<string> input)
+        {
+            var processed = new List<string>();
+
+            if (input.Count > 1)
+            {
+                for (var index = 1; index < input.Count; index++)
+                {
+                    switch (input[index])
+                    {
+                        case "*":
+                        {
+                            processed = ProcessMultiplication(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        default:
+                        {
+                            StandardAddToProcessed(input, processed, index);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                processed.Add(input[0]);
+            }
+
+            return processed;
+        }
+
+        private static List<string> ProcessAddition(this IReadOnlyList<string> input)
+        {
+            var processed = new List<string>();
+
+            if (input.Count > 1)
+            {
+                for (var index = 1; index < input.Count; index++)
+                {
+                    switch (input[index])
+                    {
+                        case "+":
+                        {
+                            processed = ProcessAddition(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        default:
+                        {
+                            StandardAddToProcessed(input, processed, index);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                processed.Add(input[0]);
+            }
+
+            return processed;
+        }
+
+        private static List<string> ProcessSubtraction(this IReadOnlyList<string> input)
+        {
+            var processed = new List<string>();
+
+            if (input.Count > 1)
+            {
+                for (var index = 1; index < input.Count; index++)
+                {
+                    switch (input[index])
+                    {
+                        case "-":
+                        {
+                            processed = ProcessSubtraction(input, processed, index);
+                            index++;
+                            break;
+                        }
+                        default:
+                        {
+                            StandardAddToProcessed(input, processed, index);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                processed.Add(input[0]);
+            }
+
+            return processed;
         }
 
         private static List<string> ProcessDivisionAndMultiplication(this IReadOnlyList<string> input)
