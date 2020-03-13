@@ -27,7 +27,6 @@ namespace CalculatorTests
         [InlineData("!£$%^&")]
         [InlineData(",.|;:'@#~[]{}`¬")]
         [InlineData("<>?=")]
-        [InlineData("*-/+()-*/")]
         public void Test_calculate_with_invalid_input_returns_zero(string input)
         {
             // Arrange.
@@ -38,6 +37,20 @@ namespace CalculatorTests
 
             // Assert.
             actual.Should().Be(expected);
+        }
+
+        [Fact]
+        public void Test_calculate_with_math_controls_returns_something_other_than_zero()
+        {
+            // Arrange.
+            const string input = "2-1/4*(3+8)-2*6/2";
+            const string expected = "0";
+
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().NotBe(expected);
         }
 
         [Fact]

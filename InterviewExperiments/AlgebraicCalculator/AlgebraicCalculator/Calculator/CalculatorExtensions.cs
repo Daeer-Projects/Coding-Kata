@@ -37,25 +37,13 @@ namespace Calculator
 
             if (ValidateInput(input))
             {
-                // We need an array of the items, minus any spaces.
                 var array = input.ToCharArray();
-                var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString())).Select(c => c).ToArray();
+                var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString()) && !c.Equals('(') && !c.Equals(')')).Select(c => c).ToArray();
 
                 var sortedList = SortList(strippedArray);
                 var divisionAndMultiplication = ProcessDivisionAndMultiplication(sortedList);
                 var additionAndSubtraction = ProcessAdditionAndSubtraction(divisionAndMultiplication);
-
-                if (additionAndSubtraction.First().Contains('.'))
-                {
-                    if (double.TryParse(additionAndSubtraction.First(), out var decimalVersion))
-                    {
-                        result = decimalVersion.ToFraction();
-                    }
-                }
-                else
-                {
-                    result = additionAndSubtraction.First();
-                }
+                result = GetResult(additionAndSubtraction);
             }
 
             return result;
@@ -310,6 +298,24 @@ namespace Calculator
                     : element)
                 .ToList();
             return tempList;
+        }
+
+        private static string GetResult(List<string> additionAndSubtraction)
+        {
+            var result = "0";
+            if (additionAndSubtraction.First().Contains('.'))
+            {
+                if (double.TryParse(additionAndSubtraction.First(), out var decimalVersion))
+                {
+                    result = decimalVersion.ToFraction();
+                }
+            }
+            else
+            {
+                result = additionAndSubtraction.First();
+            }
+
+            return result;
         }
     }
 }
