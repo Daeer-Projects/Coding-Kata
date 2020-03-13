@@ -8,7 +8,7 @@ namespace Calculator
 {
     public static class CalculatorExtensions
     {
-        private static char[] InvalidCharacters = new[] {'`', '¬', '!', '"', '£', '$'};
+        private static char[] InvalidCharacters = new[] { '`', '¬', '!', '"', '£', '$' };
 
         /// <summary>
         /// Implement a basic algebraic calculator that takes an expression string as input and provides
@@ -36,18 +36,24 @@ namespace Calculator
             var result = string.Empty;
 
             if (ValidateInput(input))
-            {             
+            {
                 // We need an array of the items, minus any spaces.
                 var array = input.ToCharArray();
                 var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString())).Select(c => c).ToArray();
 
                 var sortedList = SortList(strippedArray);
-                var divisionProcess = ProcessDivision(sortedList);
-                var multiplicationProcess = ProcessMultiplication(divisionProcess);
-                var additionProcess = ProcessAddition(multiplicationProcess);
-                var subtractionProcess = ProcessSubtraction(additionProcess);
+                var divisionAndMultiplication = ProcessDivisionAndMultiplication(sortedList);
+                var additionAndSubtraction = ProcessAdditionAndSubtraction(divisionAndMultiplication);
 
-                result = subtractionProcess.First();
+                if (additionAndSubtraction.First().Contains('.'))
+                {
+                    var decimalVersion = double.Parse(additionAndSubtraction.First());
+                    result = decimalVersion.ToFraction();
+                }
+                else
+                {
+                    result = additionAndSubtraction.First();
+                }
             }
             else
             {
@@ -87,6 +93,12 @@ namespace Calculator
             return !result.Success;
         }
 
+        /// <summary>
+        /// I don't like this.  What if there is a three digit value?  I am only
+        /// accounting for two digits here!
+        /// </summary>
+        /// <param name="inputArray"></param>
+        /// <returns></returns>
         private static List<string> SortList(this char[] inputArray)
         {
             var sortedList = new List<string>();
@@ -120,22 +132,60 @@ namespace Calculator
             return sortedList;
         }
 
-        private static List<string> ProcessDivision(this IReadOnlyList<string> input)
+        private static List<string> ProcessDivisionAndMultiplication(this IReadOnlyList<string> input)
         {
             var processed = new List<string>();
 
             if (input.Count > 1)
             {
-                for (var i = 1; i <= input.Count - 1; i++)
+                for (var i = 1; i < input.Count; i++)
                 {
                     if (input[i] == "/")
                     {
-                        var leftValue = float.Parse(input[i - 1]);
-                        var rightValue = float.Parse(input[i + 1]);
+                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
+                        var rightValue = double.Parse(input[i + 1]);
+                        var calculation = (leftValue / rightValue).ToString(CultureInfo.InvariantCulture);
 
-                        processed.Add(leftValue == 0 ? rightValue.ToString(CultureInfo.InvariantCulture) :
-                            rightValue == 0 ? leftValue.ToString(CultureInfo.InvariantCulture) :
-                            (leftValue / rightValue).ToString(CultureInfo.InvariantCulture));
+                        if (processed.Any())
+                        {
+                            var tempList = processed.Select(element => element == processed.Last()
+                                    ? (leftValue.Equals(0) ? rightValue.ToString(CultureInfo.InvariantCulture) :
+                                        rightValue.Equals(0) ? leftValue.ToString(CultureInfo.InvariantCulture) :
+                                        calculation)
+                                    : element)
+                                .ToList();
+
+                            processed = tempList;
+                        }
+                        else
+                        {
+                            processed.Add(leftValue.Equals(0) ? rightValue.ToString(CultureInfo.InvariantCulture) :
+                                rightValue.Equals(0) ? leftValue.ToString(CultureInfo.InvariantCulture) :
+                                calculation);
+                        }
+
+                        i++;
+                    }
+                    else if (input[i] == "*")
+                    {
+                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
+                        var rightValue = double.Parse(input[i + 1]);
+                        var calculation = (leftValue * rightValue).ToString(CultureInfo.InvariantCulture);
+
+                        if (processed.Any())
+                        {
+                            var tempList = processed.Select(element => element == processed.Last()
+                                    ? calculation
+                                    : element)
+                                .ToList();
+
+                            processed = tempList;
+                        }
+                        else
+                        {
+                            processed.Add(calculation);
+                        }
+
                         i++;
                     }
                     else
@@ -144,11 +194,6 @@ namespace Calculator
                         {
                             processed.Add(input[i - 1]);
                             processed.Add(input[i]);
-                        }
-                        else if (i == input.Count - 1)
-                        {
-                            processed.Add(input[i]);
-                            processed.Add(input[i + 1]);
                         }
                         else
                         {
@@ -165,106 +210,56 @@ namespace Calculator
             return processed;
         }
 
-        private static List<string> ProcessMultiplication(this IReadOnlyList<string> input)
+        private static List<string> ProcessAdditionAndSubtraction(this IReadOnlyList<string> input)
         {
             var processed = new List<string>();
 
             if (input.Count > 1)
             {
-                for (var i = 1; i <= input.Count - 1; i++)
-                {
-                    if (input[i] == "*")
-                    {
-                        var leftValue = float.Parse(input[i - 1]);
-                        var rightValue = float.Parse(input[i + 1]);
-
-                        processed.Add((leftValue * rightValue).ToString(CultureInfo.InvariantCulture));
-                        i++;
-                    }
-                    else
-                    {
-                        if (i == 1)
-                        {
-                            processed.Add(input[i - 1]);
-                            processed.Add(input[i]);
-                        }
-                        else if (i == input.Count - 1)
-                        {
-                            processed.Add(input[i]);
-                            processed.Add(input[i + 1]);
-                        }
-                        else
-                        {
-                            processed.Add(input[i]);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                processed.Add(input[0]);
-            }
-
-            return processed;
-        }
-
-        private static List<string> ProcessAddition(this IReadOnlyList<string> input)
-        {
-            var processed = new List<string>();
-
-            if (input.Count > 1)
-            {
-                for (var i = 1; i <= input.Count - 1; i++)
+                for (var i = 1; i < input.Count; i++)
                 {
                     if (input[i] == "+")
                     {
-                        var leftValue = float.Parse(input[i - 1]);
-                        var rightValue = float.Parse(input[i + 1]);
+                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
+                        var rightValue = double.Parse(input[i + 1]);
+                        var calculation = (leftValue + rightValue).ToString(CultureInfo.InvariantCulture);
 
-                        processed.Add((leftValue + rightValue).ToString(CultureInfo.InvariantCulture));
-                        i++;
-                    }
-                    else
-                    {
-                        if (i == 1)
+                        if (processed.Any())
                         {
-                            processed.Add(input[i - 1]);
-                            processed.Add(input[i]);
-                        }
-                        else if (i == input.Count - 1)
-                        {
-                            processed.Add(input[i]);
-                            processed.Add(input[i + 1]);
+                            var tempList = processed.Select(element => element == processed.Last()
+                                    ? calculation
+                                    : element)
+                                .ToList();
+
+                            processed = tempList;
                         }
                         else
                         {
-                            processed.Add(input[i]);
+                            processed.Add(calculation);
                         }
+
+                        i++;
                     }
-                }
-            }
-            else
-            {
-                processed.Add(input[0]);
-            }
-
-            return processed;
-        }
-
-        private static List<string> ProcessSubtraction(this IReadOnlyList<string> input)
-        {
-            var processed = new List<string>();
-
-            if (input.Count > 1)
-            {
-                for (var i = 1; i <= input.Count - 1; i++)
-                {
-                    if (input[i] == "-")
+                    else if (input[i] == "-")
                     {
-                        var leftValue = float.Parse(input[i - 1]);
-                        var rightValue = float.Parse(input[i + 1]);
+                        var leftValue = processed.Any() ? double.Parse(processed.Last()) : double.Parse(input[i - 1]);
+                        var rightValue = double.Parse(input[i + 1]);
+                        var calculation = (leftValue - rightValue).ToString(CultureInfo.InvariantCulture);
 
-                        processed.Add((leftValue - rightValue).ToString(CultureInfo.InvariantCulture));
+                        if (processed.Any())
+                        {
+                            var tempList = processed.Select(element => element == processed.Last()
+                                    ? calculation
+                                    : element)
+                                .ToList();
+
+                            processed = tempList;
+                        }
+                        else
+                        {
+                            processed.Add(calculation);
+                        }
+
                         i++;
                     }
                     else
@@ -273,11 +268,6 @@ namespace Calculator
                         {
                             processed.Add(input[i - 1]);
                             processed.Add(input[i]);
-                        }
-                        else if (i == input.Count - 1)
-                        {
-                            processed.Add(input[i]);
-                            processed.Add(input[i + 1]);
                         }
                         else
                         {
