@@ -67,6 +67,92 @@ namespace CalculatorTests
             actual.Should().Be(expected);
         }
 
+        [Theory]
+        [InlineData("2", "1 + 1")]
+        [InlineData("4", "1 + 1+2")]
+        [InlineData("8", "1 + 1+2+4")]
+        [InlineData("6", "1 + 1+3 + 1")]
+        public void Test_calculate_with_simple_additions_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("0", "1 - 1")]
+        [InlineData("7", "10 - 1-2")]
+        [InlineData("3", "10 - 1-2-4")]
+        [InlineData("5", "10 - 1-3 - 1")]
+        public void Test_calculate_with_simple_subtractions_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("5", "10 / 2")]
+        [InlineData("4", "16 / 2 / 2")]
+        [InlineData("2", "16 / 1/2/4")]
+        [InlineData("4", "24 / 2/3 / 1")]
+        [InlineData("9/2", "36 / 2/2 / 2")]
+        public void Test_calculate_with_simple_divisions_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("10", "5 * 2")]
+        [InlineData("40", "5*2* 4")]
+        [InlineData("144", "12 * 2 *6")]
+        public void Test_calculate_with_simple_multiplications_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("10", "5 + 10/2")]
+        [InlineData("9", "5 + 8/2")]
+        public void Test_calculate_with_division_after_addition_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("-15", "5 - 10*2")]
+        [InlineData("29", "45 - 8*2")]
+        public void Test_calculate_with_multiplication_after_subtraction_returns_expected(string expected, string input)
+        {
+            // Arrange.
+            // Act.
+            var actual = input.CalculateValue();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
         [Fact]
         public void Test_calculate_with_plus_and_minus_input_returns_expected()
         {

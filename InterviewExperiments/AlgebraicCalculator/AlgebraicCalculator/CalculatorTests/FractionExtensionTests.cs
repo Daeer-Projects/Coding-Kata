@@ -1,4 +1,5 @@
-﻿using Calculator;
+﻿using System.Runtime.InteropServices;
+using Calculator;
 using FluentAssertions;
 using Xunit;
 
@@ -33,6 +34,21 @@ namespace CalculatorTests
             const string expected = "233/52";
             const double input = 4.4807692307692307692307d;
 
+            // Act.
+            var actual = input.ToFraction();
+
+            // Assert.
+            actual.Should().Be(expected);
+        }
+
+
+        [Theory]
+        [InlineData("25/4", 6.25d)]
+        [InlineData("50/3", 16.6666666d)]
+        [InlineData("9/2", 4.5d)]
+        public void Test_to_fraction_with_valid_values_returns_expected(string expected, double input)
+        {
+            // Arrange.
             // Act.
             var actual = input.ToFraction();
 
