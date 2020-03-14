@@ -38,7 +38,8 @@ namespace Calculator
             {
                 // So, this would work, if I could use it!
                 //var dt = new DataTable();
-                //var thing = dt.Compute(input, string.Empty);
+                //var computedResult = dt.Compute(input, string.Empty);
+                //result = GetResult(computedResult);
 
                 var array = input.ToCharArray();
                 var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString()) && !c.Equals('(') && !c.Equals(')')).Select(c => c).ToArray();
@@ -56,20 +57,7 @@ namespace Calculator
 
         private static bool ValidateInput(string input)
         {
-            var result = true;
-
-            if (!IsNullOrWhiteSpace(input))
-            {
-                if (ContainsNonCalculationItems(input))
-                {
-                    result = false;
-                }
-            }
-            else
-            {
-                result = false;
-            }
-
+            var result = !(IsNullOrWhiteSpace(input) || ContainsNonCalculationItems(input));
             return result;
         }
 
