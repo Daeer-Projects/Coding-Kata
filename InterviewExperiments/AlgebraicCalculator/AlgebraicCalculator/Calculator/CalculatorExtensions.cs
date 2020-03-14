@@ -37,9 +37,9 @@ namespace Calculator
             if (ValidateInput(input))
             {
                 // So, this would work, if I could use it!
-                //var dt = new DataTable();
-                //var computedResult = dt.Compute(input, string.Empty);
-                //result = GetResult(computedResult);
+                // var dt = new DataTable();
+                // var computedResult = dt.Compute(input, string.Empty);
+                // result = GetResult(computedResult);
 
                 var array = input.ToCharArray();
                 var strippedArray = array.Where(c => !string.IsNullOrWhiteSpace(c.ToString()) && !c.Equals('(') && !c.Equals(')')).Select(c => c).ToArray();
@@ -214,7 +214,10 @@ namespace Calculator
             return result;
         }
 
-        private static List<string> ProcessCalculation(IReadOnlyList<string> input, List<string> processed, int index,
+        private static List<string> ProcessCalculation(
+            IReadOnlyList<string> input,
+            List<string> processed,
+            int index,
             Func<double, double, string> performCalculation)
         {
             var leftValue = GetLeftValue(input, processed, index);
@@ -296,19 +299,19 @@ namespace Calculator
             return tempList;
         }
 
-        private static string GetResult(List<string> additionAndSubtraction)
+        private static string GetResult(List<string> finalCalculationResult)
         {
             var result = "0";
-            if (additionAndSubtraction.First().Contains('.'))
+            if (finalCalculationResult.First().Contains('.'))
             {
-                if (double.TryParse(additionAndSubtraction.First(), out var decimalVersion))
+                if (double.TryParse(finalCalculationResult.First(), out var decimalVersion))
                 {
                     result = decimalVersion.ToFraction();
                 }
             }
             else
             {
-                result = additionAndSubtraction.First();
+                result = finalCalculationResult.First();
             }
 
             return result;
